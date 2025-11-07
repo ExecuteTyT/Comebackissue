@@ -1,0 +1,35 @@
+{
+  "name": "verni-strahovku",
+  "version": "1.0.0",
+  "description": "Лендинг для возврата навязанных банковских услуг - вернистраховку.рф",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js",
+    "test": "echo \"Тесты будут добавлены позже\" && exit 0"
+  },
+  "keywords": [
+    "возврат страховки",
+    "навязанные услуги",
+    "юридические услуги",
+    "финансовое право"
+  ],
+  "author": "ООО «Деловой подход+»",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2",
+    "nodemailer": "^6.9.7",
+    "axios": "^1.6.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}
+

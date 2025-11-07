@@ -1,0 +1,32 @@
+{
+    "name": "вернистраховку.рф",
+    "short_name": "вернистраховку",
+    "description": "Вернём навязанные страховки и услуги по кредиту без предоплаты",
+    "icons": [
+        {
+            "src": "/assets/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        },
+        {
+            "src": "/assets/favicon-32x32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
+            "src": "/assets/favicon-16x16.png",
+            "sizes": "16x16",
+            "type": "image/png"
+        },
+        {
+            "src": "/assets/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#2563EB",
+    "background_color": "#FFFFFF",
+    "display": "standalone",
+    "start_url": "/"
+}
+
