@@ -461,6 +461,14 @@ input[type="date"] {
     overflow-y: auto;
     z-index: 9998;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+#mobile-menu.active {
+    transform: translateY(0);
+    opacity: 1;
 }
 
 @media (min-width: 1024px) {
@@ -473,6 +481,43 @@ input[type="date"] {
 #mobile-menu-btn {
     z-index: 9999;
     position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hamburger Icon Animation */
+#mobile-menu-btn i {
+    transition: transform 0.3s ease-in-out;
+}
+
+#mobile-menu-btn.active i.fa-bars {
+    transform: rotate(90deg);
+}
+
+/* Burger Animation */
+.burger-line {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: #1F2937;
+    margin: 5px 0;
+    transition: all 0.3s ease-in-out;
+    border-radius: 3px;
+}
+
+.burger-active .burger-line:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.burger-active .burger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.burger-active .burger-line:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
 }
 
 /* ========== UTILITIES ========== */

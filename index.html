@@ -21,10 +21,13 @@
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="assets/site.webmanifest">
     
-    <!-- Fonts -->
+    <!-- Fonts - Оптимизированная загрузка -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    </noscript>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -60,6 +63,99 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="src/css/style.css">
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LegalService",
+        "name": "вернистраховку.рф - ООО «Деловой подход+»",
+        "description": "Возврат навязанных страховок и услуг по кредитам без предоплаты. Работаем по всей России.",
+        "url": "https://вернистраховку.рф",
+        "logo": "https://вернистраховку.рф/assets/logo-main.svg",
+        "image": "https://вернистраховку.рф/assets/logo-main.svg",
+        "telephone": "+7-904-666-66-46",
+        "email": "delovoi_podhod@inbox.ru",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "ул. Габдуллы Тукая, д.64, оф. 307",
+            "addressLocality": "Казань",
+            "addressRegion": "Республика Татарстан",
+            "postalCode": "420021",
+            "addressCountry": "RU"
+        },
+        "openingHoursSpecification": [
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                "opens": "09:00",
+                "closes": "21:00"
+            },
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Saturday", "Sunday"],
+                "opens": "10:00",
+                "closes": "18:00"
+            }
+        ],
+        "priceRange": "Без предоплаты",
+        "areaServed": {
+            "@type": "Country",
+            "name": "Россия"
+        },
+        "sameAs": [
+            "https://vk.com/verni_strahovku",
+            "https://t.me/verni_strahovku"
+        ],
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "1000",
+            "bestRating": "5",
+            "worstRating": "1"
+        },
+        "offers": {
+            "@type": "Offer",
+            "description": "Возврат навязанных страховок и услуг по кредитам",
+            "price": "0",
+            "priceCurrency": "RUB",
+            "priceSpecification": {
+                "@type": "PriceSpecification",
+                "price": "0",
+                "priceCurrency": "RUB",
+                "valueAddedTaxIncluded": "true"
+            }
+        }
+    }
+    </script>
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        // Yandex Metrika ID - должен быть установлен в .env
+        window.YANDEX_METRIKA_ID = null; // Будет установлен динамически из .env
+
+        // Загрузка Yandex Metrika только если ID указан
+        (function() {
+            // Эта функция будет вызвана после загрузки страницы
+            if (window.YANDEX_METRIKA_ID) {
+                (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+                m[i].l=1*new Date();
+                for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+                k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+                (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+                ym(window.YANDEX_METRIKA_ID, "init", {
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true,
+                    trackHash:true
+                });
+            }
+        })();
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/METRIKA_ID" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
 </head>
 <body class="font-body text-textDark">
 

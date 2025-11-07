@@ -17,6 +17,29 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Сайт вернистраховку.рф загружен успешно');
 });
 
+// ========== CSRF TOKEN ==========
+let csrfToken = null;
+
+// Получение CSRF токена при загрузке страницы
+async function fetchCSRFToken() {
+    try {
+        const response = await fetch('/api/csrf-token', {
+            credentials: 'include'
+        });
+        const data = await response.json();
+        csrfToken = data.csrfToken;
+        console.log('✅ CSRF token получен');
+    } catch (error) {
+        console.warn('⚠️ Не удалось получить CSRF токен:', error);
+    }
+}
+
+// Получаем CSRF токен при загрузке
+fetchCSRFToken();
+
+// ========== YANDEX METRIKA CONFIGURATION ==========
+const YANDEX_METRIKA_ID = window.YANDEX_METRIKA_ID || null;
+
 // ========== AOS INITIALIZATION ==========
 function initAOS() {
     AOS.init({
@@ -75,60 +98,92 @@ function initPhoneMasks() {
 function initMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
-    
+
     if (menuBtn && mobileMenu) {
         menuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const isHidden = mobileMenu.classList.contains('hidden');
-            
-            if (isHidden) {
-                mobileMenu.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            } else {
-                mobileMenu.classList.add('hidden');
-                document.body.style.overflow = '';
-            }
-            
-            const icon = menuBtn.querySelector('i');
-            if (icon) {
-                if (isHidden) {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                } else {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
-            }
+            toggleMobileMenu();
         });
 
         // Закрытие меню при клике на ссылку
         const menuLinks = mobileMenu.querySelectorAll('a');
         menuLinks.forEach(link => {
             link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-                document.body.style.overflow = '';
-                const icon = menuBtn.querySelector('i');
-                if (icon) {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
+                closeMobileMenu();
             });
         });
 
         // Закрытие меню при клике вне его
         document.addEventListener('click', (e) => {
             if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
-                if (!mobileMenu.classList.contains('hidden')) {
-                    mobileMenu.classList.add('hidden');
-                    document.body.style.overflow = '';
-                    const icon = menuBtn.querySelector('i');
-                    if (icon) {
-                        icon.classList.remove('fa-times');
-                        icon.classList.add('fa-bars');
-                    }
+                if (mobileMenu.classList.contains('active')) {
+                    closeMobileMenu();
                 }
             }
         });
+
+        // Закрытие меню при нажатии ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
+    }
+}
+
+function toggleMobileMenu() {
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (mobileMenu.classList.contains('active')) {
+        closeMobileMenu();
+    } else {
+        openMobileMenu();
+    }
+}
+
+function openMobileMenu() {
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenu.classList.remove('hidden');
+    // Небольшая задержка для срабатывания CSS анимации
+    setTimeout(() => {
+        mobileMenu.classList.add('active');
+    }, 10);
+
+    document.body.style.overflow = 'hidden';
+    menuBtn.classList.add('active');
+
+    const icon = menuBtn.querySelector('i');
+    if (icon) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+    }
+
+    // Отслеживаем открытие меню
+    if (typeof trackClick !== 'undefined') {
+        trackClick('mobile_menu_open');
+    }
+}
+
+function closeMobileMenu() {
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenu.classList.remove('active');
+    menuBtn.classList.remove('active');
+
+    // Ждем окончания анимации перед скрытием
+    setTimeout(() => {
+        mobileMenu.classList.add('hidden');
+        document.body.style.overflow = '';
+    }, 300);
+
+    const icon = menuBtn.querySelector('i');
+    if (icon) {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
     }
 }
 
@@ -278,7 +333,9 @@ function handleFormSubmit(event, formType) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'x-csrf-token': csrfToken || ''
         },
+        credentials: 'include',
         body: JSON.stringify(data)
     })
     .then(response => {

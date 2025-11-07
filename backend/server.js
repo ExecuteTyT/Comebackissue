@@ -1,6 +1,6 @@
 // ============================================
 // BACKEND SERVER ДЛЯ ВЕРНИСТРАХОВКУ.РФ
-// Node.js + Express + Nodemailer + Telegram Bot
+// Node.js + Express + Security + Logging
 // ============================================
 
 const express = require('express');
@@ -9,97 +9,325 @@ const nodemailer = require('nodemailer');
 const axios = require('axios');
 const cors = require('cors');
 const path = require('path');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const { body, validationResult } = require('express-validator');
+const cookieParser = require('cookie-parser');
+const { doubleCsrf } = require('csrf-csrf');
+const winston = require('winston');
+const morgan = require('morgan');
+const { JSDOM } = require('jsdom');
+const createDOMPurify = require('dompurify');
+
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ========== MIDDLEWARE ==========
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// ========== LOGGER CONFIGURATION ==========
+const logger = winston.createLogger({
+    level: process.env.LOG_LEVEL || 'info',
+    format: winston.format.combine(
+        winston.format.timestamp({
+            format: 'YYYY-MM-DD HH:mm:ss'
+        }),
+        winston.format.errors({ stack: true }),
+        winston.format.splat(),
+        winston.format.json()
+    ),
+    defaultMeta: { service: 'verni-strahovku' },
+    transports: [
+        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+        new winston.transports.File({ filename: 'logs/combined.log' })
+    ]
+});
 
-// Статические файлы
-app.use(express.static(path.join(__dirname, '../')));
+// Логи в консоль только в development
+if (process.env.NODE_ENV !== 'production') {
+    logger.add(new winston.transports.Console({
+        format: winston.format.combine(
+            winston.format.colorize(),
+            winston.format.simple()
+        )
+    }));
+}
 
-// ========== CONFIGURATION ==========
-const EMAIL_CONFIG = {
-    host: process.env.SMTP_HOST || 'smtp.inbox.ru',
-    port: process.env.SMTP_PORT || 465,
-    secure: true,
-    auth: {
-        user: process.env.EMAIL_USER || 'delovoi_podhod@inbox.ru',
-        pass: process.env.EMAIL_PASS || 'YOUR_EMAIL_PASSWORD'
-    }
-};
+// ========== DOMPURIFY FOR SANITIZATION ==========
+const window = new JSDOM('').window;
+const DOMPurify = createDOMPurify(window);
 
-const TELEGRAM_CONFIG = {
-    botToken: process.env.TELEGRAM_BOT_TOKEN || 'YOUR_BOT_TOKEN',
-    chatId: process.env.TELEGRAM_CHAT_ID || 'YOUR_CHAT_ID'
-};
+// ========== SECURITY MIDDLEWARE ==========
 
-const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || 'delovoi_podhod@inbox.ru';
+// Helmet - базовые заголовки безопасности
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "https://unpkg.com", "https://cdnjs.cloudflare.com"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
+            imgSrc: ["'self'", "data:", "https:", "http:"],
+            connectSrc: ["'self'", "https://api.telegram.org"],
+            frameSrc: ["'none'"]
+        }
+    },
+    crossOriginEmbedderPolicy: false
+}));
 
-// ========== EMAIL TRANSPORTER ==========
-const transporter = nodemailer.createTransport(EMAIL_CONFIG);
+// Cookie parser
+app.use(cookieParser());
 
-// Проверка подключения
-transporter.verify((error, success) => {
-    if (error) {
-        console.error('❌ Ошибка подключения к email:', error);
-    } else {
-        console.log('✅ Email сервер готов к отправке писем');
+// Body parser
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+
+// HTTP request logger
+app.use(morgan('combined', { stream: { write: message => logger.info(message.trim()) } }));
+
+// CORS Configuration
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
+    : ['http://localhost:3000', 'http://127.0.0.1:3000'];
+
+app.use(cors({
+    origin: function(origin, callback) {
+        // Разрешаем запросы без origin (например, mobile apps или curl)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+            callback(null, true);
+        } else {
+            logger.warn(`CORS blocked request from origin: ${origin}`);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+}));
+
+// Rate Limiting
+const limiter = rateLimit({
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 минут
+    max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
+    message: 'Слишком много запросов с вашего IP, попробуйте позже',
+    standardHeaders: true,
+    legacyHeaders: false,
+    handler: (req, res) => {
+        logger.warn(`Rate limit exceeded for IP: ${req.ip}`);
+        res.status(429).json({
+            success: false,
+            message: 'Слишком много запросов. Пожалуйста, позвоните нам: 8-904-666-66-46'
+        });
     }
 });
+
+// Применяем rate limiting ко всем запросам
+app.use(limiter);
+
+// Строгий rate limiting для форм
+const formLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 минут
+    max: 5, // Максимум 5 отправок формы за 15 минут
+    message: 'Слишком много отправок формы, попробуйте позже',
+    skipSuccessfulRequests: false
+});
+
+// CSRF Protection
+const csrfSecret = process.env.CSRF_SECRET || 'your-csrf-secret-key-change-this';
+const { generateToken, doubleCsrfProtection } = doubleCsrf({
+    getSecret: () => csrfSecret,
+    cookieName: 'x-csrf-token',
+    cookieOptions: {
+        sameSite: 'strict',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true
+    },
+    size: 64,
+    ignoredMethods: ['GET', 'HEAD', 'OPTIONS']
+});
+
+// Статические файлы
+app.use(express.static(path.join(__dirname, '../'), {
+    setHeaders: (res, path) => {
+        // Кэширование статических ресурсов
+        if (path.endsWith('.js') || path.endsWith('.css')) {
+            res.set('Cache-Control', 'public, max-age=31536000'); // 1 год
+        } else if (path.endsWith('.html')) {
+            res.set('Cache-Control', 'no-cache');
+        }
+    }
+}));
+
+// ========== EMAIL CONFIGURATION ==========
+const EMAIL_CONFIG = {
+    host: process.env.SMTP_HOST || 'smtp.inbox.ru',
+    port: parseInt(process.env.SMTP_PORT) || 465,
+    secure: true,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+};
+
+// Проверка наличия обязательных переменных окружения
+function checkEnvVariables() {
+    const required = ['EMAIL_USER', 'EMAIL_PASS', 'TELEGRAM_BOT_TOKEN', 'TELEGRAM_CHAT_ID'];
+    const missing = required.filter(key => !process.env[key] || process.env[key].includes('YOUR_'));
+
+    if (missing.length > 0) {
+        logger.warn(`⚠️  Missing or invalid environment variables: ${missing.join(', ')}`);
+        logger.warn(`⚠️  Please update .env file with real credentials`);
+        logger.warn(`⚠️  Email and Telegram notifications will not work until configured`);
+    }
+}
+
+checkEnvVariables();
+
+const TELEGRAM_CONFIG = {
+    botToken: process.env.TELEGRAM_BOT_TOKEN,
+    chatId: process.env.TELEGRAM_CHAT_ID
+};
+
+const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || process.env.EMAIL_USER;
+
+// Email Transporter
+let transporter;
+try {
+    transporter = nodemailer.createTransport(EMAIL_CONFIG);
+    transporter.verify((error, success) => {
+        if (error) {
+            logger.error('❌ Email configuration error:', error);
+        } else {
+            logger.info('✅ Email server ready');
+        }
+    });
+} catch (error) {
+    logger.error('❌ Failed to create email transporter:', error);
+}
+
+// ========== SANITIZATION FUNCTIONS ==========
+function sanitizeInput(input) {
+    if (typeof input !== 'string') return input;
+    return DOMPurify.sanitize(input, {
+        ALLOWED_TAGS: [],
+        ALLOWED_ATTR: []
+    });
+}
+
+function sanitizeFormData(data) {
+    const sanitized = {};
+    for (const [key, value] of Object.entries(data)) {
+        if (typeof value === 'string') {
+            sanitized[key] = sanitizeInput(value);
+        } else {
+            sanitized[key] = value;
+        }
+    }
+    return sanitized;
+}
+
+// ========== VALIDATION MIDDLEWARE ==========
+const formValidationRules = [
+    body('name')
+        .trim()
+        .notEmpty().withMessage('Имя обязательно')
+        .isLength({ min: 2, max: 100 }).withMessage('Имя должно быть от 2 до 100 символов')
+        .matches(/^[а-яА-ЯёЁa-zA-Z\s\-]+$/).withMessage('Имя может содержать только буквы'),
+
+    body('phone')
+        .trim()
+        .notEmpty().withMessage('Телефон обязателен')
+        .matches(/^\+?7\s?\(?[0-9]{3}\)?\s?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/)
+        .withMessage('Неверный формат телефона'),
+
+    body('email')
+        .optional()
+        .trim()
+        .isEmail().withMessage('Неверный формат email')
+        .normalizeEmail(),
+
+    body('amount')
+        .optional()
+        .trim()
+        .matches(/^[0-9\s]+$/).withMessage('Сумма может содержать только цифры'),
+
+    body('message')
+        .optional()
+        .trim()
+        .isLength({ max: 1000 }).withMessage('Сообщение не может быть длиннее 1000 символов')
+];
 
 // ========== MAIN ROUTE ==========
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../index.html'));
 });
 
-// ========== FORM SUBMISSION HANDLER ==========
-app.post('/api/submit-form', async (req, res) => {
-    try {
-        const formData = req.body;
-        
-        console.log('📋 Получена форма:', formData.formType);
-        console.log('📝 Данные:', JSON.stringify(formData, null, 2));
+// ========== CSRF TOKEN ENDPOINT ==========
+app.get('/api/csrf-token', (req, res) => {
+    const token = generateToken(req, res);
+    res.json({ csrfToken: token });
+});
 
-        // Валидация
-        if (!formData.name || !formData.phone) {
-            return res.status(400).json({
+// ========== FORM SUBMISSION HANDLER ==========
+app.post('/api/submit-form',
+    formLimiter,
+    doubleCsrfProtection,
+    formValidationRules,
+    async (req, res) => {
+        try {
+            // Проверка валидации
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                logger.warn('Form validation failed:', errors.array());
+                return res.status(400).json({
+                    success: false,
+                    message: 'Ошибка валидации данных',
+                    errors: errors.array().map(err => err.msg)
+                });
+            }
+
+            // Санитизация данных
+            const formData = sanitizeFormData(req.body);
+
+            logger.info('Form received:', {
+                type: formData.formType,
+                name: formData.name,
+                ip: req.ip
+            });
+
+            // Отправка уведомлений
+            const emailResult = await sendEmailNotification(formData);
+            const telegramResult = await sendTelegramNotification(formData);
+
+            // Отправка подтверждения клиенту
+            if (formData.email && emailResult) {
+                await sendClientConfirmation(formData);
+            }
+
+            res.json({
+                success: true,
+                message: 'Заявка успешно отправлена',
+                emailSent: emailResult,
+                telegramSent: telegramResult
+            });
+
+        } catch (error) {
+            logger.error('Form submission error:', error);
+            res.status(500).json({
                 success: false,
-                message: 'Не указаны обязательные поля'
+                message: 'Ошибка сервера. Пожалуйста, позвоните нам: 8-904-666-66-46'
             });
         }
-
-        // Отправка уведомлений
-        const emailResult = await sendEmailNotification(formData);
-        const telegramResult = await sendTelegramNotification(formData);
-
-        // Отправка подтверждения клиенту (опционально)
-        if (formData.email) {
-            await sendClientConfirmation(formData);
-        }
-
-        res.json({
-            success: true,
-            message: 'Заявка успешно отправлена',
-            emailSent: emailResult,
-            telegramSent: telegramResult
-        });
-
-    } catch (error) {
-        console.error('❌ Ошибка обработки формы:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Ошибка сервера. Пожалуйста, позвоните нам: 8-904-666-66-46'
-        });
     }
-});
+);
 
 // ========== EMAIL NOTIFICATION ==========
 async function sendEmailNotification(formData) {
+    if (!transporter) {
+        logger.warn('Email transporter not configured');
+        return false;
+    }
+
     try {
         const subject = getEmailSubject(formData.formType);
         const html = generateEmailHTML(formData);
@@ -112,11 +340,11 @@ async function sendEmailNotification(formData) {
         };
 
         const info = await transporter.sendMail(mailOptions);
-        console.log('✅ Email отправлен:', info.messageId);
+        logger.info('Email sent:', info.messageId);
         return true;
 
     } catch (error) {
-        console.error('❌ Ошибка отправки email:', error);
+        logger.error('Email sending error:', error);
         return false;
     }
 }
@@ -131,19 +359,23 @@ async function sendTelegramNotification(formData) {
             chat_id: TELEGRAM_CONFIG.chatId,
             text: message,
             parse_mode: 'HTML'
+        }, {
+            timeout: 5000
         });
 
-        console.log('✅ Telegram уведомление отправлено');
+        logger.info('Telegram notification sent');
         return true;
 
     } catch (error) {
-        console.error('❌ Ошибка отправки в Telegram:', error.message);
+        logger.error('Telegram sending error:', error.message);
         return false;
     }
 }
 
 // ========== CLIENT CONFIRMATION EMAIL ==========
 async function sendClientConfirmation(formData) {
+    if (!transporter) return false;
+
     try {
         const mailOptions = {
             from: `"Вернистраховку.рф" <${EMAIL_CONFIG.auth.user}>`,
@@ -152,24 +384,24 @@ async function sendClientConfirmation(formData) {
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                     <h2 style="color: #2563EB;">Спасибо за вашу заявку!</h2>
-                    
+
                     <p>Здравствуйте, <strong>${formData.name}</strong>!</p>
-                    
+
                     <p>Мы получили вашу заявку и свяжемся с вами в течение <strong>15 минут</strong>.</p>
-                    
+
                     <p>Наш специалист проведет бесплатный анализ вашего договора и рассчитает точную сумму возврата.</p>
-                    
+
                     <div style="background: #F9FAFB; padding: 20px; border-radius: 8px; margin: 20px 0;">
                         <h3 style="margin-top: 0;">Ваши данные:</h3>
                         <p><strong>Телефон:</strong> ${formData.phone}</p>
                         ${formData.amount ? `<p><strong>Сумма навязанных услуг:</strong> ${formData.amount} руб.</p>` : ''}
                     </div>
-                    
+
                     <p>Если у вас срочный вопрос, позвоните нам прямо сейчас:</p>
                     <p style="font-size: 24px; color: #2563EB; font-weight: bold;">
                         ☎ 8-904-666-66-46
                     </p>
-                    
+
                     <p style="color: #6B7280; font-size: 14px; margin-top: 30px;">
                         С уважением,<br>
                         Команда вернистраховку.рф<br>
@@ -180,11 +412,11 @@ async function sendClientConfirmation(formData) {
         };
 
         await transporter.sendMail(mailOptions);
-        console.log('✅ Подтверждение клиенту отправлено');
+        logger.info('Client confirmation sent');
         return true;
 
     } catch (error) {
-        console.error('❌ Ошибка отправки подтверждения:', error);
+        logger.error('Client confirmation error:', error);
         return false;
     }
 }
@@ -234,10 +466,10 @@ function generateEmailHTML(formData) {
                     <h1 style="margin: 0;">🛡️ НОВАЯ ЗАЯВКА</h1>
                     <p style="margin: 10px 0 0 0;">Вернистраховку.рф</p>
                 </div>
-                
+
                 <div class="content">
                     <h2 style="color: #1F2937; margin-top: 0;">Тип формы: ${getFormTypeName(formData.formType)}</h2>
-                    
+
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr class="info-row">
                             <td><span class="label">👤 Имя:</span> ${formData.name}</td>
@@ -265,15 +497,15 @@ function generateEmailHTML(formData) {
                             <td><span class="label">🕐 Время:</span> ${new Date(formData.timestamp).toLocaleString('ru-RU')}</td>
                         </tr>
                         <tr class="info-row">
-                            <td><span class="label">🌐 Страница:</span> ${formData.page}</td>
+                            <td><span class="label">🌐 IP:</span> ${formData.ip || 'N/A'}</td>
                         </tr>
                     </table>
-                    
+
                     <div style="margin-top: 30px; padding: 20px; background: #FEF3C7; border-radius: 8px; border-left: 4px solid #F59E0B;">
                         <strong>⚠️ ВАЖНО!</strong> Свяжитесь с клиентом в течение 15 минут!
                     </div>
                 </div>
-                
+
                 <div class="footer">
                     <p>ООО «Деловой подход+»</p>
                     <p>8-904-666-66-46 | delovoi_podhod@inbox.ru</p>
@@ -327,28 +559,62 @@ app.get('/api/health', (req, res) => {
     res.json({
         status: 'OK',
         timestamp: new Date().toISOString(),
-        uptime: process.uptime()
+        uptime: process.uptime(),
+        environment: process.env.NODE_ENV || 'development'
     });
 });
 
+// ========== 404 HANDLER ==========
+app.use((req, res) => {
+    logger.warn(`404 Not Found: ${req.method} ${req.url}`);
+    res.status(404).sendFile(path.join(__dirname, '../index.html'));
+});
+
+// ========== ERROR HANDLER ==========
+app.use((err, req, res, next) => {
+    logger.error('Server error:', err);
+    res.status(500).json({
+        success: false,
+        message: 'Внутренняя ошибка сервера. Пожалуйста, позвоните нам: 8-904-666-66-46'
+    });
+});
+
+// ========== CREATE LOGS DIRECTORY ==========
+const fs = require('fs');
+const logsDir = path.join(__dirname, '../logs');
+if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir);
+    logger.info('Logs directory created');
+}
+
 // ========== START SERVER ==========
 app.listen(PORT, () => {
-    console.log(`
+    logger.info(`
 ╔════════════════════════════════════════╗
 ║   🛡️  ВЕРНИСТРАХОВКУ.РФ - BACKEND     ║
 ║   Server running on port ${PORT}        ║
 ║   http://localhost:${PORT}              ║
+║   Environment: ${process.env.NODE_ENV || 'development'}         ║
 ╚════════════════════════════════════════╝
     `);
 });
 
+// ========== GRACEFUL SHUTDOWN ==========
+process.on('SIGTERM', () => {
+    logger.info('SIGTERM signal received: closing HTTP server');
+    server.close(() => {
+        logger.info('HTTP server closed');
+    });
+});
+
 // ========== ERROR HANDLING ==========
 process.on('unhandledRejection', (error) => {
-    console.error('❌ Unhandled Rejection:', error);
+    logger.error('Unhandled Rejection:', error);
 });
 
 process.on('uncaughtException', (error) => {
-    console.error('❌ Uncaught Exception:', error);
+    logger.error('Uncaught Exception:', error);
     process.exit(1);
 });
 
+module.exports = app;

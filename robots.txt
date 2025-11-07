@@ -1,0 +1,32 @@
+# robots.txt для вернистраховку.рф
+
+User-agent: *
+Allow: /
+
+# Запрет индексации служебных директорий
+Disallow: /backend/
+Disallow: /node_modules/
+Disallow: /logs/
+Disallow: /api/
+Disallow: /.git/
+Disallow: /*.env
+
+# Разрешаем индексацию основных файлов
+Allow: /index.html
+Allow: /privacy.html
+Allow: /src/
+Allow: /assets/
+
+# Указываем путь к sitemap
+Sitemap: https://вернистраховку.рф/sitemap.xml
+Sitemap: https://xn--80aaffoba4b4cyb.xn--p1ai/sitemap.xml
+
+# Правила для основных поисковых систем
+User-agent: Yandex
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+# Ускоренная индексация для Яндекса
+Host: вернистраховку.рф
