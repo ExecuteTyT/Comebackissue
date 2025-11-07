@@ -159,10 +159,11 @@ app.use(express.static(path.join(__dirname, '../'), {
 }));
 
 // ========== EMAIL CONFIGURATION ==========
+const smtpPort = parseInt(process.env.SMTP_PORT) || 465;
 const EMAIL_CONFIG = {
-    host: process.env.SMTP_HOST || 'smtp.inbox.ru',
-    port: parseInt(process.env.SMTP_PORT) || 465,
-    secure: true,
+    host: process.env.SMTP_HOST || 'smtp.spaceweb.ru',
+    port: smtpPort,
+    secure: smtpPort === 465, // SSL для порта 465, STARTTLS для портов 25/2525
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
@@ -405,7 +406,7 @@ async function sendClientConfirmation(formData) {
                     <p style="color: #6B7280; font-size: 14px; margin-top: 30px;">
                         С уважением,<br>
                         Команда вернистраховку.рф<br>
-                        ООО «Деловой подход+»
+                        ИП ГИЛЬВАНОВА АЙГУЛЬ РАИСОВНА
                     </p>
                 </div>
             `
@@ -507,7 +508,7 @@ function generateEmailHTML(formData) {
                 </div>
 
                 <div class="footer">
-                    <p>ООО «Деловой подход+»</p>
+                    <p>ИП ГИЛЬВАНОВА АЙГУЛЬ РАИСОВНА</p>
                     <p>8-904-666-66-46 | delovoi_podhod@inbox.ru</p>
                 </div>
             </div>
