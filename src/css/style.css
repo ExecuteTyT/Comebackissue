@@ -79,20 +79,44 @@ html, body {
     overflow: hidden;
 }
 
+/* ========== LOGO AND TITLE BLOCK ========== */
+.logo-title-block {
+    gap: 0.125rem; /* Минимальное расстояние между логотипом и текстом */
+}
+
+.logo-img {
+    margin-right: 0.125rem; /* Дополнительный минимальный отступ справа от логотипа */
+}
+
+.logo-text {
+    margin-left: 0; /* Убираем левый отступ у текста */
+}
+
 @media (max-width: 640px) {
-    #header a[href="#hero"] span {
+    /* Уменьшаем padding контейнера на мобильных, чтобы логотип можно было сдвинуть левее */
+    #header .container {
+        padding-left: 0.75rem; /* px-3 = 12px вместо px-6 = 24px */
+        padding-right: 0.75rem;
+    }
+    
+    .logo-title-block {
+        gap: 0.0625rem; /* 1px - еще меньше расстояние на мобильных */
+        max-width: calc(100% - 60px); /* Оставляем место для бургерного меню */
+        flex-shrink: 1;
+        min-width: 0;
+        margin-left: 0; /* Убираем левый отступ */
+    }
+    
+    .logo-text {
         font-size: 1.125rem; /* text-lg = 18px - исходный размер */
         letter-spacing: 0.05em;
     }
     
-    #header a[href="#hero"] img {
+    .logo-img {
         height: 5rem; /* h-20 = 80px */
         margin-top: 0.5rem; /* mt-2 = 8px - опускаем логотип ниже */
-    }
-    
-    /* Уменьшаем расстояние между логотипом и названием на маленьких экранах */
-    #header a[href="#hero"] {
-        gap: 0.125rem; /* space-x-0.5 = 2px - минимальное расстояние */
+        margin-right: 0.0625rem; /* 1px - минимальный отступ */
+        margin-left: 0; /* Убираем левый отступ у логотипа */
     }
     
     /* Гарантируем видимость бургерного меню на очень маленьких экранах */
@@ -105,12 +129,31 @@ html, body {
         min-width: 40px !important;
         flex-shrink: 0 !important;
     }
+}
+
+/* Для очень маленьких экранов (iPhone 12 Pro - 390px) */
+@media (max-width: 390px) {
+    /* Еще меньше padding для максимального использования пространства */
+    #header .container {
+        padding-left: 0.5rem; /* px-2 = 8px */
+        padding-right: 0.5rem;
+    }
     
-    /* Убеждаемся, что логотип и название не занимают слишком много места */
-    #header a[href="#hero"] {
-        max-width: calc(100% - 60px);
-        flex-shrink: 1;
-        min-width: 0; /* позволяет тексту сжиматься */
+    .logo-title-block {
+        gap: 0.03125rem; /* 0.5px - минимально возможное расстояние */
+        max-width: calc(100% - 50px); /* Еще больше места для бургерного меню */
+        margin-left: 0;
+    }
+    
+    .logo-img {
+        margin-right: 0.03125rem; /* 0.5px */
+        margin-left: 0;
+        height: 4.5rem; /* Немного меньше логотип на очень маленьких экранах */
+    }
+    
+    .logo-text {
+        font-size: 1rem; /* text-base = 16px - немного меньше, но не слишком */
+        letter-spacing: 0.025em;
     }
 }
 
