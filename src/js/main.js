@@ -770,5 +770,38 @@ window.validateEmail = validateEmail;
 window.validatePhone = validatePhone;
 window.trackClick = trackClick;
 
+// ========== COUNTUP ANIMATION (для счётчика в Hero) ==========
+function animateCountUp(element, start, end, duration) {
+    let startTime = null;
+    const step = (timestamp) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        const currentValue = Math.floor(progress * (end - start) + start);
+        element.textContent = new Intl.NumberFormat('ru-RU').format(currentValue);
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
+    };
+    window.requestAnimationFrame(step);
+}
+
+// Инициализация CountUp при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const countupElements = document.querySelectorAll('.countup');
+
+    // IntersectionObserver для запуска анимации при появлении в viewport
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.dataset.animated) {
+                const target = parseInt(entry.target.dataset.target);
+                animateCountUp(entry.target, 0, target, 2500);
+                entry.target.dataset.animated = 'true';
+            }
+        });
+    }, { threshold: 0.5 });
+
+    countupElements.forEach(el => observer.observe(el));
+});
+
 console.log('✅ main.js загружен и инициализирован');
 

@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Вернём страховки и навязанные услуги по кредиту без предоплаты. Работаем по всей России, сопровождаем до полного возврата, уже вернули 47 млн рублей">
-    <meta name="keywords" content="возврат страховки, навязанные услуги, возврат денег банк, страхование жизни возврат">
-    
+    <meta name="description" content="Поможем вернуть навязанные страховки и услуги по кредиту. Работаем БЕЗ ПРЕДОПЛАТЫ. Вернули уже 47 млн ₽. Средний срок 2-6 месяцев. Бесплатная консультация: 8-904-666-66-46">
+    <meta name="keywords" content="возврат страховки по кредиту, навязанная страховка, возврат каско, возврат страховки жизни, навязанные банковские услуги, защита прав потребителей">
+
     <!-- Open Graph -->
-    <meta property="og:title" content="Вернём навязанные страховки БЕЗ ПРЕДОПЛАТЫ">
-    <meta property="og:description" content="Помогаем вернуть страховки и навязанные услуги по кредиту. В среднем 2–6 месяцев, сопровождаем до победы, оплата только после возврата">
+    <meta property="og:title" content="Возврат навязанных страховок БЕЗ ПРЕДОПЛАТЫ | Вернули 47 млн ₽">
+    <meta property="og:description" content="Помогаем вернуть навязанные страховки по кредиту БЕЗ ПРЕДОПЛАТЫ. 95% успеха. Средний срок 2-6 месяцев. Бесплатная консультация.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://вернистраховку.рф">
-    
-    <title>Вернём навязанные страховки БЕЗ ПРЕДОПЛАТЫ | вернистраховку.рф</title>
+    <meta property="og:image" content="https://вернистраховку.рф/assets/og-image.jpg">
+
+    <title>Возврат навязанных страховок БЕЗ ПРЕДОПЛАТЫ | вернистраховку.рф</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
@@ -38,10 +39,16 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#2563EB',
-                        secondary: '#10B981',
-                        accent: '#F59E0B',
-                        textDark: '#1F2937',
+                        // Основные цвета согласно ТЗ
+                        primary: '#1E3A8A',      // Primary Blue
+                        secondary: '#F97316',    // Accent Orange (для CTA)
+                        success: '#10B981',      // Success Green
+                        warning: '#F59E0B',      // Warning Yellow
+                        danger: '#EF4444',       // Danger Red
+                        textDark: '#111827',
+                        // Градиенты
+                        'blue-primary': '#1E3A8A',
+                        'blue-light': '#3B82F6',
                     },
                     fontFamily: {
                         heading: ['Montserrat', 'sans-serif'],
@@ -181,12 +188,13 @@
                 <!-- Phone & CTA -->
                 <div class="flex items-center space-x-4 flex-shrink-0">
                     <div class="hidden md:block text-right">
-                        <a href="tel:+79046666646" class="text-lg font-bold text-primary hover:text-blue-700 transition">
-                            8-904-666-66-46
+                        <a href="tel:+79046666646" class="flex items-center gap-2 text-lg font-bold text-primary hover:text-blue-light transition">
+                            <i class="fas fa-phone text-success"></i>
+                            <span>8-904-666-66-46</span>
                         </a>
-                        <p class="text-xs text-gray-500">Пн-Пт 9:00-21:00</p>
+                        <p class="text-xs text-gray-500 ml-7">Пн-Пт 9:00-21:00</p>
                     </div>
-                    <button onclick="openModal()" class="hidden lg:block bg-accent hover:bg-orange-500 text-white font-semibold px-6 py-3 rounded-lg transition transform hover:scale-105">
+                    <button onclick="openModal()" class="hidden lg:block bg-secondary hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
                         Бесплатная консультация
                     </button>
                     <!-- Mobile Menu Button -->
@@ -211,105 +219,189 @@
         </div>
     </header>
 
-    <!-- ========== 2. HERO СЕКЦИЯ ========== -->
+    <!-- ========== 2. HERO СЕКЦИЯ (обновлено согласно ТЗ) ========== -->
     <section id="hero" class="relative min-h-screen flex items-center bg-gradient-to-b from-blue-50 to-white pt-24 sm:pt-28 lg:pt-32 pb-16">
         <div class="container mx-auto px-6 lg:px-16">
-            <div class="grid lg:grid-cols-5 gap-12 items-center">
-                <!-- Left: Content -->
-                <div class="lg:col-span-3" data-aos="fade-right">
-                    <h1 class="font-heading font-bold text-4xl md:text-5xl lg:text-6xl leading-tight mb-6">
-                        Вернём страховки и навязанные услуги по кредиту
+            <div class="grid lg:grid-cols-2 gap-12 items-start">
+                <!-- Left: Content (50%) -->
+                <div class="space-y-6" data-aos="fade-right">
+                    <!-- Над-заголовок -->
+                    <div class="flex flex-wrap gap-4 text-sm md:text-base font-medium text-gray-700">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-success"></i>
+                            Без предоплаты
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-success"></i>
+                            Работаем с 2019 года
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-success"></i>
+                            Вернули 47 млн ₽
+                        </span>
+                    </div>
+
+                    <!-- H1 Заголовок -->
+                    <h1 class="font-heading font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[56px] leading-tight">
+                        Банк навязал страховку при кредите?
+                        <span class="text-success">Вернём 60-80%</span>
+                        <span class="text-secondary">БЕЗ суда</span>
                     </h1>
-                    
-                    <p class="text-xl md:text-2xl mb-6">
-                        <span class="font-bold text-accent">БЕЗ ПРЕДОПЛАТЫ.</span> 
-                        Платите только после получения денег
+
+                    <!-- Подзаголовок -->
+                    <p class="text-lg md:text-xl text-gray-600 leading-relaxed max-w-[560px]">
+                        Работаем БЕЗ ПРЕДОПЛАТЫ — платите только после возврата денег.
+                        Уже вернули 47 млн рублей для 1000+ клиентов по всей России.
                     </p>
 
-                    <ul class="space-y-3 mb-8 text-lg">
-                        <li class="flex items-center space-x-3">
-                            <i class="fas fa-check-circle text-secondary text-xl"></i>
-                            <span><strong>Средний возврат 2–6 месяцев</strong></span>
+                    <!-- Счётчик возврата (анимированный) -->
+                    <div class="inline-block bg-gradient-to-r from-green-50 to-emerald-50 px-6 py-3 rounded-lg border-l-4 border-success">
+                        <p class="text-sm text-gray-600 mb-1">За эту неделю вернули:</p>
+                        <p class="text-2xl md:text-3xl font-bold text-success" id="counter-amount">
+                            <span class="countup" data-target="2340000">0</span> ₽
+                        </p>
+                    </div>
+
+                    <!-- Преимущества с галочками -->
+                    <ul class="space-y-4 text-base md:text-lg">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-success text-xl mt-1"></i>
+                            <span><strong>Средний возврат 2-6 месяцев</strong></span>
                         </li>
-                        <li class="flex items-center space-x-3">
-                            <i class="fas fa-check-circle text-secondary text-xl"></i>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-success text-xl mt-1"></i>
                             <span><strong>Работаем по всей России</strong></span>
                         </li>
-                        <li class="flex items-center space-x-3">
-                            <i class="fas fa-check-circle text-secondary text-xl"></i>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-success text-xl mt-1"></i>
                             <span><strong>Вернули уже 47 млн рублей клиентам</strong></span>
                         </li>
                     </ul>
 
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="#calculator" class="inline-block bg-accent hover:bg-orange-500 text-white font-semibold text-lg px-8 py-4 rounded-lg transition transform hover:scale-105 text-center">
+                    <!-- CTA Кнопки -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <!-- Главная кнопка с пульсацией -->
+                        <a href="#calculator" class="inline-flex items-center justify-center bg-secondary hover:bg-orange-600 text-white font-bold text-base md:text-lg px-8 py-4 rounded-xl transition duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 btn-pulse text-center">
                             <i class="fas fa-calculator mr-2"></i>
-                            РАССЧИТАТЬ ВОЗВРАТ
+                            Узнать сумму возврата за 30 секунд
                         </a>
-                        <button onclick="openModal()" class="inline-block bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold text-lg px-8 py-4 rounded-lg transition text-center">
-                            Бесплатная консультация
-                        </button>
+
+                        <!-- Вторичная кнопка -->
+                        <a href="tel:+79046666646" class="inline-flex items-center justify-center bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold text-base md:text-lg px-8 py-4 rounded-xl transition duration-300 text-center">
+                            <i class="fas fa-phone mr-2"></i>
+                            Позвонить юристу
+                        </a>
                     </div>
                 </div>
 
-                <!-- Right: Form -->
-                <div class="lg:col-span-2" data-aos="fade-left">
-                    <div class="bg-white p-8 rounded-2xl shadow-2xl">
-                        <h3 class="font-heading font-bold text-2xl mb-2 text-center">
-                            Узнайте сумму возврата за 30 секунд
-                        </h3>
-                        <p class="text-gray-600 text-center mb-6">Бесплатный экспресс-расчет</p>
+                <!-- Right: Мини-калькулятор / Визуал (50%) -->
+                <div class="lg:sticky lg:top-32" data-aos="fade-left">
+                    <div class="bg-white p-8 rounded-2xl shadow-2xl border border-gray-100">
+                        <div class="text-center mb-6">
+                            <h3 class="font-heading font-bold text-2xl md:text-3xl mb-2">
+                                Узнайте сумму возврата за 30 секунд
+                            </h3>
+                            <p class="text-gray-600">Расчет абсолютно бесплатный и ни к чему не обязывает</p>
+                        </div>
 
                         <form id="hero-form" class="space-y-4" onsubmit="handleFormSubmit(event, 'hero')">
                             <div>
-                                <input 
-                                    type="text" 
-                                    name="name" 
-                                    placeholder="Ваше имя" 
+                                <input
+                                    type="text"
+                                    name="name"
+                                    placeholder="Ваше имя"
                                     required
-                                    class="w-full h-12 px-4 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition"
+                                    class="w-full h-14 px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-secondary transition text-base"
                                 >
                             </div>
 
                             <div>
-                                <input 
-                                    type="tel" 
-                                    name="phone" 
+                                <input
+                                    type="tel"
+                                    name="phone"
                                     id="hero-phone"
-                                    placeholder="+7 (___) ___-__-__" 
+                                    placeholder="+7 (___) ___-__-__"
                                     required
-                                    class="w-full h-12 px-4 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition"
+                                    class="w-full h-14 px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-secondary transition text-base"
                                 >
                             </div>
 
                             <div>
-                                <input 
-                                    type="text" 
-                                    name="amount" 
-                                    placeholder="Примерная сумма навязанных услуг (руб.)" 
-                                    class="w-full h-12 px-4 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition"
+                                <input
+                                    type="text"
+                                    name="amount"
+                                    placeholder="Примерная сумма навязанных услуг (руб.)"
+                                    class="w-full h-14 px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-secondary transition text-base"
                                 >
+                                <p class="text-xs text-gray-500 mt-2 flex items-start gap-1">
+                                    <i class="fas fa-lightbulb text-warning mt-0.5"></i>
+                                    <span>Посмотрите в кредитном договоре раздел "Дополнительные услуги" или "Страхование"</span>
+                                </p>
                             </div>
 
                             <div class="flex items-start space-x-2">
                                 <input type="checkbox" id="hero-consent" required class="mt-1">
                                 <label for="hero-consent" class="text-xs text-gray-600">
-                                    Нажимая кнопку, вы соглашаетесь с 
+                                    Нажимая кнопку, вы соглашаетесь с
                                     <a href="/privacy.html" class="text-primary underline" target="_blank" rel="noopener">политикой конфиденциальности</a>
                                 </label>
                             </div>
 
-                            <button type="submit" class="w-full bg-accent hover:bg-orange-500 text-white font-bold text-lg py-4 rounded-lg transition transform hover:scale-105">
-                                РАССЧИТАТЬ ВОЗВРАТ
+                            <button type="submit" class="w-full bg-secondary hover:bg-orange-600 text-white font-bold text-lg py-4 rounded-xl transition duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
+                                <i class="fas fa-calculator mr-2"></i>
+                                РАССЧИТАТЬ МОЙ ВОЗВРАТ
                             </button>
                         </form>
+
+                        <!-- Trust badges под формой -->
+                        <div class="flex flex-wrap justify-center gap-3 mt-6 text-xs text-gray-600">
+                            <span class="trust-badge">
+                                <i class="fas fa-lock"></i> SSL
+                            </span>
+                            <span class="trust-badge">
+                                <i class="fas fa-balance-scale"></i> Лицензия
+                            </span>
+                            <span class="trust-badge">
+                                <i class="fas fa-trophy"></i> 5+ лет
+                            </span>
+                            <span class="trust-badge">
+                                <i class="fas fa-users"></i> 1000+ клиентов
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ========== 3. БЛОК ПРОБЛЕМЫ ========== -->
+    <!-- ========== 3. ПЛАШКА СРОЧНОСТИ (новый блок согласно ТЗ) ========== -->
+    <section class="bg-yellow-50 border-l-4 border-warning py-6 lg:py-8">
+        <div class="container mx-auto px-6 lg:px-16">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+                <div class="flex items-start gap-4 flex-1">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-triangle text-warning text-3xl lg:text-4xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-heading font-bold text-lg md:text-xl lg:text-2xl text-yellow-900 mb-2">
+                            ВНИМАНИЕ: Срок обращения ограничен законом!
+                        </h3>
+                        <p class="text-sm md:text-base lg:text-lg text-yellow-800 leading-relaxed">
+                            У вас есть <strong>3 года с момента подписания кредитного договора</strong> на возврат навязанных услуг.
+                            Прошло больше 2 лет? Действуйте <strong class="underline">СЕЙЧАС</strong>, иначе потеряете право на деньги!
+                        </p>
+                    </div>
+                </div>
+                <div class="flex-shrink-0">
+                    <a href="#calculator" class="inline-block bg-warning hover:bg-yellow-500 text-gray-900 font-semibold px-6 py-3 rounded-lg transition duration-300 shadow-md hover:shadow-lg whitespace-nowrap">
+                        Проверить мой срок
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 4. БЛОК ПРОБЛЕМЫ ========== -->
     <section id="problems" class="py-16 lg:py-24 bg-gray-50">
         <div class="container mx-auto px-6 lg:px-16">
             <h2 class="font-heading font-bold text-3xl md:text-4xl lg:text-5xl text-center mb-4" data-aos="fade-up">
