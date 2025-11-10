@@ -26,8 +26,9 @@ const PORT = process.env.PORT || 3000;
 
 // Trust proxy для работы за Vercel прокси
 // В Vercel все запросы идут через прокси, нужно доверять заголовкам X-Forwarded-*
+// Используем число 1 вместо true для более безопасной настройки
 if (process.env.VERCEL || process.env.VERCEL_ENV) {
-    app.set('trust proxy', true);
+    app.set('trust proxy', 1); // Доверяем только первому прокси (Vercel)
 }
 
 // ========== LOGGER CONFIGURATION ==========
@@ -189,6 +190,10 @@ const limiter = rateLimit({
     message: 'Слишком много запросов с вашего IP, попробуйте позже',
     standardHeaders: true,
     legacyHeaders: false,
+    // Отключаем валидацию trust proxy для Vercel
+    validate: {
+        trustProxy: false
+    },
     handler: (req, res) => {
         logger.warn(`Rate limit exceeded for IP: ${req.ip}`);
         res.status(429).json({
@@ -225,15 +230,23 @@ const { generateToken, doubleCsrfProtection } = doubleCsrf({
 });
 
 // Статические файлы
-app.use(express.static(path.join(__dirname, '../'), {
-    setHeaders: (res, path) => {
+// В Vercel пути могут отличаться, используем абсолютный путь
+const staticPath = path.join(__dirname, '../');
+logger.info(`Serving static files from: ${staticPath}`);
+
+app.use(express.static(staticPath, {
+    setHeaders: (res, filePath) => {
         // Кэширование статических ресурсов
-        if (path.endsWith('.js') || path.endsWith('.css')) {
+        if (filePath.endsWith('.js') || filePath.endsWith('.css')) {
             res.set('Cache-Control', 'public, max-age=31536000'); // 1 год
-        } else if (path.endsWith('.html')) {
+        } else if (filePath.endsWith('.html')) {
             res.set('Cache-Control', 'no-cache');
         }
-    }
+    },
+    // Включаем dotfiles для файлов, начинающихся с точки
+    dotfiles: 'ignore',
+    // Индексные файлы
+    index: false
 }));
 
 // ========== EMAIL CONFIGURATION ==========
@@ -635,16 +648,40 @@ function formatMoney(amount) {
 
 // ========== HEALTH CHECK ==========
 app.get('/api/health', (req, res) => {
+    const fs = require('fs');
+    const staticPath = path.join(__dirname, '../');
+    const filesExist = {
+        indexHtml: fs.existsSync(path.join(staticPath, 'index.html')),
+        styleCss: fs.existsSync(path.join(staticPath, 'src/css/style.css')),
+        mainJs: fs.existsSync(path.join(staticPath, 'src/js/main.js')),
+        calculatorJs: fs.existsSync(path.join(staticPath, 'src/js/calculator.js')),
+        logoSvg: fs.existsSync(path.join(staticPath, 'assets/logo-main.svg'))
+    };
+    
     res.json({
         status: 'OK',
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
-        environment: process.env.NODE_ENV || 'development'
+        environment: process.env.NODE_ENV || 'development',
+        staticPath: staticPath,
+        __dirname: __dirname,
+        filesExist: filesExist
     });
 });
 
 // ========== 404 HANDLER ==========
-app.use((req, res) => {
+// Обрабатываем 404 только для не-статических файлов
+app.use((req, res, next) => {
+    // Если это запрос статического файла, возвращаем 404
+    const staticExtensions = ['.js', '.css', '.svg', '.png', '.jpg', '.jpeg', '.gif', '.ico', '.webmanifest', '.xml', '.txt', '.woff', '.woff2', '.ttf', '.eot', '.map'];
+    const isStaticFile = staticExtensions.some(ext => req.url.endsWith(ext));
+    
+    if (isStaticFile) {
+        logger.warn(`404 Static file not found: ${req.method} ${req.url}`);
+        return res.status(404).json({ error: 'File not found' });
+    }
+    
+    // Для остальных запросов возвращаем index.html (SPA fallback)
     logger.warn(`404 Not Found: ${req.method} ${req.url}`);
     res.status(404).sendFile(path.join(__dirname, '../index.html'));
 });
