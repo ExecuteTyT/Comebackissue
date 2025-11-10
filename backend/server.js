@@ -24,6 +24,12 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust proxy для работы за Vercel прокси
+// В Vercel все запросы идут через прокси, нужно доверять заголовкам X-Forwarded-*
+if (process.env.VERCEL || process.env.VERCEL_ENV) {
+    app.set('trust proxy', true);
+}
+
 // ========== LOGGER CONFIGURATION ==========
 // Определяем serverless окружение (Vercel, AWS Lambda)
 // В Vercel переменная VERCEL может быть "1" или просто существовать
