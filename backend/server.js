@@ -203,8 +203,21 @@ const limiter = rateLimit({
     }
 });
 
-// Применяем rate limiting ко всем запросам
-app.use(limiter);
+// Применяем rate limiting ко всем запросам, кроме статических файлов
+// Статические файлы обрабатываются express.static, который идет после limiter
+app.use((req, res, next) => {
+    // Пропускаем статические файлы через rate limiter (они обрабатываются express.static)
+    const staticExtensions = ['.js', '.css', '.svg', '.png', '.jpg', '.jpeg', '.gif', '.ico', '.webmanifest', '.xml', '.txt', '.woff', '.woff2', '.ttf', '.eot', '.map', '.html'];
+    const isStaticFile = staticExtensions.some(ext => req.url.endsWith(ext)) && !req.url.startsWith('/api/');
+    
+    if (isStaticFile) {
+        // Для статических файлов пропускаем rate limiting
+        return next();
+    }
+    
+    // Для остальных запросов применяем rate limiting
+    limiter(req, res, next);
+});
 
 // Строгий rate limiting для форм
 const formLimiter = rateLimit({
@@ -232,8 +245,27 @@ const { generateToken, doubleCsrfProtection } = doubleCsrf({
 // Статические файлы
 // В Vercel пути могут отличаться, используем абсолютный путь
 const staticPath = path.join(__dirname, '../');
-logger.info(`Serving static files from: ${staticPath}`);
+const fs = require('fs');
 
+// Проверяем существование ключевых файлов при старте
+if (isServerless) {
+    const testFiles = [
+        'index.html',
+        'src/css/style.css',
+        'src/js/main.js',
+        'src/js/calculator.js',
+        'assets/logo-main.svg'
+    ];
+    testFiles.forEach(file => {
+        const fullPath = path.join(staticPath, file);
+        const exists = fs.existsSync(fullPath);
+        logger.info(`Static file check: ${file} - ${exists ? 'EXISTS' : 'NOT FOUND'} at ${fullPath}`);
+    });
+}
+
+logger.info(`Serving static files from: ${staticPath}, __dirname: ${__dirname}`);
+
+// Статические файлы должны обслуживаться ДО маршрутов
 app.use(express.static(staticPath, {
     setHeaders: (res, filePath) => {
         // Кэширование статических ресурсов
@@ -246,7 +278,9 @@ app.use(express.static(staticPath, {
     // Включаем dotfiles для файлов, начинающихся с точки
     dotfiles: 'ignore',
     // Индексные файлы
-    index: false
+    index: false,
+    // Fallthrough - если файл не найден, передаем управление дальше
+    fallthrough: true
 }));
 
 // ========== EMAIL CONFIGURATION ==========
@@ -348,6 +382,36 @@ const formValidationRules = [
         .trim()
         .isLength({ max: 1000 }).withMessage('Сообщение не может быть длиннее 1000 символов')
 ];
+
+// ========== TEST ROUTE FOR STATIC FILES ==========
+// Тестовый маршрут для проверки доступности статических файлов
+app.get('/test-static', (req, res) => {
+    const fs = require('fs');
+    const staticPath = path.join(__dirname, '../');
+    const testFiles = {
+        'index.html': path.join(staticPath, 'index.html'),
+        'src/css/style.css': path.join(staticPath, 'src/css/style.css'),
+        'src/js/main.js': path.join(staticPath, 'src/js/main.js'),
+        'src/js/calculator.js': path.join(staticPath, 'src/js/calculator.js'),
+        'assets/logo-main.svg': path.join(staticPath, 'assets/logo-main.svg')
+    };
+    
+    const results = {};
+    Object.keys(testFiles).forEach(key => {
+        results[key] = {
+            path: testFiles[key],
+            exists: fs.existsSync(testFiles[key]),
+            isFile: fs.existsSync(testFiles[key]) ? fs.statSync(testFiles[key]).isFile() : false
+        };
+    });
+    
+    res.json({
+        staticPath: staticPath,
+        __dirname: __dirname,
+        processCwd: process.cwd(),
+        files: results
+    });
+});
 
 // ========== MAIN ROUTE ==========
 app.get('/', (req, res) => {
