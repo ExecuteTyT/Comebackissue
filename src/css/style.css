@@ -67,8 +67,11 @@ html, body {
 
 #header nav {
     max-width: 100%;
-    overflow: hidden;
+    overflow: visible;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 #header .container {
@@ -78,12 +81,36 @@ html, body {
 
 @media (max-width: 640px) {
     #header a[href="#hero"] span {
-        font-size: 1.125rem; /* text-lg = 18px */
+        font-size: 1.125rem; /* text-lg = 18px - исходный размер */
         letter-spacing: 0.05em;
     }
     
     #header a[href="#hero"] img {
         height: 5rem; /* h-20 = 80px */
+        margin-top: 0.5rem; /* mt-2 = 8px - опускаем логотип ниже */
+    }
+    
+    /* Уменьшаем расстояние между логотипом и названием на маленьких экранах */
+    #header a[href="#hero"] {
+        gap: 0.125rem; /* space-x-0.5 = 2px - минимальное расстояние */
+    }
+    
+    /* Гарантируем видимость бургерного меню на очень маленьких экранах */
+    #mobile-menu-btn {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        flex-shrink: 0 !important;
+    }
+    
+    /* Убеждаемся, что логотип и название не занимают слишком много места */
+    #header a[href="#hero"] {
+        max-width: calc(100% - 60px);
+        flex-shrink: 1;
+        min-width: 0; /* позволяет тексту сжиматься */
     }
 }
 
@@ -376,6 +403,12 @@ html, body {
     font-size: 1.05rem;
     line-height: 1.5;
     padding-right: 3.5rem;
+    border-color: #D1D5DB !important; /* border-gray-300 - не красный по умолчанию */
+}
+
+/* Поле даты не должно быть красным по умолчанию, только при валидации через JS */
+#loan-date:invalid {
+    border-color: #D1D5DB !important;
 }
 
 #loan-date::-webkit-calendar-picker-indicator {
@@ -446,7 +479,17 @@ input[type="date"] {
 }
 
 /* ========== MODAL ========== */
+#modal {
+    display: none !important;
+}
+
 #modal.active {
+    display: flex !important;
+}
+
+/* Гарантируем, что модалка видна при активном состоянии, даже если есть класс hidden */
+#modal.active.hidden,
+#modal.hidden.active {
     display: flex !important;
 }
 
@@ -483,18 +526,56 @@ input[type="date"] {
     position: relative;
     width: 40px;
     height: 40px;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
 }
 
 /* Hamburger Icon Animation */
 #mobile-menu-btn i {
     transition: transform 0.3s ease-in-out;
+    font-size: 1.5rem;
 }
 
 #mobile-menu-btn.active i.fa-bars {
     transform: rotate(90deg);
+}
+
+/* Гарантия видимости бургерного меню на мобильных и скрытие на десктопе */
+@media (max-width: 1023px) {
+    #mobile-menu-btn {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        z-index: 10000 !important;
+        flex-shrink: 0 !important;
+    }
+    
+    /* Убеждаемся, что родительский блок не скрывает кнопку */
+    #header nav > div:last-child {
+        display: flex !important;
+        align-items: center;
+        flex-shrink: 0;
+        min-width: 40px;
+    }
+    
+    /* Убеждаемся, что навигация не обрезает элементы */
+    #header nav {
+        overflow: visible !important;
+    }
+}
+
+/* Скрытие бургерного меню на десктопе */
+@media (min-width: 1024px) {
+    #mobile-menu-btn {
+        display: none !important;
+        visibility: hidden !important;
+    }
 }
 
 /* Burger Animation */
@@ -663,7 +744,8 @@ button:active,
 }
 
 /* ========== FORM VALIDATION STATES ========== */
-input:invalid:not(:placeholder-shown),
+/* Исключаем поле даты из автоматической валидации - валидация только через JS */
+input:invalid:not(:placeholder-shown):not(#loan-date),
 textarea:invalid:not(:placeholder-shown) {
     border-color: #EF4444;
 }

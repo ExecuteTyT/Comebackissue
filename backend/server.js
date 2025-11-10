@@ -25,6 +25,65 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ========== LOGGER CONFIGURATION ==========
+// Определяем serverless окружение (Vercel, AWS Lambda)
+// В Vercel переменная VERCEL может быть "1" или просто существовать
+const isServerless = !!(
+    process.env.VERCEL || 
+    process.env.VERCEL_ENV || 
+    process.env.AWS_LAMBDA_FUNCTION_NAME ||
+    process.env.LAMBDA_TASK_ROOT
+);
+
+const loggerTransports = [];
+
+// В serverless окружении (Vercel) используем ТОЛЬКО консольные логи
+// Файловые логи недоступны из-за read-only файловой системы
+if (isServerless) {
+    // В serverless окружении ТОЛЬКО консольные логи - никаких файловых!
+    loggerTransports.push(
+        new winston.transports.Console({
+            format: winston.format.combine(
+                winston.format.timestamp({
+                    format: 'YYYY-MM-DD HH:mm:ss'
+                }),
+                winston.format.errors({ stack: true }),
+                winston.format.splat(),
+                winston.format.json()
+            )
+        })
+    );
+} else {
+    // В обычном окружении используем файловые логи
+    // Создаем директорию логов только если это не serverless
+    const fs = require('fs');
+    const logsDir = path.join(__dirname, '../logs');
+    if (!fs.existsSync(logsDir)) {
+        try {
+            fs.mkdirSync(logsDir, { recursive: true });
+        } catch (err) {
+            // Игнорируем ошибки создания директории
+            console.warn('Could not create logs directory:', err.message);
+        }
+    }
+    
+    loggerTransports.push(
+        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+        new winston.transports.File({ filename: 'logs/combined.log' })
+    );
+    
+    // Консольные логи в development
+    if (process.env.NODE_ENV !== 'production') {
+        loggerTransports.push(
+            new winston.transports.Console({
+                format: winston.format.combine(
+                    winston.format.colorize(),
+                    winston.format.simple()
+                )
+            })
+        );
+    }
+}
+
 const logger = winston.createLogger({
     level: process.env.LOG_LEVEL || 'info',
     format: winston.format.combine(
@@ -36,21 +95,8 @@ const logger = winston.createLogger({
         winston.format.json()
     ),
     defaultMeta: { service: 'verni-strahovku' },
-    transports: [
-        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-        new winston.transports.File({ filename: 'logs/combined.log' })
-    ]
+    transports: loggerTransports
 });
-
-// Логи в консоль только в development
-if (process.env.NODE_ENV !== 'production') {
-    logger.add(new winston.transports.Console({
-        format: winston.format.combine(
-            winston.format.colorize(),
-            winston.format.simple()
-        )
-    }));
-}
 
 // ========== DOMPURIFY FOR SANITIZATION ==========
 const window = new JSDOM('').window;
@@ -89,12 +135,24 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
     : ['http://localhost:3000', 'http://127.0.0.1:3000'];
 
+// Добавляем Vercel домены в разрешенные origins
+const vercelOrigins = process.env.VERCEL_URL 
+    ? [`https://${process.env.VERCEL_URL}`, `https://${process.env.VERCEL_URL.replace(/^https?:\/\//, '')}`]
+    : [];
+
 app.use(cors({
     origin: function(origin, callback) {
         // Разрешаем запросы без origin (например, mobile apps или curl)
         if (!origin) return callback(null, true);
 
-        if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+        // Разрешаем запросы с Vercel доменов
+        if (process.env.VERCEL && origin.includes('vercel.app')) {
+            return callback(null, true);
+        }
+
+        if (allowedOrigins.indexOf(origin) !== -1 || 
+            vercelOrigins.some(vOrigin => origin.includes(vOrigin)) ||
+            process.env.NODE_ENV === 'development') {
             callback(null, true);
         } else {
             logger.warn(`CORS blocked request from origin: ${origin}`);
@@ -581,32 +639,31 @@ app.use((err, req, res, next) => {
 });
 
 // ========== CREATE LOGS DIRECTORY ==========
-const fs = require('fs');
-const logsDir = path.join(__dirname, '../logs');
-if (!fs.existsSync(logsDir)) {
-    fs.mkdirSync(logsDir);
-    logger.info('Logs directory created');
-}
+// Директория логов создается выше, в блоке настройки loggerTransports
+// Здесь ничего не делаем, чтобы избежать дублирования
 
 // ========== START SERVER ==========
-app.listen(PORT, () => {
-    logger.info(`
+// Запускаем сервер только если это не serverless окружение (Vercel)
+if (!isServerless) {
+    const server = app.listen(PORT, () => {
+        logger.info(`
 ╔════════════════════════════════════════╗
 ║   🛡️  ВЕРНИСТРАХОВКУ.РФ - BACKEND     ║
 ║   Server running on port ${PORT}        ║
 ║   http://localhost:${PORT}              ║
 ║   Environment: ${process.env.NODE_ENV || 'development'}         ║
 ╚════════════════════════════════════════╝
-    `);
-});
-
-// ========== GRACEFUL SHUTDOWN ==========
-process.on('SIGTERM', () => {
-    logger.info('SIGTERM signal received: closing HTTP server');
-    server.close(() => {
-        logger.info('HTTP server closed');
+        `);
     });
-});
+
+    // ========== GRACEFUL SHUTDOWN ==========
+    process.on('SIGTERM', () => {
+        logger.info('SIGTERM signal received: closing HTTP server');
+        server.close(() => {
+            logger.info('HTTP server closed');
+        });
+    });
+}
 
 // ========== ERROR HANDLING ==========
 process.on('unhandledRejection', (error) => {

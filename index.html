@@ -165,8 +165,8 @@
         <div class="container mx-auto px-6 lg:px-16">
             <nav class="flex items-center justify-between h-20 lg:h-24">
                 <!-- Логотип -->
-                <a href="#hero" class="flex items-center space-x-1.5 flex-shrink-0">
-                    <img src="assets/logo-main.svg" alt="вернистраховку.рф" class="h-20 sm:h-24 lg:h-28 w-auto flex-shrink-0">
+                <a href="#hero" class="flex items-center space-x-0.5 sm:space-x-0.5 md:space-x-1 lg:space-x-1.5 flex-shrink-0">
+                    <img src="assets/logo-main.svg" alt="вернистраховку.рф" class="h-20 sm:h-24 lg:h-28 w-auto flex-shrink-0 mt-2 sm:mt-3">
                     <span class="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-heading font-bold text-primary uppercase whitespace-nowrap">вернистраховку.рф</span>
                 </a>
 
@@ -179,7 +179,7 @@
                 </ul>
 
                 <!-- Phone & CTA -->
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-4 flex-shrink-0">
                     <div class="hidden md:block text-right">
                         <a href="tel:+79046666646" class="text-lg font-bold text-primary hover:text-blue-700 transition">
                             8-904-666-66-46
@@ -190,7 +190,7 @@
                         Бесплатная консультация
                     </button>
                     <!-- Mobile Menu Button -->
-                    <button id="mobile-menu-btn" class="lg:hidden text-2xl text-gray-700 hover:text-primary transition z-50 relative">
+                    <button id="mobile-menu-btn" type="button" class="lg:hidden flex items-center justify-center w-10 h-10 min-w-[40px] text-2xl text-gray-700 hover:text-primary transition z-50 relative ml-auto">
                         <i class="fas fa-bars"></i>
                     </button>
                 </div>
@@ -674,11 +674,14 @@
 
                     <!-- Loan Date -->
                     <div>
-                        <label for="loan-date" class="block font-bold mb-2 text-lg">Дата оформления кредита:</label>
+                        <label for="loan-date" class="block font-bold mb-2 text-lg">
+                            Дата оформления кредита: <span class="text-red-500">*</span>
+                        </label>
                         <input 
                             type="date" 
                             id="loan-date" 
                             name="loan-date"
+                            required
                             class="w-full h-14 px-4 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary transition"
                         >
                     </div>
@@ -850,9 +853,7 @@
                 </div>
             </div>
             
-            <!-- Navigation -->
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
+            <!-- Pagination -->
             <div class="swiper-pagination"></div>
         </div>
 

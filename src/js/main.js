@@ -2,7 +2,129 @@
 // ВЕРНИСТРАХОВКУ.РФ - MAIN JAVASCRIPT
 // ============================================
 
+console.log('📦 ========== MAIN.JS ЗАГРУЖАЕТСЯ ==========');
+console.log('⏰ Время загрузки:', new Date().toISOString());
+console.log('🔍 document.readyState:', document.readyState);
+console.log('🔍 window доступен:', typeof window !== 'undefined');
+
+// ========== OPEN/CLOSE MODAL (ДОЛЖНЫ БЫТЬ ДОСТУПНЫ ГЛОБАЛЬНО СРАЗУ) ==========
+function openModal() {
+    console.log('🔓 ========== OPEN MODAL CALLED ==========');
+    console.log('📍 Функция openModal вызвана');
+    console.log('🔍 Проверяю доступность document:', typeof document);
+    console.log('🔍 Проверяю document.readyState:', document.readyState);
+    
+    const modal = document.getElementById('modal');
+    console.log('🔍 Результат поиска модалки:', modal);
+    console.log('🔍 Тип результата:', typeof modal);
+    
+    if (modal) {
+        console.log('✅ Модалка найдена!');
+        console.log('📋 Текущие классы модалки:', modal.className);
+        console.log('📋 classList до изменений:', Array.from(modal.classList));
+        
+        modal.classList.remove('hidden');
+        console.log('✅ Класс "hidden" удален');
+        
+        modal.classList.add('active');
+        console.log('✅ Класс "active" добавлен');
+        
+        console.log('📋 classList после изменений:', Array.from(modal.classList));
+        console.log('📋 Текущие классы модалки:', modal.className);
+        
+        document.body.style.overflow = 'hidden';
+        console.log('✅ body.overflow установлен в hidden');
+        
+        // Проверяем computed styles
+        const computedStyle = window.getComputedStyle(modal);
+        console.log('🎨 Computed display:', computedStyle.display);
+        console.log('🎨 Computed visibility:', computedStyle.visibility);
+        console.log('🎨 Computed opacity:', computedStyle.opacity);
+        
+        // Отправка события в Яндекс.Метрику (если подключена)
+        if (typeof ym !== 'undefined' && typeof YANDEX_METRIKA_ID !== 'undefined') {
+            ym(YANDEX_METRIKA_ID, 'reachGoal', 'open_modal');
+            console.log('📊 Событие отправлено в Яндекс.Метрику');
+        } else {
+            console.log('⚠️ Яндекс.Метрика не подключена или ID не определен');
+        }
+        
+        console.log('✅ ========== MODAL OPENED SUCCESSFULLY ==========');
+    } else {
+        console.error('❌ ========== MODAL NOT FOUND ==========');
+        console.error('❌ Модалка не найдена! Проверьте наличие элемента с id="modal"');
+        console.error('🔍 Ищу все элементы с классом modal:', document.querySelectorAll('.modal'));
+        console.error('🔍 Ищу все элементы с id modal:', document.querySelectorAll('#modal'));
+    }
+}
+
+function closeModal() {
+    console.log('🔒 ========== CLOSE MODAL CALLED ==========');
+    const modal = document.getElementById('modal');
+    console.log('🔍 Модалка найдена для закрытия:', modal);
+    
+    if (modal) {
+        console.log('📋 Классы до закрытия:', Array.from(modal.classList));
+        modal.classList.remove('active');
+        modal.classList.add('hidden');
+        console.log('📋 Классы после закрытия:', Array.from(modal.classList));
+        document.body.style.overflow = '';
+        console.log('✅ Модалка закрыта');
+    } else {
+        console.error('❌ Модалка не найдена для закрытия');
+    }
+}
+
+// Делаем функции глобальными для onclick (ДО загрузки DOM)
+console.log('🔧 Регистрирую глобальные функции...');
+window.openModal = openModal;
+window.closeModal = closeModal;
+console.log('✅ window.openModal установлена:', typeof window.openModal);
+console.log('✅ window.closeModal установлена:', typeof window.closeModal);
+
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('📄 ========== DOM CONTENT LOADED ==========');
+    
+    // Проверяем доступность функций
+    console.log('🔍 Проверка функций после DOMContentLoaded:');
+    console.log('  - window.openModal:', typeof window.openModal);
+    console.log('  - window.closeModal:', typeof window.closeModal);
+    console.log('  - openModal (глобально):', typeof openModal);
+    
+    // Проверяем наличие модалки
+    const modal = document.getElementById('modal');
+    console.log('🔍 Модалка в DOM:', modal);
+    if (modal) {
+        console.log('  - ID:', modal.id);
+        console.log('  - Классы:', modal.className);
+        console.log('  - Display (computed):', window.getComputedStyle(modal).display);
+    }
+    
+    // Проверяем все кнопки с onclick="openModal()"
+    const buttonsWithOpenModal = document.querySelectorAll('[onclick*="openModal"]');
+    console.log('🔍 Найдено кнопок с onclick="openModal()":', buttonsWithOpenModal.length);
+    buttonsWithOpenModal.forEach((btn, index) => {
+        console.log(`  Кнопка ${index + 1}:`, btn);
+        console.log(`    - Текст:`, btn.textContent?.trim() || btn.innerHTML?.trim());
+        console.log(`    - onclick атрибут:`, btn.getAttribute('onclick'));
+        
+        // Добавляем event listener для отладки
+        btn.addEventListener('click', function(e) {
+            console.log('🖱️ ========== BUTTON CLICKED ==========');
+            console.log('📍 Кнопка кликнута:', this);
+            console.log('📍 Текст кнопки:', this.textContent?.trim() || this.innerHTML?.trim());
+            console.log('📍 onclick атрибут:', this.getAttribute('onclick'));
+            console.log('📍 window.openModal доступна?', typeof window.openModal);
+            console.log('📍 Вызываю window.openModal...');
+            
+            if (typeof window.openModal === 'function') {
+                window.openModal();
+            } else {
+                console.error('❌ window.openModal не является функцией!');
+                console.error('❌ Тип:', typeof window.openModal);
+            }
+        });
+    });
     
     // ========== INITIALIZATION ========== 
     initAOS();
@@ -15,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initSmoothScroll();
     
     console.log('✅ Сайт вернистраховку.рф загружен успешно');
+    console.log('✅ ========== INITIALIZATION COMPLETE ==========');
 });
 
 // ========== CSRF TOKEN ==========
@@ -62,10 +185,6 @@ function initSwiper() {
         pagination: {
             el: '.swiper-pagination',
             clickable: true,
-        },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
         },
         breakpoints: {
             640: {
@@ -238,9 +357,12 @@ function initModalHandlers() {
     const modal = document.getElementById('modal');
     
     if (modal) {
+        console.log('🔧 Инициализация обработчиков модалки');
+        
         // Закрытие по клику вне модалки
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
+                console.log('🖱️ Клик вне модалки - закрываю');
                 closeModal();
             }
         });
@@ -248,37 +370,32 @@ function initModalHandlers() {
         // Закрытие по ESC
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && modal.classList.contains('active')) {
+                console.log('⌨️ Нажата клавиша ESC - закрываю модалку');
                 closeModal();
             }
         });
-    }
-}
-
-// ========== OPEN/CLOSE MODAL ==========
-function openModal() {
-    const modal = document.getElementById('modal');
-    if (modal) {
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
         
-        // Отправка события в Яндекс.Метрику (если подключена)
-        if (typeof ym !== 'undefined') {
-            ym(YANDEX_METRIKA_ID, 'reachGoal', 'open_modal');
+        // Обработчик для кнопки закрытия (крестик)
+        const closeBtn = modal.querySelector('button[onclick*="closeModal"]');
+        if (closeBtn) {
+            console.log('✅ Кнопка закрытия найдена:', closeBtn);
+            // Удаляем старый onclick и добавляем addEventListener
+            closeBtn.removeAttribute('onclick');
+            closeBtn.addEventListener('click', function(e) {
+                console.log('🖱️ Клик на кнопку закрытия');
+                e.preventDefault();
+                e.stopPropagation();
+                closeModal();
+            });
+        } else {
+            console.warn('⚠️ Кнопка закрытия не найдена в модалке');
         }
+    } else {
+        console.error('❌ Модалка не найдена для инициализации обработчиков');
     }
 }
 
-function closeModal() {
-    const modal = document.getElementById('modal');
-    if (modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-}
-
-// Делаем функции глобальными для onclick
-window.openModal = openModal;
-window.closeModal = closeModal;
+// Функции openModal и closeModal уже определены выше, в начале файла
 
 // ========== SMOOTH SCROLL ==========
 function initSmoothScroll() {
@@ -466,18 +583,111 @@ document.querySelectorAll('a[href*="whatsapp"], a[href*="telegram"], a[href*="vk
     });
 });
 
+// ========== AUTOMATIC MODAL POPUP (MARKETING) ==========
+let autoModalShown = false;
+let userInteracted = false; // Флаг взаимодействия пользователя с формами/кнопками
+let timeOnSite = 0;
+let maxScrollPercentage = 0;
+
+// Отслеживание взаимодействия пользователя
+document.addEventListener('click', function(e) {
+    // Если клик на кнопку или форму - пользователь уже взаимодействует
+    if (e.target.closest('button') || e.target.closest('form') || e.target.closest('a[href^="#"]')) {
+        userInteracted = true;
+    }
+});
+
+// Отслеживание заполнения форм
+document.addEventListener('input', function(e) {
+    if (e.target.closest('form')) {
+        userInteracted = true;
+    }
+});
+
+// Функция показа автоматической модалки
+function showAutoModal(trigger) {
+    // Не показываем, если:
+    // 1. Модалка уже была показана в этой сессии
+    // 2. Пользователь уже взаимодействовал с сайтом
+    // 3. Модалка уже открыта
+    if (autoModalShown || userInteracted || document.getElementById('modal')?.classList.contains('active')) {
+        return;
+    }
+
+    // Проверяем localStorage - не показывали ли сегодня
+    const lastShown = localStorage.getItem('autoModalLastShown');
+    const today = new Date().toDateString();
+    
+    if (lastShown === today) {
+        return; // Уже показывали сегодня
+    }
+
+    autoModalShown = true;
+    localStorage.setItem('autoModalLastShown', today);
+    
+    openModal();
+    trackClick('auto_modal_' + trigger);
+    console.log('📢 Автоматическая модалка показана (триггер: ' + trigger + ')');
+}
+
+// Триггер 1: По времени на сайте (30 секунд)
+setTimeout(() => {
+    if (timeOnSite >= 30 && maxScrollPercentage >= 20) {
+        // Пользователь провел минимум 30 секунд и прокрутил хотя бы 20%
+        showAutoModal('time_30s');
+    }
+}, 30000); // 30 секунд
+
+// Триггер 2: По времени на сайте (60 секунд) - более агрессивный
+setTimeout(() => {
+    if (timeOnSite >= 60 && maxScrollPercentage >= 10) {
+        showAutoModal('time_60s');
+    }
+}, 60000); // 60 секунд
+
+// Триггер 3: По прокрутке страницы (50%)
+let scrollModalShown = false;
+window.addEventListener('scroll', () => {
+    const documentHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    const scrollTop = window.scrollY;
+    const currentPercentage = Math.round((scrollTop / (documentHeight - windowHeight)) * 100);
+    
+    maxScrollPercentage = Math.max(maxScrollPercentage, currentPercentage);
+    
+    // Показываем модалку при прокрутке 50% и если прошло минимум 15 секунд
+    if (currentPercentage >= 50 && !scrollModalShown && timeOnSite >= 15) {
+        scrollModalShown = true;
+        showAutoModal('scroll_50');
+    }
+    
+    // Альтернативный триггер при прокрутке 70% (даже если прошло меньше времени)
+    if (currentPercentage >= 70 && !scrollModalShown && timeOnSite >= 10) {
+        scrollModalShown = true;
+        showAutoModal('scroll_70');
+    }
+});
+
+// Отслеживание времени на сайте
+setInterval(() => {
+    timeOnSite++;
+}, 1000); // Каждую секунду
+
 // ========== EXIT INTENT POPUP ==========
 let exitIntentShown = false;
 
 document.addEventListener('mouseleave', function(e) {
     // Проверяем, что курсор вышел через верх страницы
-    if (e.clientY < 0 && !exitIntentShown) {
+    // И пользователь провел на сайте минимум 10 секунд
+    if (e.clientY < 0 && !exitIntentShown && timeOnSite >= 10 && !userInteracted) {
         exitIntentShown = true;
         
         // Задержка перед показом
         setTimeout(() => {
-            openModal();
-            trackClick('exit_intent');
+            if (!autoModalShown && !document.getElementById('modal')?.classList.contains('active')) {
+                openModal();
+                trackClick('exit_intent');
+            }
         }, 500);
     }
 });

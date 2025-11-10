@@ -139,30 +139,116 @@ document.addEventListener('DOMContentLoaded', function() {
     // Элементы результата
     const resultSection = document.getElementById('result-section');
 
-    // Маска для суммы
+    // Маска для суммы с символом рубля
     if (imposedAmountInput) {
+        // Убираем символ рубля при фокусе для удобства редактирования
+        imposedAmountInput.addEventListener('focus', function() {
+            if (imposedAmountInput.value.includes(' ₽')) {
+                imposedAmountInput.value = imposedAmountInput.value.replace(' ₽', '').trim();
+            }
+        });
+        
+        // Форматируем число при вводе (БЕЗ символа рубля - он добавится только при blur)
         imposedAmountInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+            // Убираем все нецифровые символы, включая символ рубля и пробелы
+            let value = e.target.value.replace(/[^\d]/g, '');
+            
+            if (value) {
+                // Форматируем с пробелами-разделителями тысяч (БЕЗ символа рубля)
+                const formatted = value.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+                e.target.value = formatted;
+            } else {
+                // Если поле пустое, оставляем пустым
+                e.target.value = '';
+            }
+        });
+        
+        // Добавляем символ рубля только при потере фокуса
+        imposedAmountInput.addEventListener('blur', function() {
+            const cleanValue = imposedAmountInput.value.replace(/\s/g, '').replace(/[^\d]/g, '');
+            if (cleanValue) {
+                // Форматируем и добавляем символ рубля
+                const formatted = cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+                imposedAmountInput.value = formatted + ' ₽';
+            } else {
+                // Если поле пустое, оставляем пустым
+                imposedAmountInput.value = '';
+            }
         });
     }
 
+    // Обработчик формы - предотвращаем стандартную отправку
+    const calculatorForm = document.getElementById('calculator-form');
+    if (calculatorForm) {
+        calculatorForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Вызываем расчет вместо отправки формы
+            if (calculateBtn) {
+                calculateBtn.click();
+            }
+        });
+    }
+    
     // Обработчик расчета
     if (calculateBtn) {
         calculateBtn.addEventListener('click', function(e) {
             e.preventDefault();
             
             // Получение данных формы
-            const imposedAmountStr = imposedAmountInput.value.replace(/\s/g, '');
+            // Удаляем пробелы и символ рубля перед парсингом
+            const imposedAmountStr = imposedAmountInput.value.replace(/\s/g, '').replace('₽', '').trim();
             const imposedAmount = parseInt(imposedAmountStr);
             
             if (!imposedAmount || imposedAmount <= 0) {
-                alert('Пожалуйста, укажите сумму навязанных услуг');
+                // Визуальная валидация - выделяем поле красным
+                imposedAmountInput.classList.add('border-red-500');
+                imposedAmountInput.classList.remove('border-gray-300', 'focus:border-primary');
+                imposedAmountInput.style.borderColor = '#ef4444'; // red-500
                 imposedAmountInput.focus();
+                
+                // Убираем красное выделение при вводе
+                const removeError = function() {
+                    imposedAmountInput.classList.remove('border-red-500');
+                    imposedAmountInput.classList.add('border-gray-300', 'focus:border-primary');
+                    imposedAmountInput.style.borderColor = '';
+                    imposedAmountInput.removeEventListener('input', removeError);
+                };
+                imposedAmountInput.addEventListener('input', removeError, { once: true });
+                
                 return;
             }
             
+            // Убираем красное выделение если валидация прошла
+            imposedAmountInput.classList.remove('border-red-500');
+            imposedAmountInput.classList.add('border-gray-300', 'focus:border-primary');
+            imposedAmountInput.style.borderColor = '';
+            
             const loanType = document.querySelector('input[name="loan-type"]:checked')?.value || 'consumer';
+            
+            // Валидация даты (обязательное поле)
+            if (!loanDateInput || !loanDateInput.value) {
+                // Визуальная валидация - выделяем поле даты красным
+                loanDateInput.classList.add('border-red-500');
+                loanDateInput.classList.remove('border-gray-300', 'focus:border-primary');
+                loanDateInput.style.borderColor = '#ef4444'; // red-500
+                loanDateInput.focus();
+                
+                // Убираем красное выделение при выборе даты
+                const removeDateError = function() {
+                    loanDateInput.classList.remove('border-red-500');
+                    loanDateInput.classList.add('border-gray-300', 'focus:border-primary');
+                    loanDateInput.style.borderColor = '';
+                    loanDateInput.removeEventListener('change', removeDateError);
+                };
+                loanDateInput.addEventListener('change', removeDateError, { once: true });
+                
+                return;
+            }
+            
+            // Убираем красное выделение если валидация прошла
+            loanDateInput.classList.remove('border-red-500');
+            loanDateInput.classList.add('border-gray-300', 'focus:border-primary');
+            loanDateInput.style.borderColor = '';
             
             // Расчет месяцев с момента оформления
             let monthsSinceIssue = 12;
@@ -176,7 +262,21 @@ document.addEventListener('DOMContentLoaded', function() {
             const result = calculator.calculate(imposedAmount, loanType, false, monthsSinceIssue);
 
             if (result.error) {
-                alert(result.message);
+                // Визуальная валидация - выделяем поле красным
+                imposedAmountInput.classList.add('border-red-500');
+                imposedAmountInput.classList.remove('border-gray-300', 'focus:border-primary');
+                imposedAmountInput.style.borderColor = '#ef4444'; // red-500
+                imposedAmountInput.focus();
+                
+                // Убираем красное выделение при вводе
+                const removeError = function() {
+                    imposedAmountInput.classList.remove('border-red-500');
+                    imposedAmountInput.classList.add('border-gray-300', 'focus:border-primary');
+                    imposedAmountInput.style.borderColor = '';
+                    imposedAmountInput.removeEventListener('input', removeError);
+                };
+                imposedAmountInput.addEventListener('input', removeError, { once: true });
+                
                 return;
             }
 
@@ -185,9 +285,21 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Прокрутка к результату
             setTimeout(() => {
-                const calculatorSection = document.getElementById('calculator');
-                (calculatorSection || resultSection).scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 200);
+                if (resultSection) {
+                    // Убеждаемся, что блок видим
+                    resultSection.classList.remove('hidden');
+                    
+                    // Небольшая задержка для рендеринга контента
+                    requestAnimationFrame(() => {
+                        // Используем scrollIntoView с учетом scroll-margin-top из CSS
+                        resultSection.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start',
+                            inline: 'nearest'
+                        });
+                    });
+                }
+            }, 100);
             
             // Отправка события аналитики
             if (typeof trackClick !== 'undefined') {

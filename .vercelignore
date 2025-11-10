@@ -1,0 +1,16 @@
+# Игнорируем файлы при деплое на Vercel
+node_modules/
+logs/
+.env
+.env.local
+.env.*.local
+*.log
+.DS_Store
+.vscode/
+.idea/
+*.md
+!README.md
+.git/
+.gitignore
+package-lock.json
+
