@@ -27,19 +27,26 @@ const PORT = process.env.PORT || 3000;
 // ========== LOGGER CONFIGURATION ==========
 // Определяем serverless окружение (Vercel, AWS Lambda)
 // В Vercel переменная VERCEL может быть "1" или просто существовать
+// Также проверяем наличие /var/task (Lambda/Vercel путь) или отсутствие возможности создать директории
 const isServerless = !!(
     process.env.VERCEL || 
     process.env.VERCEL_ENV || 
     process.env.AWS_LAMBDA_FUNCTION_NAME ||
-    process.env.LAMBDA_TASK_ROOT
+    process.env.LAMBDA_TASK_ROOT ||
+    (typeof __dirname !== 'undefined' && __dirname.includes('/var/task'))
 );
 
 const loggerTransports = [];
 
 // В serverless окружении (Vercel) используем ТОЛЬКО консольные логи
 // Файловые логи недоступны из-за read-only файловой системы
-if (isServerless) {
-    // В serverless окружении ТОЛЬКО консольные логи - никаких файловых!
+// ВАЖНО: В production на Vercel всегда используем только консольные логи
+// Проверяем также путь - если /var/task, то это точно serverless
+const isVercelProduction = isServerless || 
+    (process.env.NODE_ENV === 'production' && typeof __dirname !== 'undefined' && __dirname.includes('/var/task'));
+
+if (isVercelProduction) {
+    // В serverless/production окружении ТОЛЬКО консольные логи - никаких файловых!
     loggerTransports.push(
         new winston.transports.Console({
             format: winston.format.combine(
@@ -53,23 +60,30 @@ if (isServerless) {
         })
     );
 } else {
-    // В обычном окружении используем файловые логи
-    // Создаем директорию логов только если это не serverless
-    const fs = require('fs');
-    const logsDir = path.join(__dirname, '../logs');
-    if (!fs.existsSync(logsDir)) {
-        try {
+    // В обычном локальном окружении используем файловые логи
+    try {
+        const fs = require('fs');
+        const logsDir = path.join(__dirname, '../logs');
+        if (!fs.existsSync(logsDir)) {
             fs.mkdirSync(logsDir, { recursive: true });
-        } catch (err) {
-            // Игнорируем ошибки создания директории
-            console.warn('Could not create logs directory:', err.message);
         }
+        
+        loggerTransports.push(
+            new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+            new winston.transports.File({ filename: 'logs/combined.log' })
+        );
+    } catch (err) {
+        // Если не можем создать файловые логи, используем только консольные
+        console.warn('Could not create file logs, using console only:', err.message);
+        loggerTransports.push(
+            new winston.transports.Console({
+                format: winston.format.combine(
+                    winston.format.colorize(),
+                    winston.format.simple()
+                )
+            })
+        );
     }
-    
-    loggerTransports.push(
-        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-        new winston.transports.File({ filename: 'logs/combined.log' })
-    );
     
     // Консольные логи в development
     if (process.env.NODE_ENV !== 'production') {
