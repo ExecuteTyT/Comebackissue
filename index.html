@@ -1457,73 +1457,138 @@
 </section>
 
 <!-- ========== 11. FOOTER ========== -->
-<footer id="contacts" class="bg-gray-900 text-gray-300 py-16">
+<footer id="contacts" class="bg-gradient-to-b from-gray-900 to-gray-950 text-gray-300 py-16 lg:py-20">
     <div class="container mx-auto px-6 lg:px-16">
-        <div class="grid md:grid-cols-3 gap-12 mb-12">
+        <!-- Main Grid -->
+        <div class="grid md:grid-cols-3 gap-8 lg:gap-12 mb-12">
             <!-- Column 1: About -->
             <div>
-                <h3 class="font-heading font-bold text-xl text-white mb-4">О компании</h3>
-                <p class="mb-4">Мы — команда профессиональных юристов, специализирующихся на возврате навязанных банковских услуг. Работаем с 2019 года, помогли более 1000 клиентов вернуть 47 миллионов рублей.</p>
+                <div class="mb-4">
+                    <h3 class="font-heading font-bold text-xl md:text-2xl text-white mb-2">вернистраховку.рф</h3>
+                    <div class="w-16 h-1 bg-gradient-to-r from-secondary to-primary rounded-full"></div>
+                </div>
+                <p class="mb-6 leading-relaxed text-gray-400">
+                    Профессиональная помощь в возврате навязанных банковских услуг. Работаем с 2019 года, вернули клиентам более 47 млн рублей.
+                </p>
+                <h4 class="font-semibold text-white mb-3">Навигация:</h4>
                 <ul class="space-y-2">
-                    <li><a href="#about" class="hover:text-white transition">О нас</a></li>
-                    <li><a href="#services" class="hover:text-white transition">Услуги</a></li>
-                    <li><a href="#reviews" class="hover:text-white transition">Отзывы</a></li>
-                    <li><a href="#contacts" class="hover:text-white transition">Контакты</a></li>
+                    <li><a href="#hero" class="hover:text-secondary transition-colors inline-flex items-center gap-2">
+                        <i class="fas fa-chevron-right text-xs"></i> Главная
+                    </a></li>
+                    <li><a href="#services" class="hover:text-secondary transition-colors inline-flex items-center gap-2">
+                        <i class="fas fa-chevron-right text-xs"></i> Что мы возвращаем
+                    </a></li>
+                    <li><a href="#advantages" class="hover:text-secondary transition-colors inline-flex items-center gap-2">
+                        <i class="fas fa-chevron-right text-xs"></i> Преимущества
+                    </a></li>
+                    <li><a href="#reviews" class="hover:text-secondary transition-colors inline-flex items-center gap-2">
+                        <i class="fas fa-chevron-right text-xs"></i> Отзывы
+                    </a></li>
+                    <li><a href="#faq" class="hover:text-secondary transition-colors inline-flex items-center gap-2">
+                        <i class="fas fa-chevron-right text-xs"></i> Вопросы и ответы
+                    </a></li>
                 </ul>
             </div>
 
             <!-- Column 2: Contacts -->
             <div>
-                <h3 class="font-heading font-bold text-xl text-white mb-4">ИП ГИЛЬВАНОВА АЙГУЛЬ РАИСОВНА</h3>
-                <ul class="space-y-3">
-                    <li class="flex items-start space-x-3">
-                        <i class="fas fa-map-marker-alt text-red-500 mt-1"></i>
-                        <span>420021, Казань, Вахитовский район,<br>ул. Габдуллы Тукая, д.64, оф. 307</span>
-                    </li>
-                    <li class="flex items-start space-x-3">
-                        <i class="fas fa-phone text-primary mt-1"></i>
-                        <a href="tel:+79046666646" class="hover:text-white transition">8-904-666-66-46</a>
-                    </li>
-                    <li class="flex items-start space-x-3">
-                        <i class="fas fa-envelope text-accent mt-1"></i>
-                        <a href="mailto:delovoi_podhod@inbox.ru" class="hover:text-white transition">delovoi_podhod@inbox.ru</a>
-                    </li>
-                    <li class="flex items-start space-x-3">
-                        <i class="fas fa-clock text-secondary mt-1"></i>
-                        <span>Пн-Пт: 9:00 – 21:00<br>Сб-Вс: 10:00 – 18:00</span>
-                    </li>
-                </ul>
+                <div class="mb-4">
+                    <h3 class="font-heading font-bold text-xl md:text-2xl text-white mb-2">Контакты</h3>
+                    <div class="w-16 h-1 bg-gradient-to-r from-secondary to-primary rounded-full"></div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Юридическое лицо:</p>
+                        <p class="font-semibold text-white">ИП ГИЛЬВАНОВА АЙГУЛЬ РАИСОВНА</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-map-marker-alt text-secondary mt-1 flex-shrink-0"></i>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Адрес:</p>
+                            <span class="leading-relaxed">420021, Казань, Вахитовский район,<br>ул. Габдуллы Тукая, д.64, оф. 307</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-phone text-success mt-1 flex-shrink-0"></i>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Телефон:</p>
+                            <a href="tel:+79046666646" class="font-semibold text-white hover:text-secondary transition-colors text-lg">8-904-666-66-46</a>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-envelope text-primary mt-1 flex-shrink-0"></i>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Email:</p>
+                            <a href="mailto:delovoi_podhod@inbox.ru" class="hover:text-secondary transition-colors break-all">delovoi_podhod@inbox.ru</a>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-clock text-warning mt-1 flex-shrink-0"></i>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Режим работы:</p>
+                            <span>Пн-Пт: 9:00 – 21:00<br>Сб-Вс: 10:00 – 18:00</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Column 3: Legal -->
             <div>
-                <h3 class="font-heading font-bold text-xl text-white mb-4">Документы</h3>
+                <div class="mb-4">
+                    <h3 class="font-heading font-bold text-xl md:text-2xl text-white mb-2">Документы</h3>
+                    <div class="w-16 h-1 bg-gradient-to-r from-secondary to-primary rounded-full"></div>
+                </div>
                 <ul class="space-y-2 mb-6">
-                    <li><a href="/privacy.html" class="hover:text-white transition" target="_blank" rel="noopener">Политика конфиденциальности</a></li>
-                    <li><a href="#terms" class="hover:text-white transition">Пользовательское соглашение</a></li>
-                    <li><a href="#offer" class="hover:text-white transition">Договор оферты</a></li>
-                    <li><a href="#requisites" class="hover:text-white transition">Реквизиты компании</a></li>
+                    <li><a href="/privacy.html" class="hover:text-secondary transition-colors inline-flex items-center gap-2" target="_blank" rel="noopener">
+                        <i class="fas fa-file-alt text-xs"></i> Политика конфиденциальности
+                    </a></li>
+                    <li><a href="#terms" class="hover:text-secondary transition-colors inline-flex items-center gap-2">
+                        <i class="fas fa-file-alt text-xs"></i> Пользовательское соглашение
+                    </a></li>
+                    <li><a href="#offer" class="hover:text-secondary transition-colors inline-flex items-center gap-2">
+                        <i class="fas fa-file-alt text-xs"></i> Договор оферты
+                    </a></li>
                 </ul>
-                <div class="space-y-1 text-sm">
-                    <p><strong>ИНН:</strong> 165043093708</p>
-                    <p><strong>ОГРНИП:</strong> 322169000127252</p>
+                <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+                    <h4 class="font-semibold text-white mb-3 text-sm">Реквизиты:</h4>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between gap-2">
+                            <span class="text-gray-500">ИНН:</span>
+                            <span class="font-mono">165043093708</span>
+                        </div>
+                        <div class="flex justify-between gap-2">
+                            <span class="text-gray-500">ОГРНИП:</span>
+                            <span class="font-mono">322169000127252</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <p class="text-xs text-gray-500 mb-3">Мы в соцсетях:</p>
+                    <div class="flex gap-3">
+                        <a href="https://vk.com/verni_strahovku" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-colors">
+                            <i class="fab fa-vk text-xl"></i>
+                        </a>
+                        <a href="https://t.me/verni_strahovku" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-800 hover:bg-blue-500 rounded-lg flex items-center justify-center transition-colors">
+                            <i class="fab fa-telegram text-xl"></i>
+                        </a>
+                        <a href="https://wa.me/79046666646" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Bottom -->
-        <div class="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p class="text-sm mb-4 md:mb-0">© 2025 вернистраховку.рф | ИП ГИЛЬВАНОВА АЙГУЛЬ РАИСОВНА • Все права защищены</p>
-            <div class="flex space-x-4">
-                <a href="https://vk.com/verni_strahovku" target="_blank" class="text-2xl hover:text-white transition">
-                    <i class="fab fa-vk"></i>
-                </a>
-                <a href="https://t.me/verni_strahovku" target="_blank" class="text-2xl hover:text-white transition">
-                    <i class="fab fa-telegram"></i>
-                </a>
-                <a href="https://wa.me/79046666646" target="_blank" class="text-2xl hover:text-white transition">
-                    <i class="fab fa-whatsapp"></i>
-                </a>
+        <div class="border-t border-gray-800 pt-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500 text-center md:text-left">
+                    © 2025 <span class="text-white font-semibold">вернистраховку.рф</span> | ИП ГИЛЬВАНОВА АЙГУЛЬ РАИСОВНА<br class="md:hidden">
+                    <span class="hidden md:inline"> • </span>Все права защищены
+                </p>
+                <p class="text-xs text-gray-600 text-center md:text-right max-w-md">
+                    Информация на сайте не является публичной офертой. Все права на материалы защищены.
+                </p>
             </div>
         </div>
     </div>
