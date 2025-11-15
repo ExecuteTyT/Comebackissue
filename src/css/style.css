@@ -2,6 +2,33 @@
    ВЕРНИСТРАХОВКУ.РФ - CUSTOM STYLES
    ============================================ */
 
+/* ========== CSS VARIABLES (ТЗ цветовая схема) ========== */
+:root {
+    /* Основные цвета */
+    --primary: #1E3A8A;      /* Primary Blue */
+    --secondary: #F97316;    /* Accent Orange (для CTA) */
+    --success: #10B981;      /* Success Green */
+    --warning: #EAB308;      /* Warning Yellow */
+    --danger: #EF4444;       /* Danger Red */
+
+    /* Нейтральные */
+    --black: #111827;
+    --gray-900: #1F2937;
+    --gray-700: #374151;
+    --gray-500: #6B7280;
+    --gray-300: #D1D5DB;
+    --gray-100: #F3F4F6;
+    --white: #FFFFFF;
+
+    /* Фоны */
+    --bg-light: #F9FAFB;
+    --bg-dark: #1F2937;
+
+    /* Типографика */
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
 /* ========== GLOBAL STYLES ========== */
 * {
     margin: 0;
@@ -851,5 +878,254 @@ a, button, input, textarea, select {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #1D4ED8;
+}
+
+/* ========== ДОПОЛНИТЕЛЬНЫЕ АНИМАЦИИ (ТЗ) ========== */
+
+/* Пульсация CTA-кнопок */
+@keyframes pulse-cta {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.btn-pulse {
+    animation: pulse-cta 2s ease-in-out infinite;
+}
+
+/* Появление снизу с fade */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Свечение для больших сумм */
+.glow-green {
+    text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+}
+
+/* Hover-эффект для карточек */
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Прогресс-бар скролла */
+#scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--secondary) 0%, var(--success) 100%);
+    z-index: 10000;
+    transition: width 0.1s ease;
+}
+
+/* Кнопка наверх */
+#back-to-top {
+    position: fixed;
+    right: 24px;
+    bottom: 100px;
+    width: 48px;
+    height: 48px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+#back-to-top.show {
+    display: flex;
+}
+
+#back-to-top:hover {
+    background: var(--blue-light);
+    transform: translateY(-4px);
+}
+
+/* Липкая кнопка звонка (мобилка) */
+#sticky-call-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 64px;
+    background: var(--success);
+    color: white;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 999;
+    animation: pulse-cta 2s ease-in-out infinite;
+}
+
+#sticky-call-mobile.show {
+    display: flex;
+}
+
+@media (min-width: 768px) {
+    #sticky-call-mobile {
+        display: none !important;
+    }
+}
+
+/* Exit-intent popup */
+#exit-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+}
+
+#exit-popup.show {
+    display: flex;
+    animation: fadeIn 0.3s ease-out;
+}
+
+#exit-popup-content {
+    background: white;
+    border-radius: 20px;
+    padding: 48px;
+    max-width: 560px;
+    width: 90%;
+    position: relative;
+    animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Trust badges */
+.trust-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--success);
+}
+
+/* Alert блоки */
+.alert-warning {
+    background: #FEF3C7;
+    border-left: 4px solid var(--warning);
+    padding: 24px;
+    border-radius: 12px;
+}
+
+.alert-danger {
+    background: #FEE2E2;
+    border-left: 4px solid var(--danger);
+    padding: 24px;
+    border-radius: 12px;
+}
+
+/* Стрелки между шагами */
+.step-arrow {
+    width: 80px;
+    height: 3px;
+    background: var(--primary);
+    position: relative;
+    opacity: 0.3;
+}
+
+.step-arrow::after {
+    content: '→';
+    position: absolute;
+    right: -10px;
+    top: -12px;
+    font-size: 24px;
+    color: var(--primary);
+}
+
+/* Мобильная оптимизация для минимальных размеров кнопок */
+@media (max-width: 768px) {
+    button,
+    .btn,
+    a.btn {
+        min-height: 44px;
+    }
+
+    input,
+    textarea,
+    select {
+        min-height: 44px;
+        font-size: 16px; /* Предотвращает zoom на iOS */
+    }
+}
+
+/* Обновление цветов Swiper на новые */
+.swiper-button-next,
+.swiper-button-prev {
+    color: var(--primary) !important;
+}
+
+.swiper-pagination-bullet {
+    background: var(--primary) !important;
+}
+
+.swiper-pagination-bullet-active {
+    background: var(--secondary) !important;
+}
+
+/* Обновление цветов скроллбара на новые */
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--blue-light);
+}
+
+/* Обновление focus-visible на новый primary */
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }
 
