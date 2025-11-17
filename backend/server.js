@@ -24,11 +24,11 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Trust proxy для работы за Vercel прокси
-// В Vercel все запросы идут через прокси, нужно доверять заголовкам X-Forwarded-*
+// Trust proxy для работы за прокси (Vercel или nginx)
+// В Vercel и nginx все запросы идут через прокси, нужно доверять заголовкам X-Forwarded-*
 // Используем число 1 вместо true для более безопасной настройки
-if (process.env.VERCEL || process.env.VERCEL_ENV) {
-    app.set('trust proxy', 1); // Доверяем только первому прокси (Vercel)
+if (process.env.VERCEL || process.env.VERCEL_ENV || process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1); // Доверяем только первому прокси (Vercel или nginx)
 }
 
 // ========== LOGGER CONFIGURATION ==========
