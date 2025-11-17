@@ -23,11 +23,14 @@ class ReturnCalculator {
             };
         }
 
-        // Определение коэффициента возврата
+        // Определение коэффициента возврата (для справки)
         let multiplier = this.calculateMultiplier(loanType, earlyRepayment, monthsSinceIssue);
 
-        // Общая сумма, которую вернет банк
-        const totalReturn = Math.round(imposedAmount * multiplier);
+        // Сначала рассчитываем breakdown компоненты
+        const breakdown = this.getBreakdown(imposedAmount);
+        
+        // Общая сумма возврата = сумма всех компонентов breakdown
+        const totalReturn = breakdown.baseReturn + breakdown.penalty + breakdown.interest + breakdown.compensation;
 
         // Сумма клиенту (60%)
         const clientAmount = Math.round(totalReturn * this.CLIENT_SHARE);
@@ -46,7 +49,7 @@ class ReturnCalculator {
             companyCommission: companyCommission,
             returnPercentage: returnPercentage,
             multiplier: multiplier,
-            breakdown: this.getBreakdown(imposedAmount, totalReturn, clientAmount, companyCommission),
+            breakdown: breakdown,
             estimatedDays: this.estimateDays(loanType)
         };
     }
@@ -90,12 +93,27 @@ class ReturnCalculator {
 
     /**
      * Детальная разбивка возврата
+     * Пропорции на основе: 100,000 (основная) + 35,000 (проценты) + 35,000 (убытки) + 5,000 (моральный вред) + 70,000 (штраф) = 245,000
+     * Пропорции от навязанной суммы (100,000):
+     * - Основная сумма: 1.0
+     * - Проценты за пользование: 0.35
+     * - Убытки ввиде процентов: 0.35
+     * - Моральный вред: 0.05
+     * - Штраф: 0.70
+     * Итого: 2.45x от навязанной суммы
      */
-    getBreakdown(imposed, total, client, commission) {
-        const penalty = Math.round(imposed * 0.3);
-        const interest = Math.round(imposed * 0.2);
-        const compensation = Math.round(imposed * 0.3);
+    getBreakdown(imposed) {
+        // Основная сумма возврата: 1.0
         const baseReturn = imposed;
+        
+        // Проценты за пользование + убытки ввиде процентов: 0.35 + 0.35 = 0.7
+        const interest = Math.round(imposed * 0.7);
+        
+        // Компенсация морального вреда: 0.05
+        const compensation = Math.round(imposed * 0.05);
+        
+        // Неустойка (штраф): 0.70
+        const penalty = Math.round(imposed * 0.7);
 
         return {
             baseReturn: baseReturn,
@@ -138,6 +156,39 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Элементы результата
     const resultSection = document.getElementById('result-section');
+    
+    // Предотвращаем выделение placeholder в поле даты
+    if (loanDateInput) {
+        // Обработчик для предотвращения выделения placeholder при фокусе
+        loanDateInput.addEventListener('focus', function(e) {
+            // Если поле пустое, убираем выделение через небольшую задержку
+            if (!this.value) {
+                setTimeout(() => {
+                    if (this.setSelectionRange) {
+                        this.setSelectionRange(0, 0);
+                    }
+                    // Также убираем выделение через Selection API
+                    if (window.getSelection) {
+                        window.getSelection().removeAllRanges();
+                    }
+                }, 0);
+            }
+        });
+        
+        // Также обрабатываем событие click
+        loanDateInput.addEventListener('click', function(e) {
+            if (!this.value) {
+                setTimeout(() => {
+                    if (this.setSelectionRange) {
+                        this.setSelectionRange(0, 0);
+                    }
+                    if (window.getSelection) {
+                        window.getSelection().removeAllRanges();
+                    }
+                }, 0);
+            }
+        });
+    }
 
     // Маска для суммы с символом рубля
     if (imposedAmountInput) {
@@ -194,6 +245,12 @@ document.addEventListener('DOMContentLoaded', function() {
         calculateBtn.addEventListener('click', function(e) {
             e.preventDefault();
             
+            // Предотвращаем автоматический фокус на поле даты браузером
+            // Убираем фокус со всех полей перед валидацией
+            if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                document.activeElement.blur();
+            }
+            
             // Получение данных формы
             // Удаляем пробелы и символ рубля перед парсингом
             const imposedAmountStr = imposedAmountInput.value.replace(/\s/g, '').replace('₽', '').trim();
@@ -226,21 +283,45 @@ document.addEventListener('DOMContentLoaded', function() {
             const loanType = document.querySelector('input[name="loan-type"]:checked')?.value || 'consumer';
             
             // Валидация даты (обязательное поле)
-            if (!loanDateInput || !loanDateInput.value) {
+            if (!loanDateInput || !loanDateInput.value || loanDateInput.value.trim() === '') {
                 // Визуальная валидация - выделяем поле даты красным
-                loanDateInput.classList.add('border-red-500');
-                loanDateInput.classList.remove('border-gray-300', 'focus:border-primary');
-                loanDateInput.style.borderColor = '#ef4444'; // red-500
-                loanDateInput.focus();
-                
-                // Убираем красное выделение при выборе даты
-                const removeDateError = function() {
-                    loanDateInput.classList.remove('border-red-500');
-                    loanDateInput.classList.add('border-gray-300', 'focus:border-primary');
-                    loanDateInput.style.borderColor = '';
-                    loanDateInput.removeEventListener('change', removeDateError);
-                };
-                loanDateInput.addEventListener('change', removeDateError, { once: true });
+                if (loanDateInput) {
+                    loanDateInput.classList.add('border-red-500', 'ring-2', 'ring-red-200');
+                    loanDateInput.classList.remove('border-gray-300', 'focus:border-primary');
+                    loanDateInput.style.borderColor = '#ef4444'; // red-500
+                    loanDateInput.style.borderWidth = '2px';
+                    
+                    // НЕ фокусируем поле, чтобы не выделялся placeholder
+                    // Просто подсвечиваем его красным - пользователь сам кликнет
+                    // Это предотвратит выделение placeholder "дд"
+                    
+                    // НЕ добавляем атрибут required - он вызывает автоматический фокус браузера
+                    // Используем только кастомную валидацию
+                    
+                    // Показываем сообщение об ошибке
+                    if (!loanDateInput.nextElementSibling || !loanDateInput.nextElementSibling.classList.contains('date-error-message')) {
+                        const errorMsg = document.createElement('p');
+                        errorMsg.className = 'date-error-message text-red-500 text-sm mt-1';
+                        errorMsg.textContent = 'Пожалуйста, укажите дату оформления кредита';
+                        loanDateInput.parentNode.insertBefore(errorMsg, loanDateInput.nextSibling);
+                    }
+                    
+                    // Убираем красное выделение и сообщение об ошибке при выборе даты или вводе
+                    const removeDateError = function() {
+                        loanDateInput.classList.remove('border-red-500', 'ring-2', 'ring-red-200');
+                        loanDateInput.classList.add('border-gray-300', 'focus:border-primary');
+                        loanDateInput.style.borderColor = '';
+                        loanDateInput.style.borderWidth = '';
+                        const errorMsg = loanDateInput.parentNode.querySelector('.date-error-message');
+                        if (errorMsg) {
+                            errorMsg.remove();
+                        }
+                        loanDateInput.removeEventListener('change', removeDateError);
+                        loanDateInput.removeEventListener('input', removeDateError);
+                    };
+                    loanDateInput.addEventListener('change', removeDateError, { once: true });
+                    loanDateInput.addEventListener('input', removeDateError, { once: true });
+                }
                 
                 return;
             }
@@ -359,7 +440,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     <div class="result-timeline">
                         <p class="result-timeline-title">Сроки получения денег</p>
-                        <p><strong>Средний возврат: 2–6 месяцев.</strong></p>
+                        <p><strong>Средний возврат: 2–8 месяцев.</strong></p>
                         <p>Если банк затягивает процесс и требуется судебное решение, процедура может занять до 24 месяцев — мы сопровождаем вас и заранее предупреждаем о сроках.</p>
                     </div>
                 </div>
@@ -368,7 +449,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p class="cta-text">Хотите подтвердить расчёт и получить индивидуальный план?</p>
                     <p class="cta-description">Оставьте контакты — проведём бесплатную экспертизу договора и уточним точную сумму возврата.</p>
 
-                    <form id="contact-form" class="contact-form" onsubmit="handleFormSubmit(event, 'calculator')">
+                    <form id="contact-form" class="contact-form" method="post">
                         <input type="text" name="name" placeholder="Ваше имя" required>
                         <input type="tel" name="phone" id="calc-result-phone" placeholder="+7 (___) ___-__-__" required>
                         <input type="email" name="email" placeholder="Email (необязательно)">
@@ -377,7 +458,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <input type="hidden" name="imposed_amount" value="${result.imposedAmount}">
 
                         <label class="checkbox-label">
-                            <input type="checkbox" required>
+                            <input type="checkbox" required class="w-4 h-4">
                             <span>Согласен с политикой конфиденциальности</span>
                         </label>
 
@@ -415,6 +496,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 lazy: false,
                 placeholderChar: '_'
             });
+        }
+        
+        // Добавляем обработчик для формы калькулятора (создается динамически)
+        const calculatorForm = document.getElementById('contact-form');
+        if (calculatorForm) {
+            // Удаляем старый обработчик, если есть
+            const newForm = calculatorForm.cloneNode(true);
+            calculatorForm.parentNode.replaceChild(newForm, calculatorForm);
+            
+            // Добавляем новый обработчик
+            newForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('📋 Calculator form submit intercepted');
+                if (typeof window.handleFormSubmit === 'function') {
+                    window.handleFormSubmit(e, 'calculator');
+                } else {
+                    console.error('❌ handleFormSubmit не найдена');
+                }
+            });
+            console.log('✅ Calculator form handler attached');
         }
     }
 

@@ -135,10 +135,67 @@ document.addEventListener('DOMContentLoaded', function() {
     initFAQ();
     initModalHandlers();
     initSmoothScroll();
+    initReviewLightbox();
+    initFormHandlers();
     
     console.log('✅ Сайт вернистраховку.рф загружен успешно');
     console.log('✅ ========== INITIALIZATION COMPLETE ==========');
 });
+
+// ========== FORM HANDLERS INITIALIZATION ==========
+function initFormHandlers() {
+    // Находим все формы
+    const heroForm = document.getElementById('hero-form');
+    const modalForm = document.getElementById('modal-form');
+    const finalForm = document.getElementById('final-form');
+    const calculatorForm = document.getElementById('contact-form');
+    
+    // Обработчик для hero-form
+    if (heroForm) {
+        heroForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('📋 Hero form submit intercepted');
+            handleFormSubmit(e, 'hero');
+        });
+        console.log('✅ Hero form handler attached');
+    }
+    
+    // Обработчик для modal-form
+    if (modalForm) {
+        modalForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('📋 Modal form submit intercepted');
+            handleFormSubmit(e, 'modal');
+        });
+        console.log('✅ Modal form handler attached');
+    }
+    
+    // Обработчик для final-form
+    if (finalForm) {
+        finalForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('📋 Final form submit intercepted');
+            handleFormSubmit(e, 'final');
+        });
+        console.log('✅ Final form handler attached');
+    }
+    
+    // Обработчик для calculator-form
+    if (calculatorForm) {
+        calculatorForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('📋 Calculator form submit intercepted');
+            handleFormSubmit(e, 'calculator');
+        });
+        console.log('✅ Calculator form handler attached');
+    }
+    
+    console.log('✅ All form handlers initialized');
+}
 
 // ========== CSRF TOKEN ==========
 let csrfToken = null;
@@ -174,7 +231,8 @@ function initAOS() {
 
 // ========== SWIPER INITIALIZATION ==========
 function initSwiper() {
-    const swiper = new Swiper('.reviewsSwiper', {
+    // Swiper для отзывов
+    const reviewsSwiper = new Swiper('.reviewsSwiper', {
         slidesPerView: 1,
         spaceBetween: 30,
         loop: true,
@@ -198,6 +256,27 @@ function initSwiper() {
             },
         }
     });
+
+    // Swiper для карточек проблем (только на мобильных)
+    const problemsSwiperElement = document.querySelector('.problemsSwiper');
+    if (problemsSwiperElement) {
+        const problemsSwiper = new Swiper('.problemsSwiper', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            loop: false,
+            pagination: {
+                el: '.problemsSwiper .swiper-pagination',
+                clickable: true,
+                dynamicBullets: true,
+            },
+            // Отключаем на десктопе (но это уже скрыто через CSS)
+            breakpoints: {
+                768: {
+                    enabled: false, // Отключаем на md и выше
+                },
+            }
+        });
+    }
 }
 
 // ========== PHONE MASK INITIALIZATION ==========
@@ -426,9 +505,18 @@ function initSmoothScroll() {
 
 // ========== FORM SUBMISSION HANDLER ==========
 function handleFormSubmit(event, formType) {
+    // Предотвращаем стандартную отправку формы
+    if (event) {
     event.preventDefault();
+        event.stopPropagation();
+    }
     
-    const form = event.target;
+    const form = event ? event.target : document.querySelector('form');
+    if (!form) {
+        console.error('❌ Форма не найдена');
+        return false;
+    }
+    
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
     
@@ -441,9 +529,11 @@ function handleFormSubmit(event, formType) {
     
     // Показываем индикатор загрузки
     const submitBtn = form.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
+    const originalText = submitBtn ? submitBtn.innerHTML : '';
+    if (submitBtn) {
     submitBtn.disabled = true;
     submitBtn.innerHTML = 'Отправка...<span class="spinner"></span>';
+    }
     
     // Отправка данных на сервер
     fetch('/api/submit-form', {
@@ -464,6 +554,12 @@ function handleFormSubmit(event, formType) {
     .then(result => {
         console.log('✅ Форма отправлена успешно:', result);
         
+        // Очищаем URL от параметров (если есть)
+        if (window.history && window.history.replaceState) {
+            const cleanUrl = window.location.pathname + (window.location.hash || '');
+            window.history.replaceState({}, document.title, cleanUrl);
+        }
+        
         // Показываем успешное сообщение
         showSuccessMessage(formType);
         
@@ -471,8 +567,8 @@ function handleFormSubmit(event, formType) {
         form.reset();
         
         // Отправка цели в Яндекс.Метрику
-        if (typeof ym !== 'undefined') {
-            ym(YANDEX_METRIKA_ID, 'reachGoal', 'form_submit_' + formType);
+        if (typeof ym !== 'undefined' && window.YANDEX_METRIKA_ID) {
+            ym(window.YANDEX_METRIKA_ID, 'reachGoal', 'form_submit_' + formType);
         }
         
         // Закрываем модалку, если была открыта
@@ -490,9 +586,14 @@ function handleFormSubmit(event, formType) {
     })
     .finally(() => {
         // Возвращаем кнопку в исходное состояние
+        if (submitBtn && originalText) {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
+        }
     });
+    
+    // Всегда возвращаем false, чтобы предотвратить стандартную отправку
+    return false;
 }
 
 // Делаем функцию глобальной
@@ -695,7 +796,7 @@ document.addEventListener('mouseleave', function(e) {
 // ========== SCROLL TO TOP BUTTON (OPTIONAL) ==========
 const scrollTopBtn = document.createElement('button');
 scrollTopBtn.id = 'scroll-to-top';
-scrollTopBtn.className = 'fixed bottom-24 right-6 w-12 h-12 bg-primary hover:bg-blue-700 text-white rounded-full items-center justify-center text-xl shadow-lg hover:scale-110 transition z-40 hidden';
+scrollTopBtn.className = 'fixed bottom-24 right-6 w-12 h-12 bg-primary hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-xl shadow-lg hover:scale-110 transition z-40 hidden';
 scrollTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
 scrollTopBtn.onclick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -802,6 +903,133 @@ document.addEventListener('DOMContentLoaded', () => {
 
     countupElements.forEach(el => observer.observe(el));
 });
+
+// ========== REVIEW PHOTOS LIGHTBOX ==========
+function initReviewLightbox() {
+    const lightbox = document.getElementById('review-lightbox');
+    const lightboxImage = document.getElementById('review-lightbox-image');
+    const lightboxClose = document.getElementById('review-lightbox-close');
+    const lightboxPrev = document.getElementById('review-lightbox-prev');
+    const lightboxNext = document.getElementById('review-lightbox-next');
+    const lightboxCounter = document.getElementById('review-lightbox-counter');
+    
+    if (!lightbox || !lightboxImage) {
+        console.warn('⚠️ Lightbox элементы не найдены');
+        return;
+    }
+    
+    const reviewPhotos = document.querySelectorAll('.review-photo-item img');
+    let currentIndex = 0;
+    const totalPhotos = reviewPhotos.length;
+    
+    // Функция открытия lightbox
+    function openLightbox(index) {
+        if (index < 0 || index >= totalPhotos) return;
+        
+        currentIndex = index;
+        const photo = reviewPhotos[index];
+        const src = photo.getAttribute('data-lightbox-src') || photo.src;
+        
+        lightboxImage.src = src;
+        lightboxImage.alt = photo.alt || `Отзыв клиента ${index + 1}`;
+        updateCounter();
+        
+        lightbox.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        
+        console.log('📸 Lightbox открыт, фото:', index + 1);
+    }
+    
+    // Функция закрытия lightbox
+    function closeLightbox() {
+        lightbox.classList.add('hidden');
+        document.body.style.overflow = '';
+        console.log('📸 Lightbox закрыт');
+    }
+    
+    // Функция обновления счетчика
+    function updateCounter() {
+        if (lightboxCounter) {
+            lightboxCounter.textContent = `${currentIndex + 1} / ${totalPhotos}`;
+        }
+    }
+    
+    // Функция показа следующего фото
+    function showNext() {
+        const nextIndex = (currentIndex + 1) % totalPhotos;
+        openLightbox(nextIndex);
+    }
+    
+    // Функция показа предыдущего фото
+    function showPrev() {
+        const prevIndex = (currentIndex - 1 + totalPhotos) % totalPhotos;
+        openLightbox(prevIndex);
+    }
+    
+    // Обработчики кликов на фотографии
+    reviewPhotos.forEach((photo, index) => {
+        photo.addEventListener('click', (e) => {
+            e.preventDefault();
+            openLightbox(index);
+        });
+        
+        // Также обрабатываем клик на родительский элемент
+        const parent = photo.closest('.review-photo-item');
+        if (parent) {
+            parent.addEventListener('click', (e) => {
+                if (e.target === photo || e.target.closest('img')) return;
+                e.preventDefault();
+                openLightbox(index);
+            });
+        }
+    });
+    
+    // Обработчик закрытия
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', closeLightbox);
+    }
+    
+    // Обработчик клика на фон (закрытие)
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+    
+    // Обработчики навигации
+    if (lightboxNext) {
+        lightboxNext.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showNext();
+        });
+    }
+    
+    if (lightboxPrev) {
+        lightboxPrev.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showPrev();
+        });
+    }
+    
+    // Навигация клавиатурой
+    document.addEventListener('keydown', (e) => {
+        if (lightbox.classList.contains('hidden')) return;
+        
+        switch(e.key) {
+            case 'Escape':
+                closeLightbox();
+                break;
+            case 'ArrowRight':
+                showNext();
+                break;
+            case 'ArrowLeft':
+                showPrev();
+                break;
+        }
+    });
+    
+    console.log('✅ Review Lightbox инициализирован');
+}
 
 console.log('✅ main.js загружен и инициализирован');
 

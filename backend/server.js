@@ -288,11 +288,20 @@ const smtpPort = parseInt(process.env.SMTP_PORT) || 465;
 const EMAIL_CONFIG = {
     host: process.env.SMTP_HOST || 'smtp.spaceweb.ru',
     port: smtpPort,
-    secure: smtpPort === 465, // SSL для порта 465, STARTTLS для портов 25/2525
+    secure: smtpPort === 465, // SSL для порта 465
+    requireTLS: smtpPort === 587, // STARTTLS для порта 587
+    // Для Mail.ru нужны дополнительные настройки TLS
+    tls: {
+        rejectUnauthorized: false // Отключаем проверку сертификата для Mail.ru
+    },
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
+        user: process.env.EMAIL_USER?.trim(), // Убираем пробелы
+        pass: process.env.EMAIL_PASS?.trim()  // Убираем пробелы
+    },
+    // Дополнительные настройки для Mail.ru
+    connectionTimeout: 10000, // 10 секунд
+    greetingTimeout: 10000,
+    socketTimeout: 10000
 };
 
 // Проверка наличия обязательных переменных окружения
@@ -319,14 +328,33 @@ const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || process.env.EMAIL_U
 // Email Transporter
 let transporter;
 try {
-    transporter = nodemailer.createTransport(EMAIL_CONFIG);
-    transporter.verify((error, success) => {
-        if (error) {
-            logger.error('❌ Email configuration error:', error);
-        } else {
-            logger.info('✅ Email server ready');
-        }
-    });
+    if (!EMAIL_CONFIG.auth.user || !EMAIL_CONFIG.auth.pass) {
+        logger.warn('⚠️  Email credentials not configured');
+    } else {
+        transporter = nodemailer.createTransport(EMAIL_CONFIG);
+        transporter.verify((error, success) => {
+            if (error) {
+                logger.error('❌ Email configuration error:', error.message);
+                logger.error('❌ Error code:', error.code);
+                logger.error('❌ Full error:', JSON.stringify(error, null, 2));
+                
+                // Подсказки по исправлению
+                if (error.code === 'EAUTH') {
+                    logger.error('💡 Решение: Используйте пароль для внешних приложений Mail.ru');
+                    logger.error('💡 Создайте его: Mail.ru → Настройки → Безопасность → Пароли для внешних приложений');
+                } else if (error.code === 'ECONNECTION') {
+                    logger.error('💡 Решение: Проверьте SMTP_HOST и SMTP_PORT');
+                    logger.error('💡 Попробуйте порт 587 вместо 465');
+                }
+            } else {
+                logger.info('✅ Email server ready');
+                logger.info(`📧 SMTP: ${EMAIL_CONFIG.host}:${EMAIL_CONFIG.port}`);
+                logger.info(`📧 Security: ${EMAIL_CONFIG.secure ? 'SSL' : EMAIL_CONFIG.requireTLS ? 'STARTTLS' : 'None'}`);
+                logger.info(`📧 From: ${EMAIL_CONFIG.auth.user}`);
+                logger.info(`📧 To: ${NOTIFICATION_EMAIL}`);
+            }
+        });
+    }
 } catch (error) {
     logger.error('❌ Failed to create email transporter:', error);
 }
@@ -375,7 +403,11 @@ const formValidationRules = [
     body('amount')
         .optional()
         .trim()
-        .matches(/^[0-9\s]+$/).withMessage('Сумма может содержать только цифры'),
+        .custom((value) => {
+            if (!value || value === '') return true; // Пустое значение разрешено
+            return /^[0-9\s]+$/.test(value) || value === '';
+        })
+        .withMessage('Сумма может содержать только цифры'),
 
     body('message')
         .optional()
@@ -418,6 +450,37 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../index.html'));
 });
 
+// ========== LEGAL PAGES ROUTES ==========
+// Поддержка URL без .html расширения
+app.get('/privacy', (req, res) => {
+    res.sendFile(path.join(__dirname, '../privacy.html'));
+});
+app.get('/privacy.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '../privacy.html'));
+});
+
+app.get('/terms', (req, res) => {
+    res.sendFile(path.join(__dirname, '../terms.html'));
+});
+app.get('/terms.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '../terms.html'));
+});
+
+app.get('/offer', (req, res) => {
+    res.sendFile(path.join(__dirname, '../offer.html'));
+});
+app.get('/offer.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '../offer.html'));
+});
+
+// ========== CONFIG ENDPOINT (для клиентской конфигурации) ==========
+app.get('/api/config', (req, res) => {
+    res.json({
+        yandexMetrikaId: process.env.YANDEX_METRIKA_ID || 105345372, // Fallback на ваш ID
+        googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID || null
+    });
+});
+
 // ========== CSRF TOKEN ENDPOINT ==========
 app.get('/api/csrf-token', (req, res) => {
     const token = generateToken(req, res);
@@ -431,10 +494,15 @@ app.post('/api/submit-form',
     formValidationRules,
     async (req, res) => {
         try {
+            logger.info('📋 Form submission received at /api/submit-form');
+            logger.info('📋 Request body:', JSON.stringify(req.body, null, 2));
+            
             // Проверка валидации
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 logger.warn('Form validation failed:', errors.array());
+                logger.warn('Validation errors details:', JSON.stringify(errors.array(), null, 2));
+                logger.warn('Request body:', JSON.stringify(req.body, null, 2));
                 return res.status(400).json({
                     success: false,
                     message: 'Ошибка валидации данных',
@@ -445,15 +513,19 @@ app.post('/api/submit-form',
             // Санитизация данных
             const formData = sanitizeFormData(req.body);
 
-            logger.info('Form received:', {
+            logger.info('✅ Form received:', {
                 type: formData.formType,
                 name: formData.name,
+                phone: formData.phone,
                 ip: req.ip
             });
 
             // Отправка уведомлений
             const emailResult = await sendEmailNotification(formData);
             const telegramResult = await sendTelegramNotification(formData);
+
+            logger.info('📧 Email result:', emailResult);
+            logger.info('📱 Telegram result:', telegramResult);
 
             // Отправка подтверждения клиенту
             if (formData.email && emailResult) {
@@ -468,7 +540,8 @@ app.post('/api/submit-form',
             });
 
         } catch (error) {
-            logger.error('Form submission error:', error);
+            logger.error('❌ Form submission error:', error);
+            logger.error('❌ Error stack:', error.stack);
             res.status(500).json({
                 success: false,
                 message: 'Ошибка сервера. Пожалуйста, позвоните нам: 8-904-666-66-46'
@@ -477,10 +550,26 @@ app.post('/api/submit-form',
     }
 );
 
+// Обработка POST на корневой путь (для отладки)
+app.post('/', (req, res) => {
+    logger.warn('⚠️  Form submitted to / instead of /api/submit-form');
+    logger.warn('⚠️  This should not happen - check JavaScript form handler');
+    res.status(404).json({
+        success: false,
+        message: 'Форма должна отправляться на /api/submit-form'
+    });
+});
+
 // ========== EMAIL NOTIFICATION ==========
 async function sendEmailNotification(formData) {
     if (!transporter) {
-        logger.warn('Email transporter not configured');
+        logger.warn('⚠️  Email transporter not configured');
+        logger.warn('⚠️  Check EMAIL_USER and EMAIL_PASS in .env file');
+        return false;
+    }
+
+    if (!EMAIL_CONFIG.auth.user || !EMAIL_CONFIG.auth.pass) {
+        logger.error('❌ Email credentials missing');
         return false;
     }
 
@@ -495,12 +584,39 @@ async function sendEmailNotification(formData) {
             html: html
         };
 
+        logger.info(`📧 Attempting to send email to ${NOTIFICATION_EMAIL}...`);
+        logger.info(`📧 SMTP: ${EMAIL_CONFIG.host}:${EMAIL_CONFIG.port}`);
+        logger.info(`📧 From: ${EMAIL_CONFIG.auth.user}`);
+        logger.info(`📧 Security: ${EMAIL_CONFIG.secure ? 'SSL' : EMAIL_CONFIG.requireTLS ? 'STARTTLS' : 'None'}`);
+        logger.info(`📧 User: ${EMAIL_CONFIG.auth.user}`);
+        logger.info(`📧 Pass length: ${EMAIL_CONFIG.auth.pass ? EMAIL_CONFIG.auth.pass.length : 0} characters`);
+
         const info = await transporter.sendMail(mailOptions);
-        logger.info('Email sent:', info.messageId);
+        logger.info('✅ Email sent successfully:', info.messageId);
+        logger.info(`✅ Response: ${JSON.stringify(info.response)}`);
         return true;
 
     } catch (error) {
-        logger.error('Email sending error:', error);
+        logger.error('❌ Email sending error:', error.message);
+        logger.error('❌ Error code:', error.code);
+        logger.error('❌ Error response:', error.response);
+        logger.error('❌ Full error:', JSON.stringify(error, null, 2));
+        
+        // Дополнительная диагностика
+        if (error.code === 'EAUTH') {
+            logger.error('❌ Authentication failed - check EMAIL_PASS (use app password for Mail.ru)');
+            logger.error('💡 Решение:');
+            logger.error('   1. Зайдите в Mail.ru → Настройки → Безопасность');
+            logger.error('   2. Создайте пароль для внешних приложений');
+            logger.error('   3. Обновите EMAIL_PASS в .env файле');
+            logger.error('   4. Перезапустите сервер');
+        } else if (error.code === 'ECONNECTION') {
+            logger.error('❌ Connection failed - check SMTP_HOST and SMTP_PORT');
+            logger.error('💡 Попробуйте порт 465 вместо 587 или наоборот');
+        } else if (error.code === 'ETIMEDOUT') {
+            logger.error('❌ Connection timeout - check firewall/network settings');
+        }
+        
         return false;
     }
 }
@@ -560,8 +676,7 @@ async function sendClientConfirmation(formData) {
 
                     <p style="color: #6B7280; font-size: 14px; margin-top: 30px;">
                         С уважением,<br>
-                        Команда вернистраховку.рф<br>
-                        ИП ГИЛЬВАНОВА АЙГУЛЬ РАИСОВНА
+                        Команда вернистраховку.рф
                     </p>
                 </div>
             `
@@ -663,8 +778,7 @@ function generateEmailHTML(formData) {
                 </div>
 
                 <div class="footer">
-                    <p>ИП ГИЛЬВАНОВА АЙГУЛЬ РАИСОВНА</p>
-                    <p>8-904-666-66-46 | delovoi_podhod@inbox.ru</p>
+                    <p>Вернистраховку.рф</p>
                 </div>
             </div>
         </body>

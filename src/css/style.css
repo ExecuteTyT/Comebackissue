@@ -441,6 +441,16 @@ html, body {
     margin-bottom: 1rem;
 }
 
+.checkbox-label input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    min-width: 1rem;
+    min-height: 1rem;
+    margin-top: 0.125rem;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
 .btn-submit {
     width: 100%;
     background: #F59E0B;
@@ -966,6 +976,22 @@ a, button, input, textarea, select {
     transform: translateY(-4px);
 }
 
+/* Кнопка скролла вверх (scroll-to-top) */
+#scroll-to-top {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+#scroll-to-top.hidden {
+    display: none !important;
+}
+
+#scroll-to-top:hover {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
 /* Липкая кнопка звонка (мобилка) */
 #sticky-call-mobile {
     position: fixed;
@@ -1127,5 +1153,112 @@ a, button, input, textarea, select {
 :focus-visible {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
+}
+
+/* ========== REVIEW PHOTOS LIGHTBOX ========== */
+.review-lightbox {
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.review-lightbox.hidden {
+    display: none !important;
+}
+
+.review-lightbox:not(.hidden) {
+    display: flex !important;
+}
+
+.review-photo-item img {
+    cursor: pointer;
+}
+
+.review-lightbox img {
+    animation: zoomIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Фиксация стрелок при нажатии */
+#review-lightbox-prev:active,
+#review-lightbox-next:active {
+    transform: translateY(-50%) !important;
+}
+
+/* Адаптивность для lightbox на мобильных */
+@media (max-width: 768px) {
+    .review-lightbox button {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    #review-lightbox-prev {
+        left: 8px;
+    }
+    
+    #review-lightbox-next {
+        right: 8px;
+    }
+    
+    #review-lightbox-close {
+        top: 8px;
+        right: 8px;
+    }
+    
+    #review-lightbox-prev:active,
+    #review-lightbox-next:active {
+        transform: translateY(-50%) !important;
+    }
+}
+
+/* ========== PREVENT PLACEHOLDER SELECTION ========== */
+/* Предотвращаем выделение placeholder текста в полях даты */
+input[type="date"]::placeholder,
+input[type="date"]::-webkit-input-placeholder,
+input[type="date"]::-moz-placeholder,
+input[type="date"]:-ms-input-placeholder {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Предотвращаем выделение placeholder при фокусе */
+input[type="date"]:focus::placeholder,
+input[type="date"]:focus::-webkit-input-placeholder {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Убираем выделение текста в пустых полях даты */
+input[type="date"]:invalid:not(:focus) {
+    color: transparent;
+}
+
+input[type="date"]:invalid:not(:focus)::-webkit-datetime-edit {
+    color: transparent;
+}
+
+input[type="date"]:invalid:not(:focus)::-webkit-datetime-edit-fields-wrapper {
+    color: transparent;
 }
 
