@@ -140,11 +140,12 @@ app.use(helmet({
         directives: {
             defaultSrc: ["'self'"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
-            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "https://unpkg.com", "https://cdnjs.cloudflare.com"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "https://unpkg.com", "https://cdnjs.cloudflare.com", "https://mc.yandex.ru"], // Добавлен mc.yandex.ru для Яндекс.Метрики
             fontSrc: ["'self'", "data:", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"], // Добавлен data: для data URI шрифтов
             imgSrc: ["'self'", "data:", "https:", "http:"],
-            connectSrc: ["'self'", "https://api.telegram.org"],
-            frameSrc: ["'none'"]
+            connectSrc: ["'self'", "https://api.telegram.org", "https://cdn.jsdelivr.net", "https://unpkg.com", "https://mc.yandex.ru"], // Добавлены для source maps и Яндекс.Метрики
+            frameSrc: ["'none'"],
+            scriptSrcAttr: ["'unsafe-inline'"] // Разрешаем inline event handlers
         }
     },
     crossOriginEmbedderPolicy: false,
