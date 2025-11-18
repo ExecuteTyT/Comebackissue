@@ -78,21 +78,40 @@
             };
             script1.onerror = function() {
                 console.warn('⚠️ Failed to load from cdn.tailwindcss.com, trying fallback...');
-                // Fallback: пробуем альтернативный CDN
+                // Fallback: пробуем альтернативный CDN (unpkg)
                 const script2 = document.createElement('script');
-                script2.src = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4/dist/tailwind.min.js';
+                script2.src = 'https://unpkg.com/tailwindcss@3/dist/tailwind.min.js';
                 script2.onload = function() {
-                    console.log('✅ Tailwind loaded from jsdelivr fallback');
-                    applyConfig();
+                    console.log('✅ Tailwind loaded from unpkg fallback');
+                    // Для Tailwind v3 нужно использовать другой подход
+                    setTimeout(function() {
+                        if (typeof tailwindcss !== 'undefined') {
+                            console.log('✅ Tailwind v3 detected');
+                        }
+                        applyConfig();
+                    }, 100);
                 };
                 script2.onerror = function() {
                     console.error('❌ Failed to load Tailwind from all sources');
-                    // Применяем конфигурацию в любом случае (может быть уже загружен)
-                    setTimeout(function() {
-                        if (!applyConfig()) {
-                            console.error('❌ Tailwind not available');
-                        }
-                    }, 100);
+                    // Последняя попытка: пробуем через jsdelivr
+                    const script3 = document.createElement('script');
+                    script3.src = 'https://cdn.jsdelivr.net/npm/tailwindcss@3/dist/tailwind.min.js';
+                    script3.onload = function() {
+                        console.log('✅ Tailwind loaded from jsdelivr fallback');
+                        setTimeout(function() {
+                            applyConfig();
+                        }, 100);
+                    };
+                    script3.onerror = function() {
+                        console.error('❌ All Tailwind CDN sources failed');
+                        // Применяем конфигурацию в любом случае (может быть уже загружен)
+                        setTimeout(function() {
+                            if (!applyConfig()) {
+                                console.error('❌ Tailwind not available - colors may not work');
+                            }
+                        }, 200);
+                    };
+                    document.head.appendChild(script3);
                 };
                 document.head.appendChild(script2);
             };
