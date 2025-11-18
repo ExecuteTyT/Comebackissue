@@ -504,7 +504,7 @@ function initSmoothScroll() {
 }
 
 // ========== FORM SUBMISSION HANDLER ==========
-function handleFormSubmit(event, formType) {
+async function handleFormSubmit(event, formType) {
     // Предотвращаем стандартную отправку формы
     if (event) {
     event.preventDefault();
