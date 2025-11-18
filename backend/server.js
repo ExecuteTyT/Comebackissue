@@ -532,13 +532,17 @@ app.get('/api/csrf-token', (req, res) => {
 // ========== FORM SUBMISSION HANDLER ==========
 app.post('/api/submit-form',
     formLimiter,
+    (req, res, next) => {
+        // Логируем запрос перед CSRF проверкой
+        logger.info('📋 Form submission received at /api/submit-form');
+        logger.info('📋 Request headers:', JSON.stringify(req.headers, null, 2));
+        logger.info('📋 Request body:', JSON.stringify(req.body, null, 2));
+        next();
+    },
     doubleCsrfProtection,
     formValidationRules,
     async (req, res) => {
         try {
-            logger.info('📋 Form submission received at /api/submit-form');
-            logger.info('📋 Request body:', JSON.stringify(req.body, null, 2));
-            
             // Проверка валидации
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
@@ -563,15 +567,31 @@ app.post('/api/submit-form',
             });
 
             // Отправка уведомлений
-            const emailResult = await sendEmailNotification(formData);
-            const telegramResult = await sendTelegramNotification(formData);
+            let emailResult = false;
+            let telegramResult = false;
+            
+            try {
+                emailResult = await sendEmailNotification(formData);
+            } catch (emailError) {
+                logger.error('❌ Email sending error:', emailError);
+            }
+            
+            try {
+                telegramResult = await sendTelegramNotification(formData);
+            } catch (telegramError) {
+                logger.error('❌ Telegram sending error:', telegramError);
+            }
 
             logger.info('📧 Email result:', emailResult);
             logger.info('📱 Telegram result:', telegramResult);
 
             // Отправка подтверждения клиенту
             if (formData.email && emailResult) {
-                await sendClientConfirmation(formData);
+                try {
+                    await sendClientConfirmation(formData);
+                } catch (confirmationError) {
+                    logger.error('❌ Client confirmation error:', confirmationError);
+                }
             }
 
             res.json({
@@ -583,6 +603,7 @@ app.post('/api/submit-form',
 
         } catch (error) {
             logger.error('❌ Form submission error:', error);
+            logger.error('❌ Error message:', error.message);
             logger.error('❌ Error stack:', error.stack);
             res.status(500).json({
                 success: false,
