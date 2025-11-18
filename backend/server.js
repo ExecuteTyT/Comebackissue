@@ -20,7 +20,13 @@ const { JSDOM } = require('jsdom');
 const createDOMPurify = require('dompurify');
 
 // Загружаем .env файл, но не перезаписываем переменные, которые уже установлены
+// ВАЖНО: NODE_ENV должен устанавливаться через PM2 (ecosystem.config.js), а не через .env
+const nodeEnvBefore = process.env.NODE_ENV;
 require('dotenv').config({ override: false });
+// Восстанавливаем NODE_ENV из PM2, если он был установлен до загрузки .env
+if (nodeEnvBefore) {
+    process.env.NODE_ENV = nodeEnvBefore;
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
