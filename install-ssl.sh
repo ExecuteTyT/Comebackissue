@@ -140,12 +140,16 @@ if [ ${PIPESTATUS[0]} -ne 0 ]; then
         echo "Проверьте логи: /var/log/letsencrypt/letsencrypt.log"
         exit 1
     fi
+    CERTBOT_SUCCESS=1
+else
+    CERTBOT_SUCCESS=1
 fi
 
-if [ $? -eq 0 ]; then
+# Проверяем, что сертификат получен
+if [ "$CERTBOT_SUCCESS" = "1" ] && [ -f "/etc/letsencrypt/live/$DOMAIN_PUNYCODE/fullchain.pem" ]; then
     echo "✅ SSL сертификат успешно получен!"
 else
-    echo "❌ Ошибка при получении сертификата"
+    echo "❌ Сертификат не найден. Проверьте логи: /var/log/letsencrypt/letsencrypt.log"
     exit 1
 fi
 
