@@ -1203,6 +1203,46 @@ a, button, input, textarea, select {
     transform: translateY(-50%) !important;
 }
 
+/* ========== TAILWIND FALLBACK - Стили для основных классов ========== */
+/* Эти стили применяются, если Tailwind CSS не загрузился */
+/* Используем CSS переменные для цветов */
+
+/* Цвета текста */
+.text-primary { color: var(--primary) !important; }
+.text-secondary { color: var(--secondary) !important; }
+.text-success { color: var(--success) !important; }
+.text-warning { color: var(--warning) !important; }
+.text-danger { color: var(--danger) !important; }
+.text-white { color: var(--white) !important; }
+.text-gray-700 { color: var(--gray-700) !important; }
+.text-gray-500 { color: var(--gray-500) !important; }
+
+/* Фоны */
+.bg-primary { background-color: var(--primary) !important; }
+.bg-secondary { background-color: var(--secondary) !important; }
+.bg-success { background-color: var(--success) !important; }
+.bg-warning { background-color: var(--warning) !important; }
+.bg-danger { background-color: var(--danger) !important; }
+.bg-white { background-color: var(--white) !important; }
+.bg-transparent { background-color: transparent !important; }
+
+/* Hover эффекты */
+.hover\:text-primary:hover { color: var(--primary) !important; }
+.hover\:bg-orange-600:hover { background-color: #ea580c !important; }
+.hover\:bg-blue-800:hover { background-color: #1e40af !important; }
+.hover\:bg-yellow-500:hover { background-color: #eab308 !important; }
+
+/* Границы */
+.border-primary { border-color: var(--primary) !important; }
+.border-secondary { border-color: var(--secondary) !important; }
+.border-2 { border-width: 2px !important; }
+.border-gray-300 { border-color: var(--gray-300) !important; }
+
+/* Focus */
+.focus\:border-primary:focus { border-color: var(--primary) !important; }
+.focus\:border-secondary:focus { border-color: var(--secondary) !important; }
+.focus\:outline-none:focus { outline: none !important; }
+
 /* Адаптивность для lightbox на мобильных */
 @media (max-width: 768px) {
     .review-lightbox button {
