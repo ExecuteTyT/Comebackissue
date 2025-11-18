@@ -142,10 +142,10 @@ app.use(helmet({
         directives: {
             defaultSrc: ["'self'"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
-            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "https://unpkg.com", "https://cdnjs.cloudflare.com", "https://mc.yandex.ru"], // Добавлен mc.yandex.ru для Яндекс.Метрики
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "https://unpkg.com", "https://cdnjs.cloudflare.com", "https://mc.yandex.ru", "https://mc.yandex.com"], // Яндекс.Метрика использует mc.yandex.com (не .ru!)
             fontSrc: ["'self'", "data:", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"], // Добавлен data: для data URI шрифтов
             imgSrc: ["'self'", "data:", "https:", "http:"],
-            connectSrc: ["'self'", "https://api.telegram.org", "https://cdn.jsdelivr.net", "https://unpkg.com", "https://mc.yandex.ru", "wss://mc.yandex.ru"], // Добавлены для source maps, Яндекс.Метрики и WebSocket
+            connectSrc: ["'self'", "https://api.telegram.org", "https://cdn.jsdelivr.net", "https://unpkg.com", "https://mc.yandex.ru", "https://mc.yandex.com", "wss://mc.yandex.ru", "wss://mc.yandex.com"], // Яндекс.Метрика использует mc.yandex.com
             frameSrc: ["'none'"],
             scriptSrcAttr: ["'unsafe-inline'"], // Разрешаем inline event handlers
             upgradeInsecureRequests: isHTTPS ? [] : null // Отключаем для HTTP, включаем только для HTTPS
