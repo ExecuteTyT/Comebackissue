@@ -922,13 +922,20 @@ app.use((err, req, res, next) => {
 // ========== START SERVER ==========
 // Запускаем сервер только если это не serverless окружение (Vercel)
 if (!isServerless) {
+    // Финальная проверка NODE_ENV перед запуском сервера
+    // Если PM2 установил NODE_ENV, используем его, иначе используем значение из .env или 'development'
+    const finalNodeEnv = process.env.NODE_ENV || 'development';
+    if (finalNodeEnv !== process.env.NODE_ENV) {
+        process.env.NODE_ENV = finalNodeEnv;
+    }
+    
     const server = app.listen(PORT, () => {
         logger.info(`
 ╔════════════════════════════════════════╗
 ║   🛡️  ВЕРНИСТРАХОВКУ.РФ - BACKEND     ║
 ║   Server running on port ${PORT}        ║
 ║   http://localhost:${PORT}              ║
-║   Environment: ${process.env.NODE_ENV || 'development'}         ║
+║   Environment: ${process.env.NODE_ENV}         ║
 ╚════════════════════════════════════════╝
         `);
     });
