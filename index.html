@@ -37,55 +37,51 @@
     
     <!-- Tailwind Config -->
     <script>
-        // Ждем загрузки Tailwind перед настройкой конфигурации
-        if (typeof tailwind !== 'undefined') {
-            tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        // Основные цвета согласно ТЗ
-                        primary: '#1E3A8A',      // Primary Blue
-                        secondary: '#F97316',    // Accent Orange (для CTA)
-                        success: '#10B981',      // Success Green
-                        warning: '#F59E0B',      // Warning Yellow
-                        danger: '#EF4444',       // Danger Red
-                        textDark: '#111827',
-                        // Градиенты
-                        'blue-primary': '#1E3A8A',
-                        'blue-light': '#3B82F6',
-                    },
-                    fontFamily: {
-                        heading: ['Montserrat', 'sans-serif'],
-                        body: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        } else {
-            // Если Tailwind не загрузился, пробуем через setTimeout
-            setTimeout(function() {
-                if (typeof tailwind !== 'undefined') {
-                    tailwind.config = {
-                        theme: {
-                            extend: {
-                                colors: {
-                                    primary: '#1E3A8A',
-                                    secondary: '#F97316',
-                                    success: '#10B981',
-                                    warning: '#F59E0B',
-                                    danger: '#EF4444',
-                                    textDark: '#111827',
-                                    'blue-primary': '#1E3A8A',
-                                    'blue-light': '#3B82F6',
-                                },
-                                fontFamily: {
-                                    heading: ['Montserrat', 'sans-serif'],
-                                    body: ['Inter', 'sans-serif'],
-                                }
+        // Функция для применения конфигурации Tailwind
+        function applyTailwindConfig() {
+            if (typeof tailwind !== 'undefined' && tailwind.config) {
+                tailwind.config = {
+                    theme: {
+                        extend: {
+                            colors: {
+                                // Основные цвета согласно ТЗ
+                                primary: '#1E3A8A',      // Primary Blue
+                                secondary: '#F97316',    // Accent Orange (для CTA)
+                                success: '#10B981',      // Success Green
+                                warning: '#F59E0B',      // Warning Yellow
+                                danger: '#EF4444',       // Danger Red
+                                textDark: '#111827',
+                                // Градиенты
+                                'blue-primary': '#1E3A8A',
+                                'blue-light': '#3B82F6',
+                            },
+                            fontFamily: {
+                                heading: ['Montserrat', 'sans-serif'],
+                                body: ['Inter', 'sans-serif'],
                             }
                         }
-                    };
+                    }
+                };
+                console.log('✅ Tailwind config applied');
+                return true;
+            }
+            return false;
+        }
+        
+        // Пробуем применить сразу
+        if (!applyTailwindConfig()) {
+            // Если не получилось, пробуем через небольшую задержку
+            let attempts = 0;
+            const maxAttempts = 10;
+            const interval = setInterval(function() {
+                attempts++;
+                if (applyTailwindConfig() || attempts >= maxAttempts) {
+                    clearInterval(interval);
+                    if (attempts >= maxAttempts) {
+                        console.warn('⚠️ Tailwind config could not be applied after', maxAttempts, 'attempts');
+                    }
                 }
-            }, 100);
+            }, 50);
         }
     </script>
     
