@@ -135,6 +135,8 @@ const DOMPurify = createDOMPurify(window);
 // ========== SECURITY MIDDLEWARE ==========
 
 // Helmet - базовые заголовки безопасности
+// ВАЖНО: Отключаем upgrade-insecure-requests для HTTP (будет включен только с HTTPS)
+const isHTTPS = process.env.NODE_ENV === 'production' && process.env.FORCE_HTTPS === 'true';
 app.use(helmet({
     contentSecurityPolicy: {
         directives: {
@@ -143,13 +145,15 @@ app.use(helmet({
             scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "https://unpkg.com", "https://cdnjs.cloudflare.com", "https://mc.yandex.ru"], // Добавлен mc.yandex.ru для Яндекс.Метрики
             fontSrc: ["'self'", "data:", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"], // Добавлен data: для data URI шрифтов
             imgSrc: ["'self'", "data:", "https:", "http:"],
-            connectSrc: ["'self'", "https://api.telegram.org", "https://cdn.jsdelivr.net", "https://unpkg.com", "https://mc.yandex.ru"], // Добавлены для source maps и Яндекс.Метрики
+            connectSrc: ["'self'", "https://api.telegram.org", "https://cdn.jsdelivr.net", "https://unpkg.com", "https://mc.yandex.ru", "wss://mc.yandex.ru"], // Добавлены для source maps, Яндекс.Метрики и WebSocket
             frameSrc: ["'none'"],
-            scriptSrcAttr: ["'unsafe-inline'"] // Разрешаем inline event handlers
+            scriptSrcAttr: ["'unsafe-inline'"], // Разрешаем inline event handlers
+            upgradeInsecureRequests: isHTTPS ? [] : null // Отключаем для HTTP, включаем только для HTTPS
         }
     },
     crossOriginEmbedderPolicy: false,
-    crossOriginOpenerPolicy: false // Отключаем для HTTP (будет работать только с HTTPS)
+    crossOriginOpenerPolicy: false, // Отключаем для HTTP (будет работать только с HTTPS)
+    hsts: false // Отключаем HSTS для HTTP
 }));
 
 // Cookie parser
