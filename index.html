@@ -37,7 +37,9 @@
     
     <!-- Tailwind Config -->
     <script>
-        tailwind.config = {
+        // Ждем загрузки Tailwind перед настройкой конфигурации
+        if (typeof tailwind !== 'undefined') {
+            tailwind.config = {
             theme: {
                 extend: {
                     colors: {
@@ -58,6 +60,32 @@
                     }
                 }
             }
+        } else {
+            // Если Tailwind не загрузился, пробуем через setTimeout
+            setTimeout(function() {
+                if (typeof tailwind !== 'undefined') {
+                    tailwind.config = {
+                        theme: {
+                            extend: {
+                                colors: {
+                                    primary: '#1E3A8A',
+                                    secondary: '#F97316',
+                                    success: '#10B981',
+                                    warning: '#F59E0B',
+                                    danger: '#EF4444',
+                                    textDark: '#111827',
+                                    'blue-primary': '#1E3A8A',
+                                    'blue-light': '#3B82F6',
+                                },
+                                fontFamily: {
+                                    heading: ['Montserrat', 'sans-serif'],
+                                    body: ['Inter', 'sans-serif'],
+                                }
+                            }
+                        }
+                    };
+                }
+            }, 100);
         }
     </script>
     
