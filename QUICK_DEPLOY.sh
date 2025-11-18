@@ -67,7 +67,8 @@ fi
 echo -e "${YELLOW}Шаг 8: Настройка nginx...${NC}"
 sudo tee /etc/nginx/sites-available/verni-strahovku.рф > /dev/null <<EOF
 server {
-    listen 80;
+    listen 80 default_server;
+    listen [::]:80 default_server;
     server_name вернистраховку.рф www.вернистраховку.рф;
 
     access_log /var/log/nginx/verni-strahovku-access.log;
@@ -75,6 +76,33 @@ server {
 
     client_max_body_size 10M;
 
+    root /var/www/verni-strahovku;
+
+    # Статические файлы - обслуживаем напрямую через Nginx (быстрее)
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|webmanifest|xml|txt|map)$ {
+        root /var/www/verni-strahovku;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+    }
+
+    # Статические файлы из папки assets
+    location /assets/ {
+        alias /var/www/verni-strahovku/assets/;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+    }
+
+    # Статические файлы из папки src
+    location /src/ {
+        alias /var/www/verni-strahovku/src/;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+    }
+
+    # Все остальные запросы проксируем на Node.js
     location / {
         proxy_pass http://localhost:3000;
         proxy_http_version 1.1;
@@ -89,12 +117,6 @@ server {
         proxy_connect_timeout 60s;
         proxy_send_timeout 60s;
         proxy_read_timeout 60s;
-    }
-
-    location /assets/ {
-        alias /var/www/verni-strahovku/assets/;
-        expires 30d;
-        add_header Cache-Control "public, immutable";
     }
 }
 EOF

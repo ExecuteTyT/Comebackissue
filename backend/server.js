@@ -198,7 +198,7 @@ const limiter = rateLimit({
         logger.warn(`Rate limit exceeded for IP: ${req.ip}`);
         res.status(429).json({
             success: false,
-            message: 'Слишком много запросов. Пожалуйста, позвоните нам: 8-904-666-66-46'
+            message: 'Слишком много запросов. Пожалуйста, позвоните нам: +7 906 123-15-22'
         });
     }
 });
@@ -265,23 +265,50 @@ if (isServerless) {
 
 logger.info(`Serving static files from: ${staticPath}, __dirname: ${__dirname}`);
 
-// Статические файлы должны обслуживаться ДО маршрутов
-app.use(express.static(staticPath, {
-    setHeaders: (res, filePath) => {
-        // Кэширование статических ресурсов
-        if (filePath.endsWith('.js') || filePath.endsWith('.css')) {
-            res.set('Cache-Control', 'public, max-age=31536000'); // 1 год
-        } else if (filePath.endsWith('.html')) {
-            res.set('Cache-Control', 'no-cache');
+// В production с Nginx статические файлы обслуживаются через Nginx
+// В development и serverless (Vercel) - через Express
+const isProductionWithNginx = process.env.NODE_ENV === 'production' && !isServerless;
+
+if (isProductionWithNginx) {
+    // В production с Nginx: не обслуживаем статические файлы через Express
+    // Nginx будет обслуживать их напрямую
+    logger.info('Production mode with Nginx: static files will be served by Nginx, not Express');
+    
+    // Middleware для пропуска статических файлов (Nginx их обработает)
+    app.use((req, res, next) => {
+        const staticExtensions = ['.js', '.css', '.svg', '.png', '.jpg', '.jpeg', '.gif', '.ico', '.webmanifest', '.xml', '.txt', '.woff', '.woff2', '.ttf', '.eot', '.map'];
+        const isStaticFile = staticExtensions.some(ext => req.url.endsWith(ext)) && 
+                            (req.url.startsWith('/src/') || req.url.startsWith('/assets/'));
+        
+        if (isStaticFile) {
+            // В production статические файлы должны обслуживаться через Nginx
+            // Если запрос дошёл до Express - значит Nginx не обработал его
+            // Возвращаем 404, чтобы браузер понял, что файл не найден
+            logger.warn(`Static file request reached Express (should be served by Nginx): ${req.url}`);
+            return res.status(404).send('Static file should be served by Nginx');
         }
-    },
-    // Включаем dotfiles для файлов, начинающихся с точки
-    dotfiles: 'ignore',
-    // Индексные файлы
-    index: false,
-    // Fallthrough - если файл не найден, передаем управление дальше
-    fallthrough: true
-}));
+        
+        next();
+    });
+} else {
+    // В development или serverless: обслуживаем статические файлы через Express
+    app.use(express.static(staticPath, {
+        setHeaders: (res, filePath) => {
+            // Кэширование статических ресурсов
+            if (filePath.endsWith('.js') || filePath.endsWith('.css')) {
+                res.set('Cache-Control', 'public, max-age=31536000'); // 1 год
+            } else if (filePath.endsWith('.html')) {
+                res.set('Cache-Control', 'no-cache');
+            }
+        },
+        // Включаем dotfiles для файлов, начинающихся с точки
+        dotfiles: 'ignore',
+        // Индексные файлы
+        index: false,
+        // Fallthrough - если файл не найден, передаем управление дальше
+        fallthrough: true
+    }));
+}
 
 // ========== EMAIL CONFIGURATION ==========
 const smtpPort = parseInt(process.env.SMTP_PORT) || 465;
@@ -544,7 +571,7 @@ app.post('/api/submit-form',
             logger.error('❌ Error stack:', error.stack);
             res.status(500).json({
                 success: false,
-                message: 'Ошибка сервера. Пожалуйста, позвоните нам: 8-904-666-66-46'
+                message: 'Ошибка сервера. Пожалуйста, позвоните нам: +7 906 123-15-22'
             });
         }
     }
@@ -671,7 +698,7 @@ async function sendClientConfirmation(formData) {
 
                     <p>Если у вас срочный вопрос, позвоните нам прямо сейчас:</p>
                     <p style="font-size: 24px; color: #2563EB; font-weight: bold;">
-                        ☎ 8-904-666-66-46
+                        ☎ +7 906 123-15-22
                     </p>
 
                     <p style="color: #6B7280; font-size: 14px; margin-top: 30px;">
@@ -850,11 +877,17 @@ app.get('/api/health', (req, res) => {
 // ========== 404 HANDLER ==========
 // Обрабатываем 404 только для не-статических файлов
 app.use((req, res, next) => {
-    // Если это запрос статического файла, возвращаем 404
+    // Если это запрос статического файла
     const staticExtensions = ['.js', '.css', '.svg', '.png', '.jpg', '.jpeg', '.gif', '.ico', '.webmanifest', '.xml', '.txt', '.woff', '.woff2', '.ttf', '.eot', '.map'];
     const isStaticFile = staticExtensions.some(ext => req.url.endsWith(ext));
     
     if (isStaticFile) {
+        // В production с Nginx статические файлы должны обслуживаться через Nginx
+        if (isProductionWithNginx) {
+            logger.warn(`404 Static file not found (should be served by Nginx): ${req.method} ${req.url}`);
+            return res.status(404).send('Static file should be served by Nginx');
+        }
+        // В development/serverless возвращаем обычный 404
         logger.warn(`404 Static file not found: ${req.method} ${req.url}`);
         return res.status(404).json({ error: 'File not found' });
     }
@@ -869,7 +902,7 @@ app.use((err, req, res, next) => {
     logger.error('Server error:', err);
     res.status(500).json({
         success: false,
-        message: 'Внутренняя ошибка сервера. Пожалуйста, позвоните нам: 8-904-666-66-46'
+        message: 'Внутренняя ошибка сервера. Пожалуйста, позвоните нам: +7 906 123-15-22'
     });
 });
 

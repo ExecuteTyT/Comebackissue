@@ -635,7 +635,7 @@ function showErrorMessage() {
             <i class="fas fa-exclamation-circle text-2xl"></i>
             <div>
                 <p class="font-bold">Ошибка отправки</p>
-                <p class="text-sm">Пожалуйста, позвоните нам: <a href="tel:+79046666646" class="underline">8-904-666-66-46</a></p>
+                <p class="text-sm">Пожалуйста, позвоните нам: <a href="tel:+79061231522" class="underline">+7 906 123-15-22</a></p>
             </div>
         </div>
     `;

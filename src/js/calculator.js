@@ -287,8 +287,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Визуальная валидация - выделяем поле даты красным
                 if (loanDateInput) {
                     loanDateInput.classList.add('border-red-500', 'ring-2', 'ring-red-200');
-                    loanDateInput.classList.remove('border-gray-300', 'focus:border-primary');
-                    loanDateInput.style.borderColor = '#ef4444'; // red-500
+                loanDateInput.classList.remove('border-gray-300', 'focus:border-primary');
+                loanDateInput.style.borderColor = '#ef4444'; // red-500
                     loanDateInput.style.borderWidth = '2px';
                     
                     // НЕ фокусируем поле, чтобы не выделялся placeholder
@@ -305,21 +305,21 @@ document.addEventListener('DOMContentLoaded', function() {
                         errorMsg.textContent = 'Пожалуйста, укажите дату оформления кредита';
                         loanDateInput.parentNode.insertBefore(errorMsg, loanDateInput.nextSibling);
                     }
-                    
+                
                     // Убираем красное выделение и сообщение об ошибке при выборе даты или вводе
-                    const removeDateError = function() {
+                const removeDateError = function() {
                         loanDateInput.classList.remove('border-red-500', 'ring-2', 'ring-red-200');
-                        loanDateInput.classList.add('border-gray-300', 'focus:border-primary');
-                        loanDateInput.style.borderColor = '';
+                    loanDateInput.classList.add('border-gray-300', 'focus:border-primary');
+                    loanDateInput.style.borderColor = '';
                         loanDateInput.style.borderWidth = '';
                         const errorMsg = loanDateInput.parentNode.querySelector('.date-error-message');
                         if (errorMsg) {
                             errorMsg.remove();
                         }
-                        loanDateInput.removeEventListener('change', removeDateError);
+                    loanDateInput.removeEventListener('change', removeDateError);
                         loanDateInput.removeEventListener('input', removeDateError);
-                    };
-                    loanDateInput.addEventListener('change', removeDateError, { once: true });
+                };
+                loanDateInput.addEventListener('change', removeDateError, { once: true });
                     loanDateInput.addEventListener('input', removeDateError, { once: true });
                 }
                 
