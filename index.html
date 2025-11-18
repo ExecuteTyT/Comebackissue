@@ -32,57 +32,75 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     </noscript>
     
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Tailwind Config -->
+    <!-- Tailwind CSS CDN с fallback -->
     <script>
-        // Функция для применения конфигурации Tailwind
-        function applyTailwindConfig() {
-            if (typeof tailwind !== 'undefined' && tailwind.config) {
-                tailwind.config = {
-                    theme: {
-                        extend: {
-                            colors: {
-                                // Основные цвета согласно ТЗ
-                                primary: '#1E3A8A',      // Primary Blue
-                                secondary: '#F97316',    // Accent Orange (для CTA)
-                                success: '#10B981',      // Success Green
-                                warning: '#F59E0B',      // Warning Yellow
-                                danger: '#EF4444',       // Danger Red
-                                textDark: '#111827',
-                                // Градиенты
-                                'blue-primary': '#1E3A8A',
-                                'blue-light': '#3B82F6',
-                            },
-                            fontFamily: {
-                                heading: ['Montserrat', 'sans-serif'],
-                                body: ['Inter', 'sans-serif'],
-                            }
+        // Функция для загрузки Tailwind с fallback
+        function loadTailwind() {
+            const tailwindConfig = {
+                theme: {
+                    extend: {
+                        colors: {
+                            // Основные цвета согласно ТЗ
+                            primary: '#1E3A8A',      // Primary Blue
+                            secondary: '#F97316',    // Accent Orange (для CTA)
+                            success: '#10B981',      // Success Green
+                            warning: '#F59E0B',      // Warning Yellow
+                            danger: '#EF4444',       // Danger Red
+                            textDark: '#111827',
+                            // Градиенты
+                            'blue-primary': '#1E3A8A',
+                            'blue-light': '#3B82F6',
+                        },
+                        fontFamily: {
+                            heading: ['Montserrat', 'sans-serif'],
+                            body: ['Inter', 'sans-serif'],
                         }
                     }
-                };
-                console.log('✅ Tailwind config applied');
-                return true;
+                }
+            };
+            
+            // Функция для применения конфигурации
+            function applyConfig() {
+                if (typeof tailwind !== 'undefined') {
+                    tailwind.config = tailwindConfig;
+                    console.log('✅ Tailwind config applied');
+                    return true;
+                }
+                return false;
             }
-            return false;
+            
+            // Пробуем загрузить с основного CDN
+            const script1 = document.createElement('script');
+            script1.src = 'https://cdn.tailwindcss.com';
+            script1.onload = function() {
+                console.log('✅ Tailwind loaded from cdn.tailwindcss.com');
+                applyConfig();
+            };
+            script1.onerror = function() {
+                console.warn('⚠️ Failed to load from cdn.tailwindcss.com, trying fallback...');
+                // Fallback: пробуем альтернативный CDN
+                const script2 = document.createElement('script');
+                script2.src = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4/dist/tailwind.min.js';
+                script2.onload = function() {
+                    console.log('✅ Tailwind loaded from jsdelivr fallback');
+                    applyConfig();
+                };
+                script2.onerror = function() {
+                    console.error('❌ Failed to load Tailwind from all sources');
+                    // Применяем конфигурацию в любом случае (может быть уже загружен)
+                    setTimeout(function() {
+                        if (!applyConfig()) {
+                            console.error('❌ Tailwind not available');
+                        }
+                    }, 100);
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
         }
         
-        // Пробуем применить сразу
-        if (!applyTailwindConfig()) {
-            // Если не получилось, пробуем через небольшую задержку
-            let attempts = 0;
-            const maxAttempts = 10;
-            const interval = setInterval(function() {
-                attempts++;
-                if (applyTailwindConfig() || attempts >= maxAttempts) {
-                    clearInterval(interval);
-                    if (attempts >= maxAttempts) {
-                        console.warn('⚠️ Tailwind config could not be applied after', maxAttempts, 'attempts');
-                    }
-                }
-            }, 50);
-        }
+        // Загружаем Tailwind сразу
+        loadTailwind();
     </script>
     
     <!-- Font Awesome -->
