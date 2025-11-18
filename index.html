@@ -32,22 +32,19 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     </noscript>
     
-    <!-- Tailwind CSS CDN с fallback -->
+    <!-- Tailwind CSS CDN с улучшенной загрузкой -->
     <script>
-        // Функция для загрузки Tailwind с fallback
-        function loadTailwind() {
+        (function() {
             const tailwindConfig = {
                 theme: {
                     extend: {
                         colors: {
-                            // Основные цвета согласно ТЗ
-                            primary: '#1E3A8A',      // Primary Blue
-                            secondary: '#F97316',    // Accent Orange (для CTA)
-                            success: '#10B981',      // Success Green
-                            warning: '#F59E0B',      // Warning Yellow
-                            danger: '#EF4444',       // Danger Red
+                            primary: '#1E3A8A',
+                            secondary: '#F97316',
+                            success: '#10B981',
+                            warning: '#F59E0B',
+                            danger: '#EF4444',
                             textDark: '#111827',
-                            // Градиенты
                             'blue-primary': '#1E3A8A',
                             'blue-light': '#3B82F6',
                         },
@@ -59,67 +56,60 @@
                 }
             };
             
-            // Функция для применения конфигурации
+            let tailwindLoaded = false;
+            
             function applyConfig() {
-                if (typeof tailwind !== 'undefined') {
-                    tailwind.config = tailwindConfig;
-                    console.log('✅ Tailwind config applied');
-                    return true;
+                if (typeof tailwind !== 'undefined' && !tailwindLoaded) {
+                    try {
+                        tailwind.config = tailwindConfig;
+                        tailwindLoaded = true;
+                        console.log('✅ Tailwind config applied');
+                        return true;
+                    } catch(e) {
+                        console.error('❌ Error applying Tailwind config:', e);
+                    }
                 }
-                return false;
+                return tailwindLoaded;
             }
             
-            // Пробуем загрузить с основного CDN
-            const script1 = document.createElement('script');
-            script1.src = 'https://cdn.tailwindcss.com';
-            script1.onload = function() {
-                console.log('✅ Tailwind loaded from cdn.tailwindcss.com');
-                applyConfig();
-            };
-            script1.onerror = function() {
-                console.warn('⚠️ Failed to load from cdn.tailwindcss.com, trying fallback...');
-                // Fallback: пробуем альтернативный CDN (unpkg)
-                const script2 = document.createElement('script');
-                script2.src = 'https://unpkg.com/tailwindcss@3/dist/tailwind.min.js';
-                script2.onload = function() {
-                    console.log('✅ Tailwind loaded from unpkg fallback');
-                    // Для Tailwind v3 нужно использовать другой подход
-                    setTimeout(function() {
-                        if (typeof tailwindcss !== 'undefined') {
-                            console.log('✅ Tailwind v3 detected');
+            // Пробуем загрузить Tailwind Play CDN
+            function loadTailwind() {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.tailwindcss.com';
+                script.async = true;
+                script.crossOrigin = 'anonymous';
+                
+                script.onload = function() {
+                    console.log('✅ Tailwind script loaded');
+                    // Даем время на инициализацию
+                    let attempts = 0;
+                    const maxAttempts = 20;
+                    const checkInterval = setInterval(function() {
+                        attempts++;
+                        if (applyConfig() || attempts >= maxAttempts) {
+                            clearInterval(checkInterval);
+                            if (attempts >= maxAttempts && !tailwindLoaded) {
+                                console.warn('⚠️ Tailwind loaded but config not applied after', maxAttempts, 'attempts');
+                            }
                         }
-                        applyConfig();
                     }, 100);
                 };
-                script2.onerror = function() {
-                    console.error('❌ Failed to load Tailwind from all sources');
-                    // Последняя попытка: пробуем через jsdelivr
-                    const script3 = document.createElement('script');
-                    script3.src = 'https://cdn.jsdelivr.net/npm/tailwindcss@3/dist/tailwind.min.js';
-                    script3.onload = function() {
-                        console.log('✅ Tailwind loaded from jsdelivr fallback');
-                        setTimeout(function() {
-                            applyConfig();
-                        }, 100);
-                    };
-                    script3.onerror = function() {
-                        console.error('❌ All Tailwind CDN sources failed');
-                        // Применяем конфигурацию в любом случае (может быть уже загружен)
-                        setTimeout(function() {
-                            if (!applyConfig()) {
-                                console.error('❌ Tailwind not available - colors may not work');
-                            }
-                        }, 200);
-                    };
-                    document.head.appendChild(script3);
+                
+                script.onerror = function() {
+                    console.error('❌ Failed to load Tailwind from cdn.tailwindcss.com');
+                    console.warn('⚠️ Site will use CSS variables as fallback');
                 };
-                document.head.appendChild(script2);
-            };
-            document.head.appendChild(script1);
-        }
-        
-        // Загружаем Tailwind сразу
-        loadTailwind();
+                
+                document.head.appendChild(script);
+            }
+            
+            // Загружаем сразу
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', loadTailwind);
+            } else {
+                loadTailwind();
+            }
+        })();
     </script>
     
     <!-- Font Awesome -->
