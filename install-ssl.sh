@@ -58,13 +58,52 @@ else
     echo "⚠️  Домен может быть недоступен. Продолжаем..."
 fi
 
-# Шаг 4: Получение сертификата
+# Шаг 4: Настройка Nginx для Let's Encrypt проверки
+echo ""
+echo "📝 Настройка Nginx для Let's Encrypt..."
+# Создаем директорию для acme-challenge
+mkdir -p /var/www/verni-strahovku/.well-known/acme-challenge
+chmod -R 755 /var/www/verni-strahovku/.well-known
+
+# Временно обновляем Nginx конфигурацию для поддержки acme-challenge
+NGINX_CONFIG="/etc/nginx/sites-available/verni-strahovku.рф"
+if [ -f "$NGINX_CONFIG" ]; then
+    # Создаем резервную копию
+    cp "$NGINX_CONFIG" "$NGINX_CONFIG.backup.acme"
+    
+    # Проверяем, есть ли уже блок для .well-known
+    if ! grep -q "\.well-known/acme-challenge" "$NGINX_CONFIG"; then
+        # Добавляем блок для acme-challenge ПЕРЕД location /
+        sed -i '/location \/ {/i\
+    # Let'\''s Encrypt verification\
+    location /.well-known/acme-challenge/ {\
+        root /var/www/verni-strahovku;\
+        allow all;\
+    }\
+' "$NGINX_CONFIG"
+        
+        # Проверяем и перезагружаем Nginx
+        if nginx -t; then
+            systemctl reload nginx
+            echo "✅ Nginx обновлен для Let's Encrypt"
+        else
+            echo "❌ Ошибка в конфигурации Nginx, восстанавливаем..."
+            cp "$NGINX_CONFIG.backup.acme" "$NGINX_CONFIG"
+            nginx -t && systemctl reload nginx
+        fi
+    else
+        echo "✅ Nginx уже настроен для Let's Encrypt"
+    fi
+fi
+
+# Шаг 5: Получение сертификата
 echo ""
 echo "🔐 Получение SSL сертификата..."
 echo "Certbot будет использовать домены в Punycode формате"
 echo ""
 
-# Используем webroot метод для более надежной установки
+# Сначала пробуем webroot метод
+echo "Попытка 1: Используем webroot метод..."
 certbot certonly \
     --webroot \
     --webroot-path=/var/www/verni-strahovku \
@@ -74,14 +113,34 @@ certbot certonly \
     --non-interactive \
     -d "$DOMAIN_PUNYCODE" \
     -d "$DOMAIN_WWW_PUNYCODE" \
-    || certbot certonly \
-        --nginx \
+    2>&1 | tee /tmp/certbot-webroot.log
+
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+    echo ""
+    echo "Попытка 2: Используем standalone метод (потребуется остановить Nginx)..."
+    # Останавливаем Nginx временно
+    systemctl stop nginx
+    
+    certbot certonly \
+        --standalone \
         --email admin@вернистраховку.рф \
         --agree-tos \
         --no-eff-email \
         --non-interactive \
         -d "$DOMAIN_PUNYCODE" \
         -d "$DOMAIN_WWW_PUNYCODE"
+    
+    CERTBOT_EXIT=$?
+    
+    # Запускаем Nginx обратно
+    systemctl start nginx
+    
+    if [ $CERTBOT_EXIT -ne 0 ]; then
+        echo "❌ Ошибка при получении сертификата"
+        echo "Проверьте логи: /var/log/letsencrypt/letsencrypt.log"
+        exit 1
+    fi
+fi
 
 if [ $? -eq 0 ]; then
     echo "✅ SSL сертификат успешно получен!"
@@ -204,7 +263,7 @@ else
     exit 1
 fi
 
-# Шаг 6: Настройка автообновления сертификата
+# Шаг 7: Настройка автообновления сертификата
 echo ""
 echo "🔄 Настройка автообновления сертификата..."
 certbot renew --dry-run
@@ -215,7 +274,7 @@ else
     echo "⚠️  Проблема с автообновлением, но это не критично"
 fi
 
-# Шаг 7: Обновление backend/server.js для HTTPS
+# Шаг 8: Обновление backend/server.js для HTTPS
 echo ""
 echo "📝 Обновление настроек сервера для HTTPS..."
 
