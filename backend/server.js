@@ -289,7 +289,7 @@ const { generateToken, doubleCsrfProtection } = doubleCsrf({
     cookieOptions: {
         sameSite: 'strict',
         path: '/',
-        secure: false, // Отключаем secure для HTTP (будет включен только при HTTPS)
+        secure: process.env.FORCE_HTTPS === 'true' || process.env.NODE_ENV === 'production', // Включаем secure для HTTPS
         httpOnly: true
     },
     size: 64,
