@@ -665,15 +665,16 @@ function showSuccessMessage(formType) {
 }
 
 // ========== ERROR MESSAGE ==========
-function showErrorMessage() {
+function showErrorMessage(customMessage) {
     const notification = document.createElement('div');
     notification.className = 'fixed top-24 right-6 bg-red-500 text-white px-6 py-4 rounded-lg shadow-2xl z-50 animate-slide-up';
+    const message = customMessage || 'Пожалуйста, позвоните нам: <a href="tel:+79061231522" class="underline">+7 906 123-15-22</a>';
     notification.innerHTML = `
         <div class="flex items-center space-x-3">
             <i class="fas fa-exclamation-circle text-2xl"></i>
             <div>
                 <p class="font-bold">Ошибка отправки</p>
-                <p class="text-sm">Пожалуйста, позвоните нам: <a href="tel:+79061231522" class="underline">+7 906 123-15-22</a></p>
+                <p class="text-sm">${message}</p>
             </div>
         </div>
     `;
