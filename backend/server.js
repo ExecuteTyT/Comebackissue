@@ -171,31 +171,70 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
     : ['http://localhost:3000', 'http://127.0.0.1:3000'];
 
+// Добавляем домен вернистраховку.рф в разрешенные origins
+const siteOrigins = [
+    'http://вернистраховку.рф',
+    'http://www.вернистраховку.рф',
+    'http://xn--80adbkporkockmsy.xn--p1ai',
+    'http://www.xn--80adbkporkockmsy.xn--p1ai',
+    'https://вернистраховку.рф',
+    'https://www.вернистраховку.рф',
+    'https://xn--80adbkporkockmsy.xn--p1ai',
+    'https://www.xn--80adbkporkockmsy.xn--p1ai'
+];
+
 // Добавляем Vercel домены в разрешенные origins
 const vercelOrigins = process.env.VERCEL_URL 
     ? [`https://${process.env.VERCEL_URL}`, `https://${process.env.VERCEL_URL.replace(/^https?:\/\//, '')}`]
     : [];
 
+// Объединяем все разрешенные origins
+const allAllowedOrigins = [...allowedOrigins, ...siteOrigins, ...vercelOrigins];
+
 app.use(cors({
     origin: function(origin, callback) {
         // Разрешаем запросы без origin (например, mobile apps или curl)
-        if (!origin) return callback(null, true);
-
-        // Разрешаем запросы с Vercel доменов
-        if (process.env.VERCEL && origin.includes('vercel.app')) {
+        if (!origin) {
+            logger.info('CORS: Request without origin, allowing');
             return callback(null, true);
         }
 
-        if (allowedOrigins.indexOf(origin) !== -1 || 
-            vercelOrigins.some(vOrigin => origin.includes(vOrigin)) ||
-            process.env.NODE_ENV === 'development') {
-            callback(null, true);
-        } else {
-            logger.warn(`CORS blocked request from origin: ${origin}`);
-            callback(new Error('Not allowed by CORS'));
+        logger.info(`CORS: Checking origin: ${origin}`);
+
+        // Разрешаем запросы с Vercel доменов
+        if (process.env.VERCEL && origin.includes('vercel.app')) {
+            logger.info('CORS: Vercel origin allowed');
+            return callback(null, true);
         }
+
+        // Проверяем точное совпадение
+        if (allAllowedOrigins.indexOf(origin) !== -1) {
+            logger.info(`CORS: Origin ${origin} allowed (exact match)`);
+            callback(null, true);
+            return;
+        }
+
+        // Проверяем частичное совпадение (для поддоменов)
+        if (allAllowedOrigins.some(allowed => origin.includes(allowed.replace(/^https?:\/\//, '')))) {
+            logger.info(`CORS: Origin ${origin} allowed (partial match)`);
+            callback(null, true);
+            return;
+        }
+
+        // В development разрешаем все
+        if (process.env.NODE_ENV === 'development') {
+            logger.info(`CORS: Origin ${origin} allowed (development mode)`);
+            callback(null, true);
+            return;
+        }
+
+        logger.warn(`CORS blocked request from origin: ${origin}`);
+        logger.warn(`Allowed origins: ${allAllowedOrigins.join(', ')}`);
+        callback(new Error('Not allowed by CORS'));
     },
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token']
 }));
 
 // Rate Limiting
