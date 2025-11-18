@@ -21,11 +21,13 @@ const createDOMPurify = require('dompurify');
 
 // Загружаем .env файл, но не перезаписываем переменные, которые уже установлены
 // ВАЖНО: NODE_ENV должен устанавливаться через PM2 (ecosystem.config.js), а не через .env
-const nodeEnvBefore = process.env.NODE_ENV;
+const nodeEnvFromPM2 = process.env.NODE_ENV; // Сохраняем значение из PM2 ДО загрузки .env
 require('dotenv').config({ override: false });
-// Восстанавливаем NODE_ENV из PM2, если он был установлен до загрузки .env
-if (nodeEnvBefore) {
-    process.env.NODE_ENV = nodeEnvBefore;
+// ПРИНУДИТЕЛЬНО восстанавливаем NODE_ENV из PM2 (если был установлен)
+// Это гарантирует, что значение из ecosystem.config.js имеет приоритет
+if (nodeEnvFromPM2) {
+    process.env.NODE_ENV = nodeEnvFromPM2;
+    console.log(`[ENV] NODE_ENV restored from PM2: ${nodeEnvFromPM2}`);
 }
 
 const app = express();
