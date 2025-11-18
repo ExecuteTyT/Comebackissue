@@ -19,7 +19,8 @@ const morgan = require('morgan');
 const { JSDOM } = require('jsdom');
 const createDOMPurify = require('dompurify');
 
-require('dotenv').config();
+// Загружаем .env файл, но не перезаписываем переменные, которые уже установлены
+require('dotenv').config({ override: false });
 
 const app = express();
 const PORT = process.env.PORT || 3000;
