@@ -250,12 +250,30 @@ const { generateToken, doubleCsrfProtection } = doubleCsrf({
     cookieOptions: {
         sameSite: 'strict',
         path: '/',
-        secure: process.env.NODE_ENV === 'production',
+        secure: false, // Отключаем secure для HTTP (будет включен только при HTTPS)
         httpOnly: true
     },
     size: 64,
     ignoredMethods: ['GET', 'HEAD', 'OPTIONS']
 });
+
+// Обработчик ошибок CSRF
+const csrfErrorHandler = (err, req, res, next) => {
+    if (err.code === 'EBADCSRFTOKEN') {
+        logger.error('❌ CSRF token validation failed:', {
+            url: req.url,
+            method: req.method,
+            headers: req.headers,
+            cookies: req.cookies,
+            body: req.body
+        });
+        return res.status(403).json({
+            success: false,
+            message: 'Ошибка безопасности. Обновите страницу и попробуйте снова.'
+        });
+    }
+    next(err);
+};
 
 // Статические файлы
 // В Vercel пути могут отличаться, используем абсолютный путь
@@ -537,9 +555,12 @@ app.post('/api/submit-form',
         logger.info('📋 Form submission received at /api/submit-form');
         logger.info('📋 Request headers:', JSON.stringify(req.headers, null, 2));
         logger.info('📋 Request body:', JSON.stringify(req.body, null, 2));
+        logger.info('📋 Cookies:', JSON.stringify(req.cookies, null, 2));
+        logger.info('📋 CSRF token in header:', req.headers['x-csrf-token']);
         next();
     },
     doubleCsrfProtection,
+    csrfErrorHandler,
     formValidationRules,
     async (req, res) => {
         try {
@@ -935,10 +956,24 @@ app.use((req, res, next) => {
 
 // ========== ERROR HANDLER ==========
 app.use((err, req, res, next) => {
-    logger.error('Server error:', err);
-    res.status(500).json({
+    logger.error('❌ Server error:', {
+        message: err.message,
+        stack: err.stack,
+        code: err.code,
+        url: req.url,
+        method: req.method,
+        headers: req.headers,
+        body: req.body
+    });
+    
+    // Если ответ уже отправлен, не отправляем повторно
+    if (res.headersSent) {
+        return next(err);
+    }
+    
+    res.status(err.status || 500).json({
         success: false,
-        message: 'Внутренняя ошибка сервера. Пожалуйста, позвоните нам: +7 906 123-15-22'
+        message: err.message || 'Внутренняя ошибка сервера. Пожалуйста, позвоните нам: +7 906 123-15-22'
     });
 });
 
