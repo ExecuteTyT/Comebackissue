@@ -526,13 +526,39 @@ function handleFormSubmit(event, formType) {
     data.page = window.location.href;
     
     console.log('📋 Отправка формы:', formType, data);
+    console.log('📋 CSRF токен:', csrfToken ? 'присутствует' : 'отсутствует');
     
     // Показываем индикатор загрузки
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalText = submitBtn ? submitBtn.innerHTML : '';
     if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = 'Отправка...<span class="spinner"></span>';
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Отправка...<span class="spinner"></span>';
+    }
+    
+    // Проверяем CSRF токен перед отправкой
+    if (!csrfToken) {
+        console.warn('⚠️ CSRF токен отсутствует, пытаемся получить...');
+        try {
+            const tokenResponse = await fetch('/api/csrf-token', {
+                credentials: 'include'
+            });
+            if (tokenResponse.ok) {
+                const tokenData = await tokenResponse.json();
+                csrfToken = tokenData.csrfToken;
+                console.log('✅ CSRF токен получен перед отправкой');
+            } else {
+                throw new Error('Не удалось получить CSRF токен');
+            }
+        } catch (tokenError) {
+            console.error('❌ Не удалось получить CSRF токен:', tokenError);
+            showErrorMessage('Не удалось получить токен безопасности. Обновите страницу и попробуйте снова.');
+            if (submitBtn && originalText) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+            return false;
+        }
     }
     
     // Отправка данных на сервер
@@ -545,11 +571,22 @@ function handleFormSubmit(event, formType) {
         credentials: 'include',
         body: JSON.stringify(data)
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Ошибка сервера');
+    .then(async response => {
+        // Пытаемся прочитать JSON ответ даже при ошибке
+        let responseData;
+        try {
+            responseData = await response.json();
+        } catch (jsonError) {
+            console.error('❌ Ошибка парсинга JSON ответа:', jsonError);
+            responseData = { message: `Ошибка сервера (${response.status})` };
         }
-        return response.json();
+        
+        if (!response.ok) {
+            console.error('❌ Ошибка сервера:', response.status, responseData);
+            throw new Error(responseData.message || `Ошибка сервера (${response.status})`);
+        }
+        
+        return responseData;
     })
     .then(result => {
         console.log('✅ Форма отправлена успешно:', result);
@@ -580,15 +617,16 @@ function handleFormSubmit(event, formType) {
     })
     .catch(error => {
         console.error('❌ Ошибка отправки формы:', error);
+        console.error('❌ Детали ошибки:', error.message, error.stack);
         
-        // Показываем сообщение об ошибке
-        showErrorMessage();
+        // Показываем сообщение об ошибке с деталями
+        showErrorMessage(error.message || 'Ошибка отправки формы. Пожалуйста, позвоните нам: +7 906 123-15-22');
     })
     .finally(() => {
         // Возвращаем кнопку в исходное состояние
         if (submitBtn && originalText) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
         }
     });
     
