@@ -8,6 +8,14 @@
         <priority>1.0</priority>
     </url>
 
+    <!-- Страница благодарности -->
+    <url>
+        <loc>https://vozvratidengi.ru/thank-you/</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
     <!-- Политика конфиденциальности -->
     <url>
         <loc>https://vozvratidengi.ru/privacy.html</loc>
