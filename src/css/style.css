@@ -97,6 +97,14 @@ html, body {
     flex-shrink: 0;
 }
 
+/* На мобильных выравниваем логотип и название по центру вертикально */
+@media (max-width: 640px) {
+    #header a[href="#hero"] {
+        align-items: center !important;
+        margin-left: 0 !important; /* Прижимаем к левому краю */
+    }
+}
+
 #header a[href="#hero"]:hover {
     opacity: 0.85;
 }
