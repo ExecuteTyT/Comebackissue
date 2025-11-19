@@ -241,18 +241,20 @@ html, body {
     }
     
     .logo-text {
-        font-size: 0.95rem !important; /* Еще меньше для очень маленьких экранов */
-        letter-spacing: 0.025em;
+        font-size: 0.875rem !important; /* 14px - уменьшено для маленьких экранов */
+        letter-spacing: 0.02em;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        line-height: 1.2 !important;
     }
     
-    /* На экранах 390px используем абсолютное позиционирование */
+    /* На экранах 390px используем абсолютное позиционирование на уровне текста */
     #mobile-menu-btn {
         position: absolute !important;
         right: 0.5rem !important; /* 8px от правого края header */
-        top: 0.75rem !important; /* 12px от верха - поднято выше */
+        top: 50% !important; /* По центру header */
+        transform: translateY(-50%) !important; /* Центрирование по вертикали */
         flex-shrink: 0 !important;
         min-width: 40px !important;
         width: 40px !important;
@@ -260,7 +262,6 @@ html, body {
         padding: 0 !important;
         margin: 0 !important;
         z-index: 10001 !important;
-        transform: none !important; /* Убираем transform для точного позиционирования */
     }
 }
 
@@ -288,23 +289,24 @@ html, body {
     }
     
     .logo-text {
-        font-size: 0.8125rem !important; /* 13px - еще меньше */
-        letter-spacing: 0.015em;
+        font-size: 0.75rem !important; /* 12px - еще меньше для маленьких экранов */
+        letter-spacing: 0.01em;
+        line-height: 1.2 !important;
     }
     
-    /* Обычная кнопка в nav - абсолютное позиционирование относительно header */
+    /* Обычная кнопка в nav - абсолютное позиционирование на уровне текста */
     #mobile-menu-btn {
         display: flex !important;
         position: absolute !important;
         right: 0.5rem !important; /* 8px от правого края header */
-        top: 0.75rem !important; /* 12px от верха - поднято выше */
+        top: 50% !important; /* По центру header */
+        transform: translateY(-50%) !important; /* Центрирование по вертикали */
         width: 36px !important;
         height: 36px !important;
         min-width: 36px !important;
         z-index: 10001 !important;
         margin: 0 !important;
         padding: 0 !important;
-        transform: none !important; /* Убираем transform для точного позиционирования */
     }
     
     #mobile-menu-btn i {
@@ -653,13 +655,12 @@ input[type="date"] {
 }
 
 .faq-answer {
-    max-height: 0;
+    display: none; /* Используем display вместо max-height для совместимости с JS */
     overflow: hidden;
-    transition: max-height 0.4s ease, padding 0.4s ease;
 }
 
 .faq-item.active .faq-answer {
-    max-height: 1000px;
+    display: block !important; /* Показываем при активном состоянии */
     padding-top: 1rem;
 }
 
