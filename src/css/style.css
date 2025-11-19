@@ -152,7 +152,23 @@ html, body {
 }
 
 .logo-text {
-    margin-left: 0; /* Убираем левый отступ у текста */
+    margin-left: 0 !important; /* Убираем левый отступ у текста */
+}
+
+/* На маленьких экранах уменьшаем размер шрифта названия */
+@media (max-width: 640px) {
+    .logo-text {
+        font-size: 0.875rem !important; /* 14px */
+        letter-spacing: 0.02em !important;
+        line-height: 1.2 !important;
+    }
+}
+
+@media (max-width: 390px) {
+    .logo-text {
+        font-size: 0.8125rem !important; /* 13px */
+        letter-spacing: 0.015em !important;
+    }
 }
 
 @media (max-width: 640px) {
