@@ -180,15 +180,16 @@ html, body {
 }
 
 @media (max-width: 640px) {
-    /* Уменьшаем padding контейнера на мобильных, чтобы логотип можно было сдвинуть левее */
+    /* Убираем padding контейнера на мобильных - максимально влево */
     #header .container {
-        padding-left: 0.5rem !important; /* 8px - минимальный отступ */
-        padding-right: 0.5rem !important; /* 8px */
+        padding-left: 0.25rem !important; /* 4px - минимальный отступ от края экрана */
+        padding-right: 0.5rem !important; /* 8px - для бургера */
     }
     
     /* Выравниваем nav по вертикали */
     #header nav {
         align-items: center !important;
+        height: 100% !important;
     }
     
     .logo-title-block {
@@ -199,6 +200,7 @@ html, body {
         margin-left: 0 !important; /* Убираем левый отступ - прижимаем к левому краю */
         margin-right: 0 !important;
         align-items: center !important; /* Выравниваем по центру вертикально */
+        height: 100% !important; /* Занимаем всю высоту nav */
     }
     
     .logo-text {
@@ -206,6 +208,8 @@ html, body {
         letter-spacing: 0.02em !important;
         line-height: 1.2 !important;
         margin: 0 !important; /* Убираем все отступы */
+        display: flex !important;
+        align-items: center !important; /* Выравниваем по центру вертикально */
     }
     
     .logo-img {
@@ -215,6 +219,7 @@ html, body {
         margin-right: 0.25rem !important; /* 4px - минимальный отступ от текста */
         margin-left: 0 !important; /* Убираем левый отступ - прижимаем к левому краю */
         align-self: center !important; /* Выравниваем по центру вертикально */
+        vertical-align: middle !important;
     }
     
     /* Гарантируем видимость бургерного меню на очень маленьких экранах */
@@ -248,14 +253,16 @@ html, body {
 @media (max-width: 390px) {
     /* Еще меньше padding для максимального использования пространства */
     #header .container {
-        padding-left: 0.5rem !important; /* px-2 = 8px */
-        padding-right: 0 !important; /* 0px - убираем правый padding */
+        padding-left: 0.25rem !important; /* 4px - минимальный отступ от края */
+        padding-right: 0.5rem !important; /* 8px - для бургера */
         position: relative;
     }
     
     #header nav {
         padding-right: 0 !important;
         position: relative;
+        align-items: center !important;
+        height: 100% !important;
     }
     
     .logo-title-block {
@@ -266,6 +273,7 @@ html, body {
         flex-shrink: 1;
         min-width: 0;
         align-items: center !important; /* Выравниваем по центру вертикально */
+        height: 100% !important; /* Занимаем всю высоту nav */
     }
     
     .logo-img {
@@ -276,6 +284,7 @@ html, body {
         height: 3.25rem !important; /* 52px - еще меньше */
         flex-shrink: 0;
         align-self: center !important; /* Выравниваем по центру вертикально */
+        vertical-align: middle !important;
     }
     
     .logo-text {
@@ -287,6 +296,8 @@ html, body {
         line-height: 1.2 !important;
         margin: 0 !important; /* Убираем все отступы */
         align-self: center !important; /* Выравниваем по центру вертикально */
+        display: flex !important;
+        align-items: center !important;
     }
     
     /* На экранах 390px используем абсолютное позиционирование на уровне текста */
@@ -308,20 +319,24 @@ html, body {
 /* Для экстремально маленьких экранов (iPhone SE - 375px) */
 @media (max-width: 375px) {
     #header .container {
-        padding-left: 0.375rem !important; /* 6px */
-        padding-right: 0 !important; /* 0px - убираем правый padding полностью */
+        padding-left: 0.25rem !important; /* 4px - минимальный отступ от края */
+        padding-right: 0.5rem !important; /* 8px - для бургера */
         position: relative;
     }
     
     #header nav {
         padding-right: 0 !important; /* Убираем padding у nav тоже */
         position: relative;
+        align-items: center !important;
+        height: 100% !important;
     }
     
     .logo-title-block {
         max-width: calc(100% - 50px) !important; /* 36px кнопка + 14px отступы */
         margin-left: 0 !important;
         margin-right: 0 !important;
+        align-items: center !important;
+        height: 100% !important; /* Занимаем всю высоту nav */
     }
     
     .logo-img {
@@ -331,6 +346,7 @@ html, body {
         margin-right: 0.25rem !important; /* 4px - минимальный отступ */
         margin-left: 0 !important;
         align-self: center !important; /* Выравниваем по центру вертикально */
+        vertical-align: middle !important;
     }
     
     .logo-text {
@@ -339,6 +355,8 @@ html, body {
         line-height: 1.2 !important;
         margin: 0 !important; /* Убираем все отступы */
         align-self: center !important; /* Выравниваем по центру вертикально */
+        display: flex !important;
+        align-items: center !important;
     }
     
     /* Обычная кнопка в nav - абсолютное позиционирование на уровне текста */
