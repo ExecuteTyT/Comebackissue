@@ -174,8 +174,8 @@ html, body {
 @media (max-width: 640px) {
     /* Уменьшаем padding контейнера на мобильных, чтобы логотип можно было сдвинуть левее */
     #header .container {
-        padding-left: 0.75rem; /* px-3 = 12px вместо px-6 = 24px */
-        padding-right: 0.75rem;
+        padding-left: 0.5rem !important; /* 8px - минимальный отступ */
+        padding-right: 0.5rem !important; /* 8px */
     }
     
     .logo-title-block {
