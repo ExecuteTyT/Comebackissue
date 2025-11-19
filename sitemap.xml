@@ -8,12 +8,36 @@
         <priority>1.0</priority>
     </url>
 
-    <!-- Страница благодарности -->
+    <!-- Услуги -->
     <url>
-        <loc>https://vozvratidengi.ru/thank-you/</loc>
+        <loc>https://vozvratidengi.ru/uslugi/</loc>
         <lastmod>2025-01-15</lastmod>
         <changefreq>monthly</changefreq>
-        <priority>0.2</priority>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Калькулятор -->
+    <url>
+        <loc>https://vozvratidengi.ru/kalkulyator/</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Отзывы -->
+    <url>
+        <loc>https://vozvratidengi.ru/otzyvy/</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- FAQ -->
+    <url>
+        <loc>https://vozvratidengi.ru/faq/</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
     </url>
 
     <!-- Политика конфиденциальности -->
