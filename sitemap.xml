@@ -16,6 +16,14 @@
         <priority>0.9</priority>
     </url>
 
+    <!-- Как работает -->
+    <url>
+        <loc>https://vozvratidengi.ru/kak-rabotaet/</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
     <!-- Калькулятор -->
     <url>
         <loc>https://vozvratidengi.ru/kalkulyator/</loc>
@@ -38,6 +46,14 @@
         <lastmod>2025-01-15</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
+    </url>
+
+    <!-- Контакты -->
+    <url>
+        <loc>https://vozvratidengi.ru/contacts/</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.7</priority>
     </url>
 
     <!-- Политика конфиденциальности -->
