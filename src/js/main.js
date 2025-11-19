@@ -174,7 +174,8 @@ function initAOS() {
 
 // ========== SWIPER INITIALIZATION ==========
 function initSwiper() {
-    const swiper = new Swiper('.reviewsSwiper', {
+    // Слайдер отзывов
+    const reviewsSwiper = new Swiper('.reviewsSwiper', {
         slidesPerView: 1,
         spaceBetween: 30,
         loop: true,
@@ -183,7 +184,7 @@ function initSwiper() {
             disableOnInteraction: false,
         },
         pagination: {
-            el: '.swiper-pagination',
+            el: '.reviewsSwiper .swiper-pagination',
             clickable: true,
         },
         breakpoints: {
@@ -196,6 +197,21 @@ function initSwiper() {
             1024: {
                 slidesPerView: 3,
             },
+        }
+    });
+
+    // Слайдер исполнительных листов (только mobile)
+    const execSheetsSwiper = new Swiper('.execSheetsSwiper', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: true,
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.execSheetsSwiper .swiper-pagination',
+            clickable: true,
         }
     });
 }

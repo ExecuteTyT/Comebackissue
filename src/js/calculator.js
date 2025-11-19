@@ -5,8 +5,7 @@
 
 class ReturnCalculator {
     constructor() {
-        this.MULTIPLIER_MIN = 1.5;  // Минимальный коэффициент возврата
-        this.MULTIPLIER_MAX = 2.0;  // Максимальный коэффициент возврата
+        this.MULTIPLIER = 2.45;  // Фиксированный коэффициент возврата (base + 70% неустойка + 70% проценты + 5% моральный вред)
         this.COMPANY_COMMISSION = 0.40; // 40% комиссия компании
         this.CLIENT_SHARE = 0.60; // 60% получает клиент
     }
@@ -23,11 +22,8 @@ class ReturnCalculator {
             };
         }
 
-        // Определение коэффициента возврата
-        let multiplier = this.calculateMultiplier(loanType, earlyRepayment, monthsSinceIssue);
-
-        // Общая сумма, которую вернет банк
-        const totalReturn = Math.round(imposedAmount * multiplier);
+        // Общая сумма, которую вернет банк (фиксированный коэффициент 2.45)
+        const totalReturn = Math.round(imposedAmount * this.MULTIPLIER);
 
         // Сумма клиенту (60%)
         const clientAmount = Math.round(totalReturn * this.CLIENT_SHARE);
@@ -45,57 +41,20 @@ class ReturnCalculator {
             clientAmount: clientAmount,
             companyCommission: companyCommission,
             returnPercentage: returnPercentage,
-            multiplier: multiplier,
-            breakdown: this.getBreakdown(imposedAmount, totalReturn, clientAmount, companyCommission),
+            breakdown: this.getBreakdown(imposedAmount),
             estimatedDays: this.estimateDays(loanType)
         };
     }
 
     /**
-     * Расчет коэффициента возврата
-     */
-    calculateMultiplier(loanType, earlyRepayment, monthsSinceIssue) {
-        let multiplier = 1.7; // Базовый коэффициент
-
-        // Тип кредита
-        switch(loanType) {
-            case 'auto':
-                multiplier = 1.8;
-                break;
-            case 'consumer':
-                multiplier = 1.7;
-                break;
-            case 'mortgage':
-                multiplier = 1.6;
-                break;
-        }
-
-        // Досрочное погашение
-        if (earlyRepayment) {
-            multiplier += 0.2;
-        }
-
-        // Срок с момента оформления
-        if (monthsSinceIssue <= 6) {
-            multiplier += 0.1;
-        } else if (monthsSinceIssue <= 12) {
-            multiplier += 0.05;
-        }
-
-        // Ограничение диапазона
-        multiplier = Math.max(this.MULTIPLIER_MIN, Math.min(this.MULTIPLIER_MAX, multiplier));
-
-        return multiplier;
-    }
-
-    /**
      * Детальная разбивка возврата
+     * Формула: base + 70% неустойка + 70% проценты + 5% моральный вред = 245%
      */
-    getBreakdown(imposed, total, client, commission) {
-        const penalty = Math.round(imposed * 0.3);
-        const interest = Math.round(imposed * 0.2);
-        const compensation = Math.round(imposed * 0.3);
+    getBreakdown(imposed) {
         const baseReturn = imposed;
+        const penalty = Math.round(imposed * 0.7);      // Неустойка 70%
+        const interest = Math.round(imposed * 0.7);     // Проценты 70%
+        const compensation = Math.round(imposed * 0.05); // Моральный вред 5%
 
         return {
             baseReturn: baseReturn,
@@ -359,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     <div class="result-timeline">
                         <p class="result-timeline-title">Сроки получения денег</p>
-                        <p><strong>Средний возврат: 2–6 месяцев.</strong></p>
+                        <p><strong>Средний возврат: 2–8 месяцев.</strong></p>
                         <p>Если банк затягивает процесс и требуется судебное решение, процедура может занять до 24 месяцев — мы сопровождаем вас и заранее предупреждаем о сроках.</p>
                     </div>
                 </div>
