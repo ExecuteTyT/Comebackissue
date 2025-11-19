@@ -181,13 +181,18 @@ html, body {
 @media (max-width: 390px) {
     /* Еще меньше padding для максимального использования пространства */
     #header .container {
-        padding-left: 0.5rem; /* px-2 = 8px */
-        padding-right: 0.25rem !important; /* px-1 = 4px - минимальный отступ справа для кнопки */
+        padding-left: 0.5rem !important; /* px-2 = 8px */
+        padding-right: 0 !important; /* 0px - убираем правый padding */
+    }
+    
+    /* Добавляем padding только для nav */
+    #header nav {
+        padding-right: 0.5rem !important;
     }
     
     .logo-title-block {
         gap: 0.03125rem; /* 0.5px - минимально возможное расстояние */
-        max-width: calc(100% - 48px) !important; /* Еще больше места для бургерного меню (48px = 40px кнопка + 8px отступ) */
+        max-width: calc(100% - 46px) !important; /* Еще больше места для бургерного меню (40px кнопка + 6px отступ) */
         margin-left: 0;
         flex-shrink: 1;
         min-width: 0;
@@ -210,12 +215,14 @@ html, body {
     
     /* Гарантируем, что кнопка бургерного меню полностью видна */
     #mobile-menu-btn {
-        margin-right: 0 !important;
+        margin-right: -0.25rem !important; /* Небольшой отрицательный margin для выхода за padding */
         margin-left: auto !important;
         flex-shrink: 0 !important;
         min-width: 40px !important;
         width: 40px !important;
         padding: 0 !important;
+        position: relative !important;
+        z-index: 10001 !important;
     }
 }
 
@@ -223,30 +230,38 @@ html, body {
 @media (max-width: 375px) {
     #header .container {
         padding-left: 0.375rem !important; /* 6px */
-        padding-right: 0.125rem !important; /* 2px - минимальный отступ */
+        padding-right: 0 !important; /* 0px - убираем правый padding полностью */
+    }
+    
+    /* Используем отрицательный margin для кнопки, чтобы она выходила за пределы padding */
+    #header nav {
+        padding-right: 0.5rem !important; /* Добавляем padding только для nav, чтобы кнопка была видна */
     }
     
     .logo-title-block {
-        max-width: calc(100% - 44px) !important; /* 40px кнопка + 4px отступ */
+        max-width: calc(100% - 42px) !important; /* 36px кнопка + 6px отступ */
     }
     
     .logo-img {
-        height: 4rem !important; /* 64px - еще меньше */
+        height: 3.75rem !important; /* 60px - еще меньше */
     }
     
     .logo-text {
-        font-size: 0.875rem !important; /* 14px */
-        letter-spacing: 0.02em;
+        font-size: 0.8125rem !important; /* 13px - еще меньше */
+        letter-spacing: 0.015em;
     }
     
     #mobile-menu-btn {
         width: 36px !important;
         min-width: 36px !important;
         height: 36px !important;
+        margin-right: -0.25rem !important; /* Небольшой отрицательный margin для выхода за padding */
+        position: relative !important;
+        z-index: 10001 !important;
     }
     
     #mobile-menu-btn i {
-        font-size: 1.25rem !important; /* Немного меньше иконка */
+        font-size: 1.125rem !important; /* Немного меньше иконка */
     }
 }
 
@@ -1443,6 +1458,16 @@ a, button, input, textarea, select {
 
 /* ========== CONTAINER ========== */
 .container { width: 100% !important; margin-left: auto !important; margin-right: auto !important; padding-left: 1rem !important; padding-right: 1rem !important; }
+/* Переопределение для header контейнера на маленьких экранах */
+@media (max-width: 640px) {
+    #header .container { padding-right: 0.75rem !important; }
+}
+@media (max-width: 390px) {
+    #header .container { padding-right: 0.25rem !important; }
+}
+@media (max-width: 375px) {
+    #header .container { padding-right: 0.125rem !important; }
+}
 @media (min-width: 640px) { .container { max-width: 640px !important; } }
 @media (min-width: 768px) { .container { max-width: 768px !important; } }
 @media (min-width: 1024px) { .container { max-width: 1024px !important; } }
