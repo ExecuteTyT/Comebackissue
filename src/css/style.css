@@ -177,29 +177,76 @@ html, body {
     }
 }
 
-/* Для очень маленьких экранов (iPhone 12 Pro - 390px) */
+/* Для очень маленьких экранов (iPhone SE - 375px и меньше) */
 @media (max-width: 390px) {
     /* Еще меньше padding для максимального использования пространства */
     #header .container {
         padding-left: 0.5rem; /* px-2 = 8px */
-        padding-right: 0.5rem;
+        padding-right: 0.25rem !important; /* px-1 = 4px - минимальный отступ справа для кнопки */
     }
     
     .logo-title-block {
         gap: 0.03125rem; /* 0.5px - минимально возможное расстояние */
-        max-width: calc(100% - 50px); /* Еще больше места для бургерного меню */
+        max-width: calc(100% - 48px) !important; /* Еще больше места для бургерного меню (48px = 40px кнопка + 8px отступ) */
         margin-left: 0;
+        flex-shrink: 1;
+        min-width: 0;
     }
     
     .logo-img {
         margin-right: 0.03125rem; /* 0.5px */
         margin-left: 0;
         height: 4.5rem; /* Немного меньше логотип на очень маленьких экранах */
+        flex-shrink: 0;
     }
     
     .logo-text {
-        font-size: 1rem; /* text-base = 16px - немного меньше, но не слишком */
+        font-size: 0.95rem !important; /* Еще меньше для очень маленьких экранов */
         letter-spacing: 0.025em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    /* Гарантируем, что кнопка бургерного меню полностью видна */
+    #mobile-menu-btn {
+        margin-right: 0 !important;
+        margin-left: auto !important;
+        flex-shrink: 0 !important;
+        min-width: 40px !important;
+        width: 40px !important;
+        padding: 0 !important;
+    }
+}
+
+/* Для экстремально маленьких экранов (iPhone SE - 375px) */
+@media (max-width: 375px) {
+    #header .container {
+        padding-left: 0.375rem !important; /* 6px */
+        padding-right: 0.125rem !important; /* 2px - минимальный отступ */
+    }
+    
+    .logo-title-block {
+        max-width: calc(100% - 44px) !important; /* 40px кнопка + 4px отступ */
+    }
+    
+    .logo-img {
+        height: 4rem !important; /* 64px - еще меньше */
+    }
+    
+    .logo-text {
+        font-size: 0.875rem !important; /* 14px */
+        letter-spacing: 0.02em;
+    }
+    
+    #mobile-menu-btn {
+        width: 36px !important;
+        min-width: 36px !important;
+        height: 36px !important;
+    }
+    
+    #mobile-menu-btn i {
+        font-size: 1.25rem !important; /* Немного меньше иконка */
     }
 }
 
