@@ -108,6 +108,7 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative; /* Для абсолютного позиционирования кнопки */
 }
 
 #header .container {
@@ -225,8 +226,9 @@ html, body {
     
     .logo-title-block {
         gap: 0.03125rem; /* 0.5px - минимально возможное расстояние */
-        max-width: calc(100% - 44px) !important; /* 40px кнопка + 4px отступ */
-        margin-left: 0;
+        max-width: calc(100% - 54px) !important; /* 40px кнопка + 14px отступы */
+        margin-left: 0 !important;
+        margin-right: 0 !important;
         flex-shrink: 1;
         min-width: 0;
     }
@@ -260,11 +262,6 @@ html, body {
         margin: 0 !important;
         z-index: 10001 !important;
     }
-    
-    /* Скрываем фиксированную кнопку на экранах больше 375px */
-    #mobile-menu-btn-fixed {
-        display: none !important;
-    }
 }
 
 /* Для экстремально маленьких экранов (iPhone SE - 375px) */
@@ -281,7 +278,9 @@ html, body {
     }
     
     .logo-title-block {
-        max-width: calc(100% - 40px) !important; /* 36px кнопка + 4px минимальный отступ */
+        max-width: calc(100% - 50px) !important; /* 36px кнопка + 14px отступы */
+        margin-left: 0 !important;
+        margin-right: 0 !important;
     }
     
     .logo-img {
@@ -293,39 +292,22 @@ html, body {
         letter-spacing: 0.015em;
     }
     
-    /* Скрываем обычную кнопку в nav */
+    /* Обычная кнопка в nav - абсолютное позиционирование относительно header */
     #mobile-menu-btn {
-        display: none !important;
-    }
-    
-    /* Показываем фиксированную кнопку вне контейнера */
-    #mobile-menu-btn-fixed {
         display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        position: fixed !important;
-        right: 0.5rem !important; /* 8px от правого края экрана */
-        top: 1.375rem !important; /* (80px header - 36px кнопка) / 2 = 22px = 1.375rem - по центру header */
+        position: absolute !important;
+        right: 0.5rem !important; /* 8px от правого края header */
+        top: 50% !important;
+        transform: translateY(-50%) !important;
         width: 36px !important;
         height: 36px !important;
         min-width: 36px !important;
         z-index: 10001 !important;
-        background: white !important;
-        border: none !important;
-        padding: 0 !important;
         margin: 0 !important;
-        cursor: pointer !important;
-        color: #374151 !important;
-        font-size: 1.125rem !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
-        border-radius: 4px !important;
+        padding: 0 !important;
     }
     
-    #mobile-menu-btn-fixed:hover {
-        color: #1E3A8A !important;
-    }
-    
-    #mobile-menu-btn-fixed i {
+    #mobile-menu-btn i {
         font-size: 1.125rem !important;
     }
 }
