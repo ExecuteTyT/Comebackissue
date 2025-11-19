@@ -46,6 +46,11 @@ html, body {
     position: relative;
 }
 
+/* Разрешаем overflow для header, чтобы кнопка бургерного меню не обрезалась */
+#header {
+    overflow-x: visible !important;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -61,6 +66,7 @@ html, body {
     background-color: white !important;
     display: block !important;
     visibility: visible !important;
+    overflow-x: visible !important; /* Разрешаем overflow для видимости кнопки */
 }
 
 #header.scrolled {
@@ -183,16 +189,17 @@ html, body {
     #header .container {
         padding-left: 0.5rem !important; /* px-2 = 8px */
         padding-right: 0 !important; /* 0px - убираем правый padding */
+        position: relative;
     }
     
-    /* Добавляем padding только для nav */
     #header nav {
-        padding-right: 0.5rem !important;
+        padding-right: 0 !important;
+        position: relative;
     }
     
     .logo-title-block {
         gap: 0.03125rem; /* 0.5px - минимально возможное расстояние */
-        max-width: calc(100% - 46px) !important; /* Еще больше места для бургерного меню (40px кнопка + 6px отступ) */
+        max-width: calc(100% - 44px) !important; /* 40px кнопка + 4px отступ */
         margin-left: 0;
         flex-shrink: 1;
         min-width: 0;
@@ -213,15 +220,18 @@ html, body {
         text-overflow: ellipsis;
     }
     
-    /* Гарантируем, что кнопка бургерного меню полностью видна */
+    /* Абсолютное позиционирование кнопки для гарантированной видимости */
     #mobile-menu-btn {
-        margin-right: -0.25rem !important; /* Небольшой отрицательный margin для выхода за padding */
-        margin-left: auto !important;
+        position: absolute !important;
+        right: 0.5rem !important; /* 8px от правого края header */
+        top: 50% !important;
+        transform: translateY(-50%) !important;
         flex-shrink: 0 !important;
         min-width: 40px !important;
         width: 40px !important;
+        height: 40px !important;
         padding: 0 !important;
-        position: relative !important;
+        margin: 0 !important;
         z-index: 10001 !important;
     }
 }
@@ -231,15 +241,16 @@ html, body {
     #header .container {
         padding-left: 0.375rem !important; /* 6px */
         padding-right: 0 !important; /* 0px - убираем правый padding полностью */
+        position: relative;
     }
     
-    /* Используем отрицательный margin для кнопки, чтобы она выходила за пределы padding */
     #header nav {
-        padding-right: 0.5rem !important; /* Добавляем padding только для nav, чтобы кнопка была видна */
+        padding-right: 0 !important; /* Убираем padding у nav тоже */
+        position: relative;
     }
     
     .logo-title-block {
-        max-width: calc(100% - 42px) !important; /* 36px кнопка + 6px отступ */
+        max-width: calc(100% - 40px) !important; /* 36px кнопка + 4px минимальный отступ */
     }
     
     .logo-img {
@@ -251,13 +262,17 @@ html, body {
         letter-spacing: 0.015em;
     }
     
+    /* Абсолютное позиционирование кнопки относительно header */
     #mobile-menu-btn {
         width: 36px !important;
         min-width: 36px !important;
         height: 36px !important;
-        margin-right: -0.25rem !important; /* Небольшой отрицательный margin для выхода за padding */
-        position: relative !important;
+        position: absolute !important;
+        right: 0.5rem !important; /* 8px от правого края header */
+        top: 50% !important;
+        transform: translateY(-50%) !important;
         z-index: 10001 !important;
+        margin: 0 !important;
     }
     
     #mobile-menu-btn i {
@@ -708,6 +723,7 @@ input[type="date"] {
 
 /* Гарантия видимости бургерного меню на мобильных и скрытие на десктопе */
 @media (max-width: 1023px) {
+    /* На экранах больше 390px используем обычное позиционирование */
     #mobile-menu-btn {
         display: flex !important;
         visibility: visible !important;
@@ -728,6 +744,13 @@ input[type="date"] {
     /* Убеждаемся, что контейнер не обрезает элементы */
     #header .container {
         overflow: visible !important;
+    }
+}
+
+/* На экранах от 391px до 640px - обычное позиционирование */
+@media (min-width: 391px) and (max-width: 640px) {
+    #mobile-menu-btn {
+        position: relative !important;
     }
 }
 
