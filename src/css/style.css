@@ -179,24 +179,25 @@ html, body {
     }
     
     .logo-title-block {
-        gap: 0.0625rem; /* 1px - еще меньше расстояние на мобильных */
-        max-width: calc(100% - 60px); /* Оставляем место для бургерного меню */
+        gap: 0 !important; /* 0px - название вплотную к логотипу */
+        max-width: calc(100% - 50px) !important; /* 40px кнопка + 10px отступы */
         flex-shrink: 1;
         min-width: 0;
-        margin-left: 0; /* Убираем левый отступ */
-        margin-right: auto; /* Прижимаем к левому краю */
+        margin-left: 0 !important; /* Убираем левый отступ */
+        margin-right: 0 !important;
     }
     
     .logo-text {
-        font-size: 1.125rem; /* text-lg = 18px - исходный размер */
-        letter-spacing: 0.05em;
+        font-size: 0.875rem !important; /* 14px - уменьшено для мобильных */
+        letter-spacing: 0.02em !important;
+        line-height: 1.2 !important;
     }
     
     .logo-img {
-        height: 5rem; /* h-20 = 80px */
-        margin-top: 0.5rem; /* mt-2 = 8px - опускаем логотип ниже */
-        margin-right: 0.0625rem; /* 1px - минимальный отступ */
-        margin-left: 0; /* Убираем левый отступ у логотипа */
+        height: 4rem !important; /* 64px - уменьшено для мобильных */
+        margin-top: 0.25rem !important; /* 4px */
+        margin-right: 0 !important; /* 0px - название вплотную */
+        margin-left: 0 !important; /* Убираем левый отступ у логотипа */
     }
     
     /* Гарантируем видимость бургерного меню на очень маленьких экранах */
@@ -250,19 +251,20 @@ html, body {
     }
     
     .logo-img {
-        margin-right: 0.03125rem; /* 0.5px */
-        margin-left: 0;
-        height: 4.5rem; /* Немного меньше логотип на очень маленьких экранах */
+        margin-right: 0 !important; /* 0px - название вплотную */
+        margin-left: 0 !important;
+        height: 3.5rem !important; /* 56px - еще меньше */
+        margin-top: 0.25rem !important; /* 4px */
         flex-shrink: 0;
     }
     
     .logo-text {
-        font-size: 0.875rem !important; /* 14px - уменьшено для маленьких экранов */
-        letter-spacing: 0.02em;
+        font-size: 0.75rem !important; /* 12px - еще меньше */
+        letter-spacing: 0.01em !important;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        line-height: 1.2 !important;
+        line-height: 1.1 !important;
     }
     
     /* На экранах 390px используем абсолютное позиционирование на уровне текста */
@@ -301,13 +303,14 @@ html, body {
     }
     
     .logo-img {
-        height: 3.75rem !important; /* 60px - еще меньше */
+        height: 3.25rem !important; /* 52px - еще меньше */
+        margin-top: 0.25rem !important; /* 4px */
     }
     
     .logo-text {
-        font-size: 0.75rem !important; /* 12px - еще меньше для маленьких экранов */
-        letter-spacing: 0.01em;
-        line-height: 1.2 !important;
+        font-size: 0.6875rem !important; /* 11px - минимальный размер */
+        letter-spacing: 0.005em !important;
+        line-height: 1.1 !important;
     }
     
     /* Обычная кнопка в nav - абсолютное позиционирование на уровне текста */
