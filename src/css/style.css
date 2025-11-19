@@ -178,26 +178,35 @@ html, body {
         padding-right: 0.5rem !important; /* 8px */
     }
     
+    /* Выравниваем nav по вертикали */
+    #header nav {
+        align-items: center !important;
+    }
+    
     .logo-title-block {
-        gap: 0 !important; /* 0px - название вплотную к логотипу */
+        gap: 0.25rem !important; /* 4px - минимальное расстояние между логотипом и текстом */
         max-width: calc(100% - 50px) !important; /* 40px кнопка + 10px отступы */
         flex-shrink: 1;
         min-width: 0;
-        margin-left: 0 !important; /* Убираем левый отступ */
+        margin-left: 0 !important; /* Убираем левый отступ - прижимаем к левому краю */
         margin-right: 0 !important;
+        align-items: center !important; /* Выравниваем по центру вертикально */
     }
     
     .logo-text {
         font-size: 0.875rem !important; /* 14px - уменьшено для мобильных */
         letter-spacing: 0.02em !important;
         line-height: 1.2 !important;
+        margin: 0 !important; /* Убираем все отступы */
     }
     
     .logo-img {
-        height: 4rem !important; /* 64px - уменьшено для мобильных */
-        margin-top: 0.25rem !important; /* 4px */
-        margin-right: 0 !important; /* 0px - название вплотную */
-        margin-left: 0 !important; /* Убираем левый отступ у логотипа */
+        height: 3.5rem !important; /* 56px - уменьшено для мобильных */
+        margin-top: 0 !important; /* Убираем верхний отступ */
+        margin-bottom: 0 !important; /* Убираем нижний отступ */
+        margin-right: 0.25rem !important; /* 4px - минимальный отступ от текста */
+        margin-left: 0 !important; /* Убираем левый отступ - прижимаем к левому краю */
+        align-self: center !important; /* Выравниваем по центру вертикально */
     }
     
     /* Гарантируем видимость бургерного меню на очень маленьких экранах */
@@ -242,20 +251,23 @@ html, body {
     }
     
     .logo-title-block {
-        gap: 0.03125rem; /* 0.5px - минимально возможное расстояние */
-        max-width: calc(100% - 54px) !important; /* 40px кнопка + 14px отступы */
+        gap: 0.25rem !important; /* 4px - минимальное расстояние */
+        max-width: calc(100% - 50px) !important; /* 40px кнопка + 10px отступы */
         margin-left: 0 !important;
         margin-right: 0 !important;
         flex-shrink: 1;
         min-width: 0;
+        align-items: center !important; /* Выравниваем по центру вертикально */
     }
     
     .logo-img {
-        margin-right: 0 !important; /* 0px - название вплотную */
+        margin-right: 0.25rem !important; /* 4px - минимальный отступ */
         margin-left: 0 !important;
-        height: 3.5rem !important; /* 56px - еще меньше */
-        margin-top: 0.25rem !important; /* 4px */
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        height: 3.25rem !important; /* 52px - еще меньше */
         flex-shrink: 0;
+        align-self: center !important; /* Выравниваем по центру вертикально */
     }
     
     .logo-text {
@@ -264,7 +276,9 @@ html, body {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        line-height: 1.1 !important;
+        line-height: 1.2 !important;
+        margin: 0 !important; /* Убираем все отступы */
+        align-self: center !important; /* Выравниваем по центру вертикально */
     }
     
     /* На экранах 390px используем абсолютное позиционирование на уровне текста */
@@ -303,14 +317,20 @@ html, body {
     }
     
     .logo-img {
-        height: 3.25rem !important; /* 52px - еще меньше */
-        margin-top: 0.25rem !important; /* 4px */
+        height: 3rem !important; /* 48px - еще меньше */
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        margin-right: 0.25rem !important; /* 4px - минимальный отступ */
+        margin-left: 0 !important;
+        align-self: center !important; /* Выравниваем по центру вертикально */
     }
     
     .logo-text {
         font-size: 0.6875rem !important; /* 11px - минимальный размер */
         letter-spacing: 0.005em !important;
-        line-height: 1.1 !important;
+        line-height: 1.2 !important;
+        margin: 0 !important; /* Убираем все отступы */
+        align-self: center !important; /* Выравниваем по центру вертикально */
     }
     
     /* Обычная кнопка в nav - абсолютное позиционирование на уровне текста */
@@ -326,6 +346,8 @@ html, body {
         z-index: 10001 !important;
         margin: 0 !important;
         padding: 0 !important;
+        align-items: center !important; /* Выравниваем иконку по центру */
+        justify-content: center !important;
     }
     
     #mobile-menu-btn i {
