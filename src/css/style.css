@@ -124,13 +124,13 @@ html, body {
 /* На маленьких экранах уменьшаем расстояние между логотипом и текстом */
 @media (max-width: 640px) {
     .logo-title-block {
-        gap: 0.0625rem !important; /* 1px - минимальное расстояние */
+        gap: 0 !important; /* 0px - название вплотную к логотипу */
     }
 }
 
 @media (max-width: 375px) {
     .logo-title-block {
-        gap: 0.03125rem !important; /* 0.5px - еще меньше */
+        gap: 0 !important; /* 0px - название вплотную к логотипу */
     }
 }
 
@@ -138,16 +138,16 @@ html, body {
     margin-right: 0.125rem; /* Дополнительный минимальный отступ справа от логотипа */
 }
 
-/* На маленьких экранах уменьшаем отступ между логотипом и текстом */
+/* На маленьких экранах убираем отступ между логотипом и текстом */
 @media (max-width: 640px) {
     .logo-img {
-        margin-right: 0.0625rem !important; /* 1px */
+        margin-right: 0 !important; /* 0px - название вплотную к логотипу */
     }
 }
 
 @media (max-width: 375px) {
     .logo-img {
-        margin-right: 0.03125rem !important; /* 0.5px */
+        margin-right: 0 !important; /* 0px - название вплотную к логотипу */
     }
 }
 
@@ -252,8 +252,7 @@ html, body {
     #mobile-menu-btn {
         position: absolute !important;
         right: 0.5rem !important; /* 8px от правого края header */
-        top: 50% !important;
-        transform: translateY(-50%) !important;
+        top: 0.75rem !important; /* 12px от верха - поднято выше */
         flex-shrink: 0 !important;
         min-width: 40px !important;
         width: 40px !important;
@@ -261,6 +260,7 @@ html, body {
         padding: 0 !important;
         margin: 0 !important;
         z-index: 10001 !important;
+        transform: none !important; /* Убираем transform для точного позиционирования */
     }
 }
 
@@ -297,14 +297,14 @@ html, body {
         display: flex !important;
         position: absolute !important;
         right: 0.5rem !important; /* 8px от правого края header */
-        top: 50% !important;
-        transform: translateY(-50%) !important;
+        top: 0.75rem !important; /* 12px от верха - поднято выше */
         width: 36px !important;
         height: 36px !important;
         min-width: 36px !important;
         z-index: 10001 !important;
         margin: 0 !important;
         padding: 0 !important;
+        transform: none !important; /* Убираем transform для точного позиционирования */
     }
     
     #mobile-menu-btn i {
