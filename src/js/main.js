@@ -199,21 +199,6 @@ function initSwiper() {
             },
         }
     });
-
-    // Слайдер исполнительных листов (только mobile)
-    const execSheetsSwiper = new Swiper('.execSheetsSwiper', {
-        slidesPerView: 1,
-        spaceBetween: 20,
-        loop: true,
-        autoplay: {
-            delay: 4000,
-            disableOnInteraction: false,
-        },
-        pagination: {
-            el: '.execSheetsSwiper .swiper-pagination',
-            clickable: true,
-        }
-    });
 }
 
 // ========== PHONE MASK INITIALIZATION ==========

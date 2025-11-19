@@ -190,8 +190,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 loanDateInput.classList.add('border-red-500');
                 loanDateInput.classList.remove('border-gray-300', 'focus:border-primary');
                 loanDateInput.style.borderColor = '#ef4444'; // red-500
-                loanDateInput.focus();
-                
+
+                // Прокручиваем к полю даты без фокуса (чтобы не выделялся плейсхолдер "дд")
+                loanDateInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
                 // Убираем красное выделение при выборе даты
                 const removeDateError = function() {
                     loanDateInput.classList.remove('border-red-500');
@@ -200,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     loanDateInput.removeEventListener('change', removeDateError);
                 };
                 loanDateInput.addEventListener('change', removeDateError, { once: true });
-                
+
                 return;
             }
             

@@ -880,6 +880,18 @@ a, button, input, textarea, select {
     background: #1D4ED8;
 }
 
+/* ========== REVIEW PHOTO CARDS FIX ========== */
+/* Изоляция трансформации для предотвращения пропадания скролла */
+.review-photo-item {
+    isolation: isolate;
+    will-change: transform;
+}
+
+.review-photo-item > div {
+    transform-origin: center center;
+    backface-visibility: hidden;
+}
+
 /* ========== ДОПОЛНИТЕЛЬНЫЕ АНИМАЦИИ (ТЗ) ========== */
 
 /* Пульсация CTA-кнопок */
