@@ -295,10 +295,20 @@ function initPhoneMasks() {
 // ========== MOBILE MENU ==========
 function initMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
+    const menuBtnFixed = document.getElementById('mobile-menu-btn-fixed');
     const mobileMenu = document.getElementById('mobile-menu');
 
+    // Обработчик для обычной кнопки
     if (menuBtn && mobileMenu) {
         menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMobileMenu();
+        });
+    }
+    
+    // Обработчик для фиксированной кнопки (для маленьких экранов)
+    if (menuBtnFixed && mobileMenu) {
+        menuBtnFixed.addEventListener('click', (e) => {
             e.stopPropagation();
             toggleMobileMenu();
         });
@@ -313,7 +323,9 @@ function initMobileMenu() {
 
         // Закрытие меню при клике вне его
         document.addEventListener('click', (e) => {
-            if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+            const isClickOnMenuBtn = menuBtn && menuBtn.contains(e.target);
+            const isClickOnMenuBtnFixed = menuBtnFixed && menuBtnFixed.contains(e.target);
+            if (!mobileMenu.contains(e.target) && !isClickOnMenuBtn && !isClickOnMenuBtnFixed) {
                 if (mobileMenu.classList.contains('active')) {
                     closeMobileMenu();
                 }
@@ -331,6 +343,7 @@ function initMobileMenu() {
 
 function toggleMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
+    const menuBtnFixed = document.getElementById('mobile-menu-btn-fixed');
     const mobileMenu = document.getElementById('mobile-menu');
 
     if (mobileMenu.classList.contains('active')) {
@@ -342,6 +355,7 @@ function toggleMobileMenu() {
 
 function openMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
+    const menuBtnFixed = document.getElementById('mobile-menu-btn-fixed');
     const mobileMenu = document.getElementById('mobile-menu');
 
     mobileMenu.classList.remove('hidden');
@@ -367,10 +381,12 @@ function openMobileMenu() {
 
 function closeMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
+    const menuBtnFixed = document.getElementById('mobile-menu-btn-fixed');
     const mobileMenu = document.getElementById('mobile-menu');
 
     mobileMenu.classList.remove('active');
-    menuBtn.classList.remove('active');
+    if (menuBtn) menuBtn.classList.remove('active');
+    if (menuBtnFixed) menuBtnFixed.classList.remove('active');
 
     // Ждем окончания анимации перед скрытием
     setTimeout(() => {
