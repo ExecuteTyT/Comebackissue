@@ -418,6 +418,32 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../index.html'));
 });
 
+// ========== SEPARATE PAGES ROUTES ==========
+// Роуты для отдельных SEO-страниц
+app.get('/uslugi/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../uslugi/index.html'));
+});
+
+app.get('/kak-rabotaet/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../kak-rabotaet/index.html'));
+});
+
+app.get('/otzyvy/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../otzyvy/index.html'));
+});
+
+app.get('/contacts/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../contacts/index.html'));
+});
+
+app.get('/kalkulyator/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../kalkulyator/index.html'));
+});
+
+app.get('/faq/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../faq/index.html'));
+});
+
 // ========== CSRF TOKEN ENDPOINT ==========
 app.get('/api/csrf-token', (req, res) => {
     const token = generateToken(req, res);
