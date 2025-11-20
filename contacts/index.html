@@ -132,10 +132,13 @@
                     <div class="hidden md:block text-right">
                         <a href="tel:+79061231522" class="flex items-center gap-2 text-lg font-bold text-primary hover:text-blue-light transition">
                             <i class="fas fa-phone text-success"></i>
-                            <span class="whitespace-nowrap">+7&nbsp;906&nbsp;123&#8209;15&#8209;22</span>
+                            <span>+7 906 123-15-22</span>
                         </a>
                         <p class="text-xs text-gray-500 ml-7">Пн-Пт 9:00-21:00</p>
                     </div>
+                    <button onclick="openModal()" class="hidden lg:block bg-secondary hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
+                        Бесплатная консультация
+                    </button>
                     <!-- Mobile Menu Button -->
                     <button id="mobile-menu-btn" type="button" class="lg:hidden flex items-center justify-center w-10 h-10 min-w-[40px] text-2xl text-gray-700 hover:text-primary transition z-50 relative ml-auto">
                         <i class="fas fa-bars"></i>
@@ -500,23 +503,59 @@
         </div>
     </footer>
 
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 px-4">
+        <div class="bg-white rounded-3xl p-8 md:p-12 max-w-md w-full relative" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-3xl text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <h2 class="font-heading font-bold text-3xl mb-4 text-center">БЕСПЛАТНАЯ КОНСУЛЬТАЦИЯ</h2>
+            <p class="text-gray-600 text-center mb-6">Оставьте заявку, и мы свяжемся с вами в течение 15 минут</p>
+
+            <form id="modal-form" onsubmit="handleFormSubmit(event, 'modal')" class="space-y-4">
+                <input 
+                    type="text" 
+                    name="name" 
+                    placeholder="Ваше имя" 
+                    required
+                    class="w-full h-12 px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary transition"
+                >
+                <input 
+                    type="tel" 
+                    name="phone" 
+                    id="modal-phone"
+                    placeholder="+7 (___) ___-__-__" 
+                    required
+                    class="w-full h-12 px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary transition"
+                >
+
+                <div class="flex items-start space-x-2">
+                    <input type="checkbox" id="modal-consent" required class="mt-1">
+                    <label for="modal-consent" class="text-xs text-gray-600">
+                    Согласен с <a href="/privacy.html" class="text-primary underline" target="_blank" rel="noopener">политикой конфиденциальности</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full bg-secondary hover:bg-orange-500 text-white font-bold text-lg py-4 rounded-lg transition">
+                    ОТПРАВИТЬ ЗАЯВКУ
+                </button>
+            </form>
+
+            <div class="text-center mt-6">
+                <p class="text-gray-600 mb-2">Или позвоните прямо сейчас:</p>
+                <a href="tel:+79061231522" class="text-2xl font-bold text-primary hover:text-blue-700 transition">
+                    ☎ +7 906 123-15-22
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>
         AOS.init({ duration: 800, once: true, offset: 100 });
-
-        // Mobile menu toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        if (mobileMenuBtn && mobileMenu) {
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-                const icon = mobileMenuBtn.querySelector('i');
-                icon.classList.toggle('fa-bars');
-                icon.classList.toggle('fa-times');
-            });
-        }
     </script>
+    <script src="../src/js/main.js"></script>
 </body>
 </html>
