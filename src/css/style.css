@@ -1141,3 +1141,34 @@ a, button, input, textarea, select {
     outline-offset: 2px;
 }
 
+/* ========== MOBILE FIXES ========== */
+/* Prevent currency symbol wrapping */
+.nowrap-currency,
+.font-bold:contains("₽"),
+.text-4xl:contains("₽"),
+.text-5xl:contains("₽"),
+h1:contains("₽"),
+h2:contains("₽"),
+h3:contains("₽") {
+    white-space: nowrap !important;
+}
+
+/* General fix for numbers with currency on mobile */
+@media (max-width: 768px) {
+    /* Prevent breaking before ruble symbol */
+    .font-bold,
+    .text-2xl,
+    .text-3xl,
+    .text-4xl,
+    .text-5xl,
+    .text-6xl {
+        word-break: keep-all;
+        overflow-wrap: normal;
+    }
+
+    /* Phone numbers shouldn't break */
+    .whitespace-nowrap {
+        white-space: nowrap !important;
+    }
+}
+
