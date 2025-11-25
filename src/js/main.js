@@ -65,11 +65,15 @@ function closeModal() {
     
     if (modal) {
         console.log('📋 Классы до закрытия:', Array.from(modal.classList));
+        // Убираем класс active
         modal.classList.remove('active');
-        modal.classList.add('hidden');
-        console.log('📋 Классы после закрытия:', Array.from(modal.classList));
-        document.body.style.overflow = '';
-        console.log('✅ Модалка закрыта');
+        // Добавляем hidden с небольшой задержкой для плавной анимации
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+            console.log('📋 Классы после закрытия:', Array.from(modal.classList));
+            console.log('✅ Модалка закрыта');
+        }, 150);
     } else {
         console.error('❌ Модалка не найдена для закрытия');
     }
@@ -377,16 +381,38 @@ function initModalHandlers() {
         });
         
         // Обработчик для кнопки закрытия (крестик)
-        const closeBtn = modal.querySelector('button[onclick*="closeModal"]');
+        // Ищем кнопку несколькими способами для надежности
+        let closeBtn = modal.querySelector('button[onclick*="closeModal"]');
+        if (!closeBtn) {
+            // Пробуем найти по позиции (absolute top-4 right-4)
+            closeBtn = modal.querySelector('button.absolute.top-4.right-4');
+        }
+        if (!closeBtn) {
+            // Пробуем найти по иконке
+            closeBtn = modal.querySelector('button i.fa-times')?.closest('button');
+        }
+        
         if (closeBtn) {
             console.log('✅ Кнопка закрытия найдена:', closeBtn);
-            // Удаляем старый onclick и добавляем addEventListener
-            closeBtn.removeAttribute('onclick');
-            closeBtn.addEventListener('click', function(e) {
+            // Удаляем старый onclick если есть
+            if (closeBtn.hasAttribute('onclick')) {
+                closeBtn.removeAttribute('onclick');
+            }
+            // Удаляем старые обработчики если есть
+            const newCloseBtn = closeBtn.cloneNode(true);
+            closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+            // Добавляем новый обработчик
+            newCloseBtn.addEventListener('click', function(e) {
                 console.log('🖱️ Клик на кнопку закрытия');
                 e.preventDefault();
                 e.stopPropagation();
-                closeModal();
+                if (typeof closeModal === 'function') {
+                    closeModal();
+                } else if (typeof window.closeModal === 'function') {
+                    window.closeModal();
+                } else {
+                    console.error('❌ Функция closeModal не найдена');
+                }
             });
         } else {
             console.warn('⚠️ Кнопка закрытия не найдена в модалке');
