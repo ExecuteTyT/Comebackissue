@@ -67,13 +67,11 @@ function closeModal() {
         console.log('📋 Классы до закрытия:', Array.from(modal.classList));
         // Убираем класс active
         modal.classList.remove('active');
-        // Добавляем hidden с небольшой задержкой для плавной анимации
-        setTimeout(() => {
-            modal.classList.add('hidden');
-            document.body.style.overflow = '';
-            console.log('📋 Классы после закрытия:', Array.from(modal.classList));
-            console.log('✅ Модалка закрыта');
-        }, 150);
+        // Добавляем hidden сразу
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+        console.log('📋 Классы после закрытия:', Array.from(modal.classList));
+        console.log('✅ Модалка закрыта');
     } else {
         console.error('❌ Модалка не найдена для закрытия');
     }
