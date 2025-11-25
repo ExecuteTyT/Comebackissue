@@ -577,11 +577,21 @@ input[type="date"] {
     transform: translateY(-100%);
     opacity: 0;
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    visibility: hidden;
 }
 
 #mobile-menu.active {
     transform: translateY(0);
     opacity: 1;
+    visibility: visible;
+}
+
+#mobile-menu.hidden {
+    display: none !important;
+}
+
+#mobile-menu:not(.hidden).active {
+    display: block !important;
 }
 
 @media (min-width: 1024px) {
