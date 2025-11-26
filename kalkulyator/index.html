@@ -170,12 +170,12 @@
                     </div>
 
                     <!-- Calculator Form -->
-                    <div class="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-8 md:p-12 shadow-xl border border-gray-100" data-aos="fade-up">
+                    <div class="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-6 sm:p-8 md:p-12 shadow-xl border border-gray-100 overflow-hidden" data-aos="fade-up">
                         <div class="text-center mb-8">
                             <h2 class="font-heading font-bold text-2xl md:text-3xl mb-3">
                                 Введите данные для расчёта
                             </h2>
-                            <p class="text-gray-600">Укажите сумму навязанной страховки, и мы рассчитаем точную сумму возврата</p>
+                            <p class="text-gray-600 text-sm sm:text-base">Укажите сумму навязанной страховки, и мы рассчитаем примерную сумму возврата</p>
                         </div>
 
                         <form id="calculator-form-page" class="space-y-6">
@@ -195,39 +195,39 @@
                             </div>
 
                             <!-- Calculate Button -->
-                            <button type="submit" class="w-full bg-secondary hover:bg-orange-500 text-white font-bold text-xl py-5 rounded-xl transition transform hover:scale-105 shadow-lg">
-                                <i class="fas fa-calculator mr-2"></i>РАССЧИТАТЬ МОЙ ВОЗВРАТ
+                            <button type="submit" class="w-full bg-secondary hover:bg-orange-500 text-white font-bold text-base sm:text-lg md:text-xl py-4 sm:py-5 rounded-xl transition transform hover:scale-105 shadow-lg whitespace-nowrap overflow-hidden text-ellipsis">
+                                <i class="fas fa-calculator mr-2"></i><span class="hidden sm:inline">РАССЧИТАТЬ МОЙ ВОЗВРАТ</span><span class="sm:hidden">РАССЧИТАТЬ</span>
                             </button>
                         </form>
 
                         <!-- Result Section -->
-                        <div id="calc-result" class="hidden mt-8 p-8 bg-gradient-to-br from-green-50 to-white rounded-2xl shadow-xl border-2 border-green-200">
+                        <div id="calc-result" class="hidden mt-8 p-6 sm:p-8 bg-gradient-to-br from-green-50 to-white rounded-2xl shadow-xl border-2 border-green-200 overflow-hidden">
                             <div class="text-center mb-6">
-                                <div class="inline-flex items-center justify-center w-16 h-16 bg-success rounded-full mb-4">
-                                    <i class="fas fa-check text-white text-2xl"></i>
+                                <div class="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-success rounded-full mb-4">
+                                    <i class="fas fa-check text-white text-xl sm:text-2xl"></i>
                                 </div>
-                                <h3 class="font-heading font-bold text-2xl text-success mb-2">Результат расчёта</h3>
-                                <p class="text-gray-600 text-sm">Точная сумма, которую вы можете вернуть</p>
+                                <h3 class="font-heading font-bold text-xl sm:text-2xl text-success mb-2">Результат расчёта</h3>
+                                <p class="text-gray-600 text-xs sm:text-sm">Примерная сумма, которую вы можете вернуть</p>
                             </div>
 
                             <div class="space-y-4 mb-6">
-                                <div class="flex justify-between items-center p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
-                                    <span class="text-gray-700 font-medium">Сумма страховки:</span>
-                                    <span id="result-input" class="font-bold text-lg text-gray-900 whitespace-nowrap">0 <span class="text-primary">₽</span></span>
+                                <div class="flex justify-between items-center gap-4 p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
+                                    <span class="text-gray-700 font-medium flex-shrink-0">Сумма страховки:</span>
+                                    <span id="result-input" class="font-bold text-lg text-gray-900 whitespace-nowrap flex-shrink-0">0 <span class="text-primary">₽</span></span>
                                 </div>
-                                <div class="flex justify-between items-center p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
-                                    <span class="text-gray-700 font-medium">Общая сумма к возврату:</span>
-                                    <span id="result-total" class="font-bold text-lg text-primary whitespace-nowrap">0 <span class="text-primary">₽</span></span>
+                                <div class="flex justify-between items-center gap-4 p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
+                                    <span class="text-gray-700 font-medium flex-shrink-0">Общая сумма к возврату:</span>
+                                    <span id="result-total" class="font-bold text-lg text-primary whitespace-nowrap flex-shrink-0">0 <span class="text-primary">₽</span></span>
                                 </div>
-                                <div class="flex justify-between items-center p-6 bg-gradient-to-r from-green-100 to-green-50 rounded-xl border-2 border-success shadow-md">
-                                    <span class="font-bold text-success text-lg">Вы получите:</span>
-                                    <span id="result-client" class="font-bold text-3xl text-success whitespace-nowrap">0 <span>₽</span></span>
+                                <div class="flex justify-between items-center gap-4 p-6 bg-gradient-to-r from-green-100 to-green-50 rounded-xl border-2 border-success shadow-md">
+                                    <span class="font-bold text-success text-lg flex-shrink-0">Вы получите:</span>
+                                    <span id="result-client" class="font-bold text-2xl sm:text-3xl text-success whitespace-nowrap flex-shrink-0">0 <span>₽</span></span>
                                 </div>
                             </div>
 
                             <div class="text-center pt-4 border-t border-gray-200">
-                                <p class="text-gray-700 mb-4 font-medium">Хотите получить эти деньги?</p>
-                                <button onclick="openModal()" class="inline-block bg-secondary hover:bg-orange-500 text-white font-bold px-8 py-4 rounded-lg transition transform hover:scale-105 shadow-lg">
+                                <p class="text-gray-700 mb-4 font-medium text-sm sm:text-base">Хотите получить эти деньги?</p>
+                                <button onclick="openModal()" class="inline-block bg-secondary hover:bg-orange-500 text-white font-bold text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-4 rounded-lg transition transform hover:scale-105 shadow-lg w-full sm:w-auto">
                                     <i class="fas fa-phone mr-2"></i>ОСТАВИТЬ ЗАЯВКУ
                                 </button>
                             </div>
@@ -238,44 +238,44 @@
                     <div class="mt-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 md:p-10 border border-blue-100" data-aos="fade-up">
                         <h3 class="font-heading font-bold text-2xl mb-6 text-center">Как рассчитывается сумма возврата?</h3>
                         <div class="grid md:grid-cols-2 gap-6 mb-6">
-                            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                                <h4 class="font-bold text-lg mb-4 text-primary">Что входит в расчёт:</h4>
-                                <ul class="space-y-3 text-gray-700">
+                            <div class="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 overflow-hidden">
+                                <h4 class="font-bold text-base sm:text-lg mb-4 text-primary">Что входит в расчёт:</h4>
+                                <ul class="space-y-2 sm:space-y-3 text-gray-700 text-sm sm:text-base">
                                     <li class="flex items-start">
-                                        <i class="fas fa-check-circle text-success mr-3 mt-1 flex-shrink-0"></i>
+                                        <i class="fas fa-check-circle text-success mr-2 sm:mr-3 mt-0.5 sm:mt-1 flex-shrink-0"></i>
                                         <span>Основная сумма страховки <span class="font-semibold">(100%)</span></span>
                                     </li>
                                     <li class="flex items-start">
-                                        <i class="fas fa-check-circle text-success mr-3 mt-1 flex-shrink-0"></i>
+                                        <i class="fas fa-check-circle text-success mr-2 sm:mr-3 mt-0.5 sm:mt-1 flex-shrink-0"></i>
                                         <span>Неустойка за незаконное удержание <span class="font-semibold">(70%)</span></span>
                                     </li>
                                     <li class="flex items-start">
-                                        <i class="fas fa-check-circle text-success mr-3 mt-1 flex-shrink-0"></i>
+                                        <i class="fas fa-check-circle text-success mr-2 sm:mr-3 mt-0.5 sm:mt-1 flex-shrink-0"></i>
                                         <span>Проценты за пользование деньгами <span class="font-semibold">(70%)</span></span>
                                     </li>
                                     <li class="flex items-start">
-                                        <i class="fas fa-check-circle text-success mr-3 mt-1 flex-shrink-0"></i>
+                                        <i class="fas fa-check-circle text-success mr-2 sm:mr-3 mt-0.5 sm:mt-1 flex-shrink-0"></i>
                                         <span>Компенсация морального вреда <span class="font-semibold">(5%)</span></span>
                                     </li>
                                 </ul>
                             </div>
-                            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                                <h4 class="font-bold text-lg mb-4 text-success">Условия работы:</h4>
-                                <ul class="space-y-3 text-gray-700">
+                            <div class="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 overflow-hidden">
+                                <h4 class="font-bold text-base sm:text-lg mb-4 text-success">Условия работы:</h4>
+                                <ul class="space-y-2 sm:space-y-3 text-gray-700 text-sm sm:text-base">
                                     <li class="flex items-start">
-                                        <i class="fas fa-hand-holding-usd text-secondary mr-3 mt-1 flex-shrink-0"></i>
+                                        <i class="fas fa-hand-holding-usd text-secondary mr-2 sm:mr-3 mt-0.5 sm:mt-1 flex-shrink-0"></i>
                                         <span><span class="font-semibold">Вы получаете 60%</span> от общей суммы возврата</span>
                                     </li>
                                     <li class="flex items-start">
-                                        <i class="fas fa-shield-alt text-primary mr-3 mt-1 flex-shrink-0"></i>
+                                        <i class="fas fa-shield-alt text-primary mr-2 sm:mr-3 mt-0.5 sm:mt-1 flex-shrink-0"></i>
                                         <span><span class="font-semibold">Без предоплаты</span> — платите только после получения денег</span>
                                     </li>
                                     <li class="flex items-start">
-                                        <i class="fas fa-gavel text-warning mr-3 mt-1 flex-shrink-0"></i>
+                                        <i class="fas fa-gavel text-warning mr-2 sm:mr-3 mt-0.5 sm:mt-1 flex-shrink-0"></i>
                                         <span><span class="font-semibold">Наша комиссия 40%</span> — только при успешном возврате</span>
                                     </li>
                                     <li class="flex items-start">
-                                        <i class="fas fa-clock text-info mr-3 mt-1 flex-shrink-0"></i>
+                                        <i class="fas fa-clock text-info mr-2 sm:mr-3 mt-0.5 sm:mt-1 flex-shrink-0"></i>
                                         <span>Средний срок возврата <span class="font-semibold">2-8 месяцев</span></span>
                                     </li>
                                 </ul>
