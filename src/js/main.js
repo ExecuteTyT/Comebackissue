@@ -65,10 +65,12 @@ function closeModal() {
     
     if (modal) {
         console.log('📋 Классы до закрытия:', Array.from(modal.classList));
+        // Убираем класс active
         modal.classList.remove('active');
+        // Добавляем hidden сразу
         modal.classList.add('hidden');
-        console.log('📋 Классы после закрытия:', Array.from(modal.classList));
         document.body.style.overflow = '';
+        console.log('📋 Классы после закрытия:', Array.from(modal.classList));
         console.log('✅ Модалка закрыта');
     } else {
         console.error('❌ Модалка не найдена для закрытия');
@@ -82,11 +84,13 @@ window.closeModal = closeModal;
 console.log('✅ window.openModal установлена:', typeof window.openModal);
 console.log('✅ window.closeModal установлена:', typeof window.closeModal);
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('📄 ========== DOM CONTENT LOADED ==========');
+// Функция инициализации, которая может быть вызвана в любое время
+function initializePage() {
+    console.log('📄 ========== INITIALIZATION START ==========');
+    console.log('🔍 document.readyState:', document.readyState);
     
     // Проверяем доступность функций
-    console.log('🔍 Проверка функций после DOMContentLoaded:');
+    console.log('🔍 Проверка функций:');
     console.log('  - window.openModal:', typeof window.openModal);
     console.log('  - window.closeModal:', typeof window.closeModal);
     console.log('  - openModal (глобально):', typeof openModal);
@@ -140,7 +144,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('✅ Сайт вернистраховку.рф загружен успешно');
     console.log('✅ ========== INITIALIZATION COMPLETE ==========');
-});
+}
+
+// Инициализация при DOMContentLoaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializePage);
+} else {
+    // DOM уже загружен, инициализируем сразу
+    initializePage();
+}
 
 // ========== FORM HANDLERS INITIALIZATION ==========
 function initFormHandlers() {
@@ -231,7 +243,7 @@ function initAOS() {
 
 // ========== SWIPER INITIALIZATION ==========
 function initSwiper() {
-    // Swiper для отзывов
+    // Слайдер отзывов
     const reviewsSwiper = new Swiper('.reviewsSwiper', {
         slidesPerView: 1,
         spaceBetween: 30,
@@ -241,7 +253,7 @@ function initSwiper() {
             disableOnInteraction: false,
         },
         pagination: {
-            el: '.swiper-pagination',
+            el: '.reviewsSwiper .swiper-pagination',
             clickable: true,
         },
         breakpoints: {
@@ -294,13 +306,25 @@ function initPhoneMasks() {
 
 // ========== MOBILE MENU ==========
 function initMobileMenu() {
+    console.log('🔧 Инициализация мобильного меню...');
     const menuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
 
-    // Обработчик для кнопки
+    console.log('🔍 menuBtn:', menuBtn);
+    console.log('🔍 mobileMenu:', mobileMenu);
+
     if (menuBtn && mobileMenu) {
-        menuBtn.addEventListener('click', (e) => {
+        console.log('✅ Элементы мобильного меню найдены');
+        
+        // Удаляем старые обработчики если есть
+        const newMenuBtn = menuBtn.cloneNode(true);
+        menuBtn.parentNode.replaceChild(newMenuBtn, menuBtn);
+        
+        // Добавляем обработчик клика на кнопку
+        newMenuBtn.addEventListener('click', (e) => {
+            console.log('🖱️ Клик на кнопку мобильного меню');
             e.stopPropagation();
+            e.preventDefault();
             toggleMobileMenu();
         });
 
@@ -308,14 +332,14 @@ function initMobileMenu() {
         const menuLinks = mobileMenu.querySelectorAll('a');
         menuLinks.forEach(link => {
             link.addEventListener('click', () => {
+                console.log('🔗 Клик на ссылку в меню - закрываю');
                 closeMobileMenu();
             });
         });
 
         // Закрытие меню при клике вне его
         document.addEventListener('click', (e) => {
-            const isClickOnMenuBtn = menuBtn && menuBtn.contains(e.target);
-            if (!mobileMenu.contains(e.target) && !isClickOnMenuBtn) {
+            if (!mobileMenu.contains(e.target) && !newMenuBtn.contains(e.target)) {
                 if (mobileMenu.classList.contains('active')) {
                     closeMobileMenu();
                 }
@@ -325,9 +349,16 @@ function initMobileMenu() {
         // Закрытие меню при нажатии ESC
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                console.log('⌨️ Нажата ESC - закрываю меню');
                 closeMobileMenu();
             }
         });
+        
+        console.log('✅ Мобильное меню инициализировано');
+    } else {
+        console.error('❌ Элементы мобильного меню не найдены!');
+        console.error('  - menuBtn:', menuBtn);
+        console.error('  - mobileMenu:', mobileMenu);
     }
 }
 
@@ -457,16 +488,38 @@ function initModalHandlers() {
         });
         
         // Обработчик для кнопки закрытия (крестик)
-        const closeBtn = modal.querySelector('button[onclick*="closeModal"]');
+        // Ищем кнопку несколькими способами для надежности
+        let closeBtn = modal.querySelector('button[onclick*="closeModal"]');
+        if (!closeBtn) {
+            // Пробуем найти по позиции (absolute top-4 right-4)
+            closeBtn = modal.querySelector('button.absolute.top-4.right-4');
+        }
+        if (!closeBtn) {
+            // Пробуем найти по иконке
+            closeBtn = modal.querySelector('button i.fa-times')?.closest('button');
+        }
+        
         if (closeBtn) {
             console.log('✅ Кнопка закрытия найдена:', closeBtn);
-            // Удаляем старый onclick и добавляем addEventListener
-            closeBtn.removeAttribute('onclick');
-            closeBtn.addEventListener('click', function(e) {
+            // Удаляем старый onclick если есть
+            if (closeBtn.hasAttribute('onclick')) {
+                closeBtn.removeAttribute('onclick');
+            }
+            // Удаляем старые обработчики если есть
+            const newCloseBtn = closeBtn.cloneNode(true);
+            closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+            // Добавляем новый обработчик
+            newCloseBtn.addEventListener('click', function(e) {
                 console.log('🖱️ Клик на кнопку закрытия');
                 e.preventDefault();
                 e.stopPropagation();
-                closeModal();
+                if (typeof closeModal === 'function') {
+                    closeModal();
+                } else if (typeof window.closeModal === 'function') {
+                    window.closeModal();
+                } else {
+                    console.error('❌ Функция closeModal не найдена');
+                }
             });
         } else {
             console.warn('⚠️ Кнопка закрытия не найдена в модалке');

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Услуги по возврату навязанных страховок: страхование жизни, КАСКО, от потери работы, GAP-страхование. Работаем БЕЗ ПРЕДОПЛАТЫ по всей России. 95% успеха.">
+    <meta name="keywords" content="возврат страховки, возврат навязанной страховки, возврат страхования жизни, возврат КАСКО, возврат GAP страхования, услуги юриста по страховке">
+
+    <title>Услуги по возврату навязанных страховок | vozvratidengi.ru</title>
+
+    <link rel="canonical" href="https://vozvratidengi.ru/uslugi/">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Услуги по возврату навязанных страховок | vozvratidengi.ru">
+    <meta property="og:description" content="Возврат страховки жизни, КАСКО, GAP-страхования. Работаем БЕЗ ПРЕДОПЛАТЫ по всей России. 95% успеха.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vozvratidengi.ru/uslugi/">
+    <meta property="og:image" content="https://vozvratidengi.ru/assets/og-image.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E3A8A',
+                        secondary: '#F97316',
+                        success: '#10B981',
+                        warning: '#F59E0B',
+                        danger: '#EF4444',
+                        textDark: '#111827',
+                    },
+                    fontFamily: {
+                        heading: ['Montserrat', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- AOS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../src/css/style.css">
+
+    <!-- Service Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "serviceType": "Возврат навязанных страховок",
+        "provider": {
+            "@type": "LegalService",
+            "name": "vozvratidengi.ru",
+            "url": "https://vozvratidengi.ru",
+            "telephone": "+7-906-123-15-22",
+            "email": "info@vozvratidengi.ru"
+        },
+        "areaServed": {
+            "@type": "Country",
+            "name": "Россия"
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "RUB",
+            "description": "Работаем БЕЗ ПРЕДОПЛАТЫ. Комиссия 40% только после успешного возврата."
+        }
+    }
+    </script>
+</head>
+<body class="font-body text-textDark">
+
+    <!-- Header -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 bg-white transition-shadow duration-300">
+        <div class="container mx-auto px-6 lg:px-16">
+            <nav class="flex items-center justify-between h-20 lg:h-24">
+                <a href="/" class="flex items-center flex-shrink-0 logo-title-block">
+                    <img src="../assets/logo-main.svg" alt="Возврат страховки" class="h-20 sm:h-24 lg:h-28 w-auto flex-shrink-0 mt-2 sm:mt-3 logo-img">
+                    <span class="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-heading font-bold text-primary uppercase whitespace-nowrap logo-text">ВОЗВРАТ СТРАХОВКИ</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <ul class="hidden lg:flex items-center space-x-6 text-base font-medium">
+                    <li><a href="/" class="hover:text-primary transition">Главная</a></li>
+                    <li><a href="/uslugi/" class="hover:text-primary transition">Услуги</a></li>
+                    <li><a href="/kak-rabotaet/" class="hover:text-primary transition">Как работает</a></li>
+                    <li><a href="/kalkulyator/" class="hover:text-primary transition">Калькулятор</a></li>
+                    <li><a href="/otzyvy/" class="hover:text-primary transition">Отзывы</a></li>
+                    <li><a href="/contacts/" class="hover:text-primary transition">Контакты</a></li>
+                </ul>
+
+                <!-- Phone & CTA -->
+                <div class="flex items-center space-x-4 flex-shrink-0">
+                    <div class="hidden md:block text-right">
+                        <a href="tel:+79061231522" class="flex items-center gap-2 text-lg font-bold text-primary hover:text-blue-light transition">
+                            <i class="fas fa-phone text-success"></i>
+                            <span>+7 906 123-15-22</span>
+                        </a>
+                        <p class="text-xs text-gray-500 ml-7">Пн-Пт 9:00-21:00</p>
+                    </div>
+                    <button onclick="openModal()" class="hidden lg:block bg-secondary hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
+                        Бесплатная консультация
+                    </button>
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" type="button" class="lg:hidden flex items-center justify-center w-10 h-10 min-w-[40px] text-2xl text-gray-700 hover:text-primary transition z-50 relative ml-auto">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t">
+            <ul class="flex flex-col space-y-4 p-6">
+                <li><a href="/" class="block hover:text-primary transition">Главная</a></li>
+                <li><a href="/uslugi/" class="block hover:text-primary transition">Услуги</a></li>
+                <li><a href="/kak-rabotaet/" class="block hover:text-primary transition">Как работает</a></li>
+                <li><a href="/kalkulyator/" class="block hover:text-primary transition">Калькулятор</a></li>
+                <li><a href="/otzyvy/" class="block hover:text-primary transition">Отзывы</a></li>
+                <li><a href="/contacts/" class="block hover:text-primary transition">Контакты</a></li>
+                <li class="pt-4 border-t">
+                    <a href="tel:+79061231522" class="text-lg font-bold text-primary">+7 906 123-15-22</a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-24 lg:pt-32">
+        <!-- Hero -->
+        <section class="py-16 lg:py-24 bg-gradient-to-b from-blue-50 to-white">
+            <div class="container mx-auto px-6 lg:px-16">
+                <h1 class="font-heading font-bold text-4xl md:text-5xl lg:text-6xl text-center mb-6" data-aos="fade-up">
+                    Услуги по возврату <span class="text-secondary">навязанных страховок</span>
+                </h1>
+                <p class="text-xl text-center text-gray-600 max-w-3xl mx-auto mb-8" data-aos="fade-up" data-aos-delay="100">
+                    Работаем БЕЗ ПРЕДОПЛАТЫ. Вы платите только после получения денег от банка.
+                </p>
+            </div>
+        </section>
+
+        <!-- Services Grid -->
+        <section class="py-16 lg:py-24 bg-white">
+            <div class="container mx-auto px-6 lg:px-16">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- Service 1 -->
+                    <div class="bg-white border-2 border-gray-100 rounded-2xl p-8 hover:border-secondary hover:shadow-xl transition-all duration-300" data-aos="fade-up">
+                        <div class="w-16 h-16 bg-red-100 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-heart text-3xl text-danger"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl mb-4">Страхование жизни и здоровья</h3>
+                        <p class="text-gray-600 mb-4">Самый частый вид навязанной страховки при оформлении кредита. Возвращаем до 100% стоимости + проценты.</p>
+                        <ul class="text-sm text-gray-500 space-y-2">
+                            <li><i class="fas fa-check text-success mr-2"></i>Потребительские кредиты</li>
+                            <li><i class="fas fa-check text-success mr-2"></i>Ипотека</li>
+                            <li><i class="fas fa-check text-success mr-2"></i>Автокредиты</li>
+                        </ul>
+                    </div>
+
+                    <!-- Service 2 -->
+                    <div class="bg-white border-2 border-gray-100 rounded-2xl p-8 hover:border-secondary hover:shadow-xl transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
+                        <div class="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-car text-3xl text-primary"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl mb-4">КАСКО и GAP-страхование</h3>
+                        <p class="text-gray-600 mb-4">Навязанное при покупке авто в кредит. Возвращаем полную стоимость полиса.</p>
+                        <ul class="text-sm text-gray-500 space-y-2">
+                            <li><i class="fas fa-check text-success mr-2"></i>Автосалоны</li>
+                            <li><i class="fas fa-check text-success mr-2"></i>Банки-кредиторы</li>
+                            <li><i class="fas fa-check text-success mr-2"></i>Лизинговые компании</li>
+                        </ul>
+                    </div>
+
+                    <!-- Service 3 -->
+                    <div class="bg-white border-2 border-gray-100 rounded-2xl p-8 hover:border-secondary hover:shadow-xl transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
+                        <div class="w-16 h-16 bg-yellow-100 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-briefcase text-3xl text-warning"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl mb-4">Страхование от потери работы</h3>
+                        <p class="text-gray-600 mb-4">Часто навязывается как "обязательное". На самом деле - добровольное.</p>
+                        <ul class="text-sm text-gray-500 space-y-2">
+                            <li><i class="fas fa-check text-success mr-2"></i>Кредитные карты</li>
+                            <li><i class="fas fa-check text-success mr-2"></i>Потребительские кредиты</li>
+                            <li><i class="fas fa-check text-success mr-2"></i>Рефинансирование</li>
+                        </ul>
+                    </div>
+
+                    <!-- Service 4 -->
+                    <div class="bg-white border-2 border-gray-100 rounded-2xl p-8 hover:border-secondary hover:shadow-xl transition-all duration-300" data-aos="fade-up" data-aos-delay="300">
+                        <div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-mobile-alt text-3xl text-success"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl mb-4">СМС-информирование</h3>
+                        <p class="text-gray-600 mb-4">Платные уведомления, подключенные без согласия. Возвращаем все списания.</p>
+                        <ul class="text-sm text-gray-500 space-y-2">
+                            <li><i class="fas fa-check text-success mr-2"></i>Все банки РФ</li>
+                            <li><i class="fas fa-check text-success mr-2"></i>МФО</li>
+                            <li><i class="fas fa-check text-success mr-2"></i>Страховые компании</li>
+                        </ul>
+                    </div>
+
+                    <!-- Service 5 -->
+                    <div class="bg-white border-2 border-gray-100 rounded-2xl p-8 hover:border-secondary hover:shadow-xl transition-all duration-300" data-aos="fade-up" data-aos-delay="400">
+                        <div class="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-shield-alt text-3xl text-purple-600"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl mb-4">Юридическая защита</h3>
+                        <p class="text-gray-600 mb-4">Бесполезная услуга, которую включают в кредит как "защиту прав".</p>
+                        <ul class="text-sm text-gray-500 space-y-2">
+                            <li><i class="fas fa-check text-success mr-2"></i>Все виды кредитов</li>
+                            <li><i class="fas fa-check text-success mr-2"></i>Кредитные карты</li>
+                            <li><i class="fas fa-check text-success mr-2"></i>Рассрочки</li>
+                        </ul>
+                    </div>
+
+                    <!-- Service 6 -->
+                    <div class="bg-white border-2 border-gray-100 rounded-2xl p-8 hover:border-secondary hover:shadow-xl transition-all duration-300" data-aos="fade-up" data-aos-delay="500">
+                        <div class="w-16 h-16 bg-orange-100 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-plus-circle text-3xl text-secondary"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl mb-4">Другие навязанные услуги</h3>
+                        <p class="text-gray-600 mb-4">Любые платные услуги, включенные в кредит без вашего согласия.</p>
+                        <ul class="text-sm text-gray-500 space-y-2">
+                            <li><i class="fas fa-check text-success mr-2"></i>Консультации</li>
+                            <li><i class="fas fa-check text-success mr-2"></i>Подписки</li>
+                            <li><i class="fas fa-check text-success mr-2"></i>Дополнительные продукты</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section class="py-16 lg:py-24 bg-gray-50">
+            <div class="container mx-auto px-6 lg:px-16">
+                <h2 class="font-heading font-bold text-3xl md:text-4xl text-center mb-12" data-aos="fade-up">
+                    Почему клиенты выбирают нас
+                </h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                    <div class="text-center" data-aos="fade-up">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-hand-holding-usd text-3xl text-success"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-3">Без предоплаты</h3>
+                        <p class="text-gray-600 text-sm">Вы ничего не платите до получения денег. Наша комиссия — 40% от возвращённой суммы, только после успешного возврата. Если не вернём деньги — вы ничего не должны.</p>
+                    </div>
+                    <div class="text-center" data-aos="fade-up" data-aos-delay="100">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-chart-line text-3xl text-primary"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-3">95% успеха</h3>
+                        <p class="text-gray-600 text-sm">За 5 лет работы мы выиграли 95% дел. Глубокое знание законодательства и опыт работы с банками позволяют нам добиваться результата в большинстве случаев.</p>
+                    </div>
+                    <div class="text-center" data-aos="fade-up" data-aos-delay="200">
+                        <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-globe text-3xl text-secondary"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-3">Вся Россия онлайн</h3>
+                        <p class="text-gray-600 text-sm">Работаем дистанционно с клиентами из любого региона. Документы передаёте через мессенджеры, общаемся по телефону. Вам не нужно никуда ехать.</p>
+                    </div>
+                    <div class="text-center" data-aos="fade-up" data-aos-delay="300">
+                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-gavel text-3xl text-purple-600"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-3">Полное сопровождение</h3>
+                        <p class="text-gray-600 text-sm">Берём на себя всю работу: от анализа документов до представительства в суде. Вы только предоставляете документы и получаете деньги на счёт.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section class="py-16 lg:py-24 bg-white">
+            <div class="container mx-auto px-6 lg:px-16">
+                <h2 class="font-heading font-bold text-3xl md:text-4xl text-center mb-12" data-aos="fade-up">
+                    Стоимость услуг
+                </h2>
+                <div class="max-w-3xl mx-auto">
+                    <div class="bg-gradient-to-r from-primary to-blue-700 text-white rounded-3xl p-8 md:p-12 mb-8" data-aos="fade-up">
+                        <div class="text-center mb-8">
+                            <p class="text-blue-100 mb-2">Наша комиссия</p>
+                            <p class="text-5xl md:text-6xl font-bold">40%</p>
+                            <p class="text-blue-100 mt-2">от возвращённой суммы</p>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-success mr-3"></i>
+                                <span>Никаких платежей до получения результата</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-success mr-3"></i>
+                                <span>Если не вернём — вы ничего не платите</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-success mr-3"></i>
+                                <span>Все судебные расходы за наш счёт</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 rounded-2xl p-8" data-aos="fade-up" data-aos-delay="100">
+                        <h3 class="font-bold text-xl mb-4">Пример расчёта</h3>
+                        <p class="text-gray-600 mb-4">Вам навязали страховку на <strong>100 000 ₽</strong>. С учётом неустоек и компенсаций общая сумма возврата составит <strong>245 000 ₽</strong>.</p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white rounded-lg p-4 text-center">
+                                <p class="text-sm text-gray-500 mb-1">Вы получите</p>
+                                <p class="text-2xl font-bold text-success">147 000 ₽</p>
+                            </div>
+                            <div class="bg-white rounded-lg p-4 text-center">
+                                <p class="text-sm text-gray-500 mb-1">Наша комиссия</p>
+                                <p class="text-2xl font-bold text-gray-700">98 000 ₽</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-4 text-center">
+                            <a href="/kalkulyator/" class="text-primary hover:text-secondary underline">Рассчитайте свою сумму в калькуляторе →</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="py-16 lg:py-24 bg-gray-50">
+            <div class="container mx-auto px-6 lg:px-16">
+                <h2 class="font-heading font-bold text-3xl md:text-4xl text-center mb-12" data-aos="fade-up">
+                    Частые вопросы об услугах
+                </h2>
+                <div class="max-w-3xl mx-auto space-y-4">
+                    <div class="bg-white rounded-xl p-6 shadow-sm" data-aos="fade-up">
+                        <h3 class="font-bold text-lg mb-3">Какие страховки точно можно вернуть?</h3>
+                        <p class="text-gray-600">Можно вернуть любую страховку, которую вам навязали при оформлении кредита без вашего добровольного согласия. Самые частые случаи: страхование жизни и здоровья, КАСКО при автокредите, страхование от потери работы, GAP-страхование. Если вас заставили подписать страховой полис как условие выдачи кредита или не объяснили, что это добровольная услуга — это навязывание, и деньги можно вернуть.</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm" data-aos="fade-up" data-aos-delay="50">
+                        <h3 class="font-bold text-lg mb-3">Можно ли вернуть страховку спустя несколько лет?</h3>
+                        <p class="text-gray-600">Да, срок исковой давности по таким делам — 3 года с момента оплаты страховки. Если с момента оформления кредита прошло меньше 3 лет, вы имеете полное право на возврат. В некоторых случаях можно вернуть страховку даже по более старым кредитам, если удастся доказать, что вы узнали о нарушении позже.</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm" data-aos="fade-up" data-aos-delay="100">
+                        <h3 class="font-bold text-lg mb-3">Повлияет ли возврат страховки на мой кредит?</h3>
+                        <p class="text-gray-600">Нет, возврат страховки никак не влияет на условия вашего кредита. Процентная ставка, график платежей и другие условия остаются прежними. Банк не имеет права ухудшить условия кредита из-за того, что вы воспользовались своим законным правом. Кредитная история также не пострадает — это ваше законное право.</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm" data-aos="fade-up" data-aos-delay="150">
+                        <h3 class="font-bold text-lg mb-3">С какими банками вы работаете?</h3>
+                        <p class="text-gray-600">Мы работаем со всеми банками России: Сбербанк, ВТБ, Альфа-Банк, Тинькофф, Газпромбанк, Россельхозбанк, Райффайзенбанк, Совкомбанк и другие. У нас есть успешный опыт возврата страховок от каждого из крупных банков. Также работаем с МФО и страховыми компаниями напрямую.</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm" data-aos="fade-up" data-aos-delay="200">
+                        <h3 class="font-bold text-lg mb-3">Почему сумма возврата больше, чем я заплатил за страховку?</h3>
+                        <p class="text-gray-600">Помимо основной суммы страховки, по закону вам положены: неустойка за незаконное удержание денег (до 70%), проценты за пользование вашими деньгами (до 70%), компенсация морального вреда (до 5%), штраф в пользу потребителя (50% от присуждённой суммы). Поэтому итоговая сумма может быть в 2-2.5 раза больше изначальной.</p>
+                    </div>
+                </div>
+                <div class="text-center mt-8">
+                    <a href="/faq/" class="text-primary hover:text-secondary font-semibold transition">
+                        Все вопросы и ответы <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="py-16 lg:py-24 bg-primary text-white">
+            <div class="container mx-auto px-6 lg:px-16 text-center">
+                <h2 class="font-heading font-bold text-3xl md:text-4xl mb-6" data-aos="fade-up">
+                    Узнайте сумму возврата бесплатно
+                </h2>
+                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+                    Рассчитайте, сколько денег вам должен вернуть банк
+                </p>
+                <a href="/kalkulyator/" class="inline-block bg-secondary hover:bg-orange-500 text-white font-bold text-lg px-8 py-4 rounded-lg transition transform hover:scale-105" data-aos="fade-up" data-aos-delay="200">
+                    РАССЧИТАТЬ ВОЗВРАТ
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-b from-gray-900 to-gray-950 text-gray-300 py-12">
+        <div class="container mx-auto px-6 lg:px-16">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div>
+                    <p class="font-heading font-bold text-xl text-white mb-2">vozvratidengi.ru</p>
+                    <p class="text-sm text-gray-500">ИП ГИЛЬВАНОВА АЙГУЛЬ РАИСОВНА</p>
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="tel:+79061231522" class="text-white hover:text-secondary transition">
+                        <i class="fas fa-phone mr-2"></i>+7 906 123-15-22
+                    </a>
+                    <a href="mailto:info@vozvratidengi.ru" class="hover:text-secondary transition">
+                        <i class="fas fa-envelope mr-2"></i>info@vozvratidengi.ru
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-500">
+                © 2025 vozvratidengi.ru | Все права защищены
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 px-4">
+        <div class="bg-white rounded-3xl p-8 md:p-12 max-w-md w-full relative" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-3xl text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <h2 class="font-heading font-bold text-3xl mb-4 text-center">БЕСПЛАТНАЯ КОНСУЛЬТАЦИЯ</h2>
+            <p class="text-gray-600 text-center mb-6">Оставьте заявку, и мы свяжемся с вами в течение 15 минут</p>
+
+            <form id="modal-form" onsubmit="handleFormSubmit(event, 'modal')" class="space-y-4">
+                <input 
+                    type="text" 
+                    name="name" 
+                    placeholder="Ваше имя" 
+                    required
+                    class="w-full h-12 px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary transition"
+                >
+                <input 
+                    type="tel" 
+                    name="phone" 
+                    id="modal-phone"
+                    placeholder="+7 (___) ___-__-__" 
+                    required
+                    class="w-full h-12 px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary transition"
+                >
+
+                <div class="flex items-start space-x-2">
+                    <input type="checkbox" id="modal-consent" required class="mt-1">
+                    <label for="modal-consent" class="text-xs text-gray-600">
+                    Согласен с <a href="/privacy.html" class="text-primary underline" target="_blank" rel="noopener">политикой конфиденциальности</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full bg-secondary hover:bg-orange-500 text-white font-bold text-lg py-4 rounded-lg transition">
+                    ОТПРАВИТЬ ЗАЯВКУ
+                </button>
+            </form>
+
+            <div class="text-center mt-6">
+                <p class="text-gray-600 mb-2">Или позвоните прямо сейчас:</p>
+                <a href="tel:+79061231522" class="text-2xl font-bold text-primary hover:text-blue-700 transition">
+                    ☎ +7 906 123-15-22
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true, offset: 100 });
+    </script>
+    <script src="../src/js/main.js"></script>
+</body>
+</html>

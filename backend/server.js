@@ -549,35 +549,30 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../index.html'));
 });
 
-// ========== LEGAL PAGES ROUTES ==========
-// Поддержка URL без .html расширения
-app.get('/privacy', (req, res) => {
-    res.sendFile(path.join(__dirname, '../privacy.html'));
-});
-app.get('/privacy.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '../privacy.html'));
+// ========== SEPARATE PAGES ROUTES ==========
+// Роуты для отдельных SEO-страниц
+app.get('/uslugi/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../uslugi/index.html'));
 });
 
-app.get('/terms', (req, res) => {
-    res.sendFile(path.join(__dirname, '../terms.html'));
-});
-app.get('/terms.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '../terms.html'));
+app.get('/kak-rabotaet/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../kak-rabotaet/index.html'));
 });
 
-app.get('/offer', (req, res) => {
-    res.sendFile(path.join(__dirname, '../offer.html'));
-});
-app.get('/offer.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '../offer.html'));
+app.get('/otzyvy/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../otzyvy/index.html'));
 });
 
-// ========== CONFIG ENDPOINT (для клиентской конфигурации) ==========
-app.get('/api/config', (req, res) => {
-    res.json({
-        yandexMetrikaId: process.env.YANDEX_METRIKA_ID || 105345372, // Fallback на ваш ID
-        googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID || null
-    });
+app.get('/contacts/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../contacts/index.html'));
+});
+
+app.get('/kalkulyator/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../kalkulyator/index.html'));
+});
+
+app.get('/faq/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../faq/index.html'));
 });
 
 // ========== CSRF TOKEN ENDPOINT ==========

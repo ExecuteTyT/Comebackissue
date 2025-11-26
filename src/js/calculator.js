@@ -5,8 +5,7 @@
 
 class ReturnCalculator {
     constructor() {
-        this.MULTIPLIER_MIN = 1.5;  // Минимальный коэффициент возврата
-        this.MULTIPLIER_MAX = 2.0;  // Максимальный коэффициент возврата
+        this.MULTIPLIER = 2.45;  // Фиксированный коэффициент возврата (base + 70% неустойка + 70% проценты + 5% моральный вред)
         this.COMPANY_COMMISSION = 0.40; // 40% комиссия компании
         this.CLIENT_SHARE = 0.60; // 60% получает клиент
     }
@@ -23,14 +22,8 @@ class ReturnCalculator {
             };
         }
 
-        // Определение коэффициента возврата (для справки)
-        let multiplier = this.calculateMultiplier(loanType, earlyRepayment, monthsSinceIssue);
-
-        // Сначала рассчитываем breakdown компоненты
-        const breakdown = this.getBreakdown(imposedAmount);
-        
-        // Общая сумма возврата = сумма всех компонентов breakdown
-        const totalReturn = breakdown.baseReturn + breakdown.penalty + breakdown.interest + breakdown.compensation;
+        // Общая сумма, которую вернет банк (фиксированный коэффициент 2.45)
+        const totalReturn = Math.round(imposedAmount * this.MULTIPLIER);
 
         // Сумма клиенту (60%)
         const clientAmount = Math.round(totalReturn * this.CLIENT_SHARE);
@@ -48,72 +41,20 @@ class ReturnCalculator {
             clientAmount: clientAmount,
             companyCommission: companyCommission,
             returnPercentage: returnPercentage,
-            multiplier: multiplier,
-            breakdown: breakdown,
+            breakdown: this.getBreakdown(imposedAmount),
             estimatedDays: this.estimateDays(loanType)
         };
     }
 
     /**
-     * Расчет коэффициента возврата
-     */
-    calculateMultiplier(loanType, earlyRepayment, monthsSinceIssue) {
-        let multiplier = 1.7; // Базовый коэффициент
-
-        // Тип кредита
-        switch(loanType) {
-            case 'auto':
-                multiplier = 1.8;
-                break;
-            case 'consumer':
-                multiplier = 1.7;
-                break;
-            case 'mortgage':
-                multiplier = 1.6;
-                break;
-        }
-
-        // Досрочное погашение
-        if (earlyRepayment) {
-            multiplier += 0.2;
-        }
-
-        // Срок с момента оформления
-        if (monthsSinceIssue <= 6) {
-            multiplier += 0.1;
-        } else if (monthsSinceIssue <= 12) {
-            multiplier += 0.05;
-        }
-
-        // Ограничение диапазона
-        multiplier = Math.max(this.MULTIPLIER_MIN, Math.min(this.MULTIPLIER_MAX, multiplier));
-
-        return multiplier;
-    }
-
-    /**
      * Детальная разбивка возврата
-     * Пропорции на основе: 100,000 (основная) + 35,000 (проценты) + 35,000 (убытки) + 5,000 (моральный вред) + 70,000 (штраф) = 245,000
-     * Пропорции от навязанной суммы (100,000):
-     * - Основная сумма: 1.0
-     * - Проценты за пользование: 0.35
-     * - Убытки ввиде процентов: 0.35
-     * - Моральный вред: 0.05
-     * - Штраф: 0.70
-     * Итого: 2.45x от навязанной суммы
+     * Формула: base + 70% неустойка + 70% проценты + 5% моральный вред = 245%
      */
     getBreakdown(imposed) {
-        // Основная сумма возврата: 1.0
         const baseReturn = imposed;
-        
-        // Проценты за пользование + убытки ввиде процентов: 0.35 + 0.35 = 0.7
-        const interest = Math.round(imposed * 0.7);
-        
-        // Компенсация морального вреда: 0.05
-        const compensation = Math.round(imposed * 0.05);
-        
-        // Неустойка (штраф): 0.70
-        const penalty = Math.round(imposed * 0.7);
+        const penalty = Math.round(imposed * 0.7);      // Неустойка 70%
+        const interest = Math.round(imposed * 0.7);     // Проценты 70%
+        const compensation = Math.round(imposed * 0.05); // Моральный вред 5%
 
         return {
             baseReturn: baseReturn,
@@ -289,24 +230,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     loanDateInput.classList.add('border-red-500', 'ring-2', 'ring-red-200');
                 loanDateInput.classList.remove('border-gray-300', 'focus:border-primary');
                 loanDateInput.style.borderColor = '#ef4444'; // red-500
-                    loanDateInput.style.borderWidth = '2px';
-                    
-                    // НЕ фокусируем поле, чтобы не выделялся placeholder
-                    // Просто подсвечиваем его красным - пользователь сам кликнет
-                    // Это предотвратит выделение placeholder "дд"
-                    
-                    // НЕ добавляем атрибут required - он вызывает автоматический фокус браузера
-                    // Используем только кастомную валидацию
-                    
-                    // Показываем сообщение об ошибке
-                    if (!loanDateInput.nextElementSibling || !loanDateInput.nextElementSibling.classList.contains('date-error-message')) {
-                        const errorMsg = document.createElement('p');
-                        errorMsg.className = 'date-error-message text-red-500 text-sm mt-1';
-                        errorMsg.textContent = 'Пожалуйста, укажите дату оформления кредита';
-                        loanDateInput.parentNode.insertBefore(errorMsg, loanDateInput.nextSibling);
-                    }
-                
-                    // Убираем красное выделение и сообщение об ошибке при выборе даты или вводе
+
+                // Прокручиваем к полю даты без фокуса (чтобы не выделялся плейсхолдер "дд")
+                loanDateInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Убираем красное выделение при выборе даты
                 const removeDateError = function() {
                         loanDateInput.classList.remove('border-red-500', 'ring-2', 'ring-red-200');
                     loanDateInput.classList.add('border-gray-300', 'focus:border-primary');
@@ -320,9 +248,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         loanDateInput.removeEventListener('input', removeDateError);
                 };
                 loanDateInput.addEventListener('change', removeDateError, { once: true });
-                    loanDateInput.addEventListener('input', removeDateError, { once: true });
-                }
-                
+
                 return;
             }
             

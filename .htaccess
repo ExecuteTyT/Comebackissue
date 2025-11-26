@@ -1,0 +1,112 @@
+# =================================================
+# .htaccess для vozvratidengi.ru
+# =================================================
+
+# Включить RewriteEngine
+RewriteEngine On
+
+# =================================================
+# HTTPS редирект (раскомментируйте на продакшене)
+# =================================================
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# =================================================
+# Редирект www на без www
+# =================================================
+RewriteCond %{HTTP_HOST} ^www\.vozvratidengi\.ru$ [NC]
+RewriteRule ^(.*)$ https://vozvratidengi.ru/$1 [R=301,L]
+
+# =================================================
+# 301 редиректы со старого домена
+# =================================================
+
+# Редирект с кириллического домена вернистраховку.рф (punycode)
+RewriteCond %{HTTP_HOST} ^(www\.)?xn--80adbkporkockmsy\.xn--p1ai$ [NC]
+RewriteRule ^(.*)$ https://vozvratidengi.ru/$1 [R=301,L]
+
+# =================================================
+# Редиректы для старых якорей
+# =================================================
+RewriteRule ^#services$ /#uslugi [R=301,L,NE]
+RewriteRule ^#how-it-works$ /#kak-rabotaet [R=301,L,NE]
+RewriteRule ^#reviews$ /#otzyvy [R=301,L,NE]
+RewriteRule ^#contacts$ /#kontakty [R=301,L,NE]
+
+# =================================================
+# Кеширование статических файлов
+# =================================================
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Изображения
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+
+    # Шрифты
+    ExpiresByType font/ttf "access plus 1 year"
+    ExpiresByType font/otf "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+
+    # CSS и JavaScript
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+
+    # HTML
+    ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# =================================================
+# Сжатие Gzip
+# =================================================
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE text/xml
+</IfModule>
+
+# =================================================
+# Безопасность
+# =================================================
+
+# Запретить просмотр директорий
+Options -Indexes
+
+# Защита от XSS атак
+<IfModule mod_headers.c>
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Запретить доступ к .htaccess
+<Files .htaccess>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Запретить доступ к .env файлам
+<FilesMatch "^\.env">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# =================================================
+# Кастомные страницы ошибок
+# =================================================
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
