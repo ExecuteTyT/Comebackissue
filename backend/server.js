@@ -364,8 +364,26 @@ if (isProductionWithNginx) {
     });
 } else {
     // В development или serverless: обслуживаем статические файлы через Express
+    // ВАЖНО: express.static должен быть ПЕРЕД всеми маршрутами
     app.use(express.static(staticPath, {
         setHeaders: (res, filePath) => {
+            // Устанавливаем правильные MIME типы
+            if (filePath.endsWith('.css')) {
+                res.set('Content-Type', 'text/css; charset=utf-8');
+            } else if (filePath.endsWith('.js')) {
+                res.set('Content-Type', 'application/javascript; charset=utf-8');
+            } else if (filePath.endsWith('.svg')) {
+                res.set('Content-Type', 'image/svg+xml');
+            } else if (filePath.endsWith('.json')) {
+                res.set('Content-Type', 'application/json; charset=utf-8');
+            } else if (filePath.endsWith('.png')) {
+                res.set('Content-Type', 'image/png');
+            } else if (filePath.endsWith('.jpg') || filePath.endsWith('.jpeg')) {
+                res.set('Content-Type', 'image/jpeg');
+            } else if (filePath.endsWith('.webmanifest')) {
+                res.set('Content-Type', 'application/manifest+json');
+            }
+            
             // Кэширование статических ресурсов
             if (filePath.endsWith('.js') || filePath.endsWith('.css')) {
                 res.set('Cache-Control', 'public, max-age=31536000'); // 1 год
@@ -373,13 +391,13 @@ if (isProductionWithNginx) {
                 res.set('Cache-Control', 'no-cache');
             }
         },
-        // Включаем dotfiles для файлов, начинающихся с точки
         dotfiles: 'ignore',
-        // Индексные файлы
         index: false,
-        // Fallthrough - если файл не найден, передаем управление дальше
+        // Fallthrough: true - если файл не найден, передаем управление дальше к маршрутам
         fallthrough: true
     }));
+    
+    logger.info(`Static files middleware configured for development/serverless mode. Serving from: ${staticPath}`);
 }
 
 // ========== EMAIL CONFIGURATION ==========
@@ -545,6 +563,8 @@ app.get('/test-static', (req, res) => {
 });
 
 // ========== MAIN ROUTE ==========
+// ВАЖНО: этот маршрут должен быть ПОСЛЕ express.static
+// express.static обработает все статические файлы, а этот маршрут - только для корня
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../index.html'));
 });
@@ -575,10 +595,26 @@ app.get('/faq/', (req, res) => {
     res.sendFile(path.join(__dirname, '../faq/index.html'));
 });
 
+// ========== CONFIG ENDPOINT ==========
+app.get('/api/config', (req, res) => {
+    res.json({
+        yandexMetrikaId: process.env.YANDEX_METRIKA_ID || 105345372,
+        googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID || null
+    });
+});
+
 // ========== CSRF TOKEN ENDPOINT ==========
 app.get('/api/csrf-token', (req, res) => {
     const token = generateToken(req, res);
     res.json({ csrfToken: token });
+});
+
+// ========== CONFIG ENDPOINT ==========
+app.get('/api/config', (req, res) => {
+    res.json({
+        yandexMetrikaId: process.env.YANDEX_METRIKA_ID || 105345372,
+        googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID || null
+    });
 });
 
 // ========== FORM SUBMISSION HANDLER ==========

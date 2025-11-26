@@ -1412,3 +1412,14 @@ h3:contains("₽") {
     }
 }
 
+/* ========== FIX FOR SPACE-X-6 CLASS (для header навигации) ========== */
+/* Исправление проблемы с отсутствием space-x-6 в tailwind-output.css */
+.space-x-6 > * + * {
+    margin-left: 1.5rem; /* 24px */
+}
+
+/* Альтернативный вариант для навигации header */
+#header nav ul.space-x-6 li + li {
+    margin-left: 1.5rem;
+}
+

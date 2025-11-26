@@ -131,16 +131,100 @@ function initializePage() {
     });
     
     // ========== INITIALIZATION ========== 
-    initAOS();
-    initSwiper();
-    initPhoneMasks();
-    initMobileMenu();
-    initHeaderScroll();
-    initFAQ();
-    initModalHandlers();
-    initSmoothScroll();
-    initReviewLightbox();
-    initFormHandlers();
+    // Инициализация AOS (анимации)
+    try {
+        console.log('🎯 Вызываю initAOS...');
+        initAOS();
+        console.log('✅ initAOS завершен');
+    } catch (error) {
+        console.error('❌ Ошибка при инициализации AOS:', error);
+    }
+    
+    // Инициализация Swiper (слайдеры) - с проверкой загрузки библиотеки
+    try {
+        console.log('🎯 Вызываю initSwiper...');
+        if (typeof Swiper !== 'undefined') {
+            initSwiper();
+            console.log('✅ initSwiper завершен');
+        } else {
+            console.warn('⚠️ Swiper не загружен, пропускаю инициализацию слайдера');
+            console.warn('⚠️ Убедитесь, что Swiper подключен ДО main.js в HTML');
+        }
+    } catch (error) {
+        console.error('❌ Ошибка при инициализации Swiper:', error);
+    }
+    
+    // Инициализация масок для телефонов
+    try {
+        console.log('🎯 Вызываю initPhoneMasks...');
+        initPhoneMasks();
+        console.log('✅ initPhoneMasks завершен');
+    } catch (error) {
+        console.error('❌ Ошибка при инициализации масок телефонов:', error);
+    }
+    
+    // Инициализация мобильного меню - ОБЯЗАТЕЛЬНО должна выполняться
+    try {
+        console.log('🎯 Вызываю initMobileMenu...');
+        initMobileMenu();
+        console.log('✅ initMobileMenu завершен');
+    } catch (error) {
+        console.error('❌ Ошибка при инициализации мобильного меню:', error);
+    }
+    
+    // Инициализация скролла header
+    try {
+        console.log('🎯 Вызываю initHeaderScroll...');
+        initHeaderScroll();
+        console.log('✅ initHeaderScroll завершен');
+    } catch (error) {
+        console.error('❌ Ошибка при инициализации скролла header:', error);
+    }
+    
+    // Инициализация FAQ
+    try {
+        console.log('🎯 Вызываю initFAQ...');
+        initFAQ();
+        console.log('✅ initFAQ завершен');
+    } catch (error) {
+        console.error('❌ Ошибка при инициализации FAQ:', error);
+    }
+    
+    // Инициализация обработчиков модалки
+    try {
+        console.log('🎯 Вызываю initModalHandlers...');
+        initModalHandlers();
+        console.log('✅ initModalHandlers завершен');
+    } catch (error) {
+        console.error('❌ Ошибка при инициализации обработчиков модалки:', error);
+    }
+    
+    // Инициализация плавной прокрутки
+    try {
+        console.log('🎯 Вызываю initSmoothScroll...');
+        initSmoothScroll();
+        console.log('✅ initSmoothScroll завершен');
+    } catch (error) {
+        console.error('❌ Ошибка при инициализации плавной прокрутки:', error);
+    }
+    
+    // Инициализация lightbox для отзывов
+    try {
+        console.log('🎯 Вызываю initReviewLightbox...');
+        initReviewLightbox();
+        console.log('✅ initReviewLightbox завершен');
+    } catch (error) {
+        console.error('❌ Ошибка при инициализации lightbox:', error);
+    }
+    
+    // Инициализация обработчиков форм
+    try {
+        console.log('🎯 Вызываю initFormHandlers...');
+        initFormHandlers();
+        console.log('✅ initFormHandlers завершен');
+    } catch (error) {
+        console.error('❌ Ошибка при инициализации обработчиков форм:', error);
+    }
     
     console.log('✅ Сайт вернистраховку.рф загружен успешно');
     console.log('✅ ========== INITIALIZATION COMPLETE ==========');
@@ -243,52 +327,79 @@ function initAOS() {
 
 // ========== SWIPER INITIALIZATION ==========
 function initSwiper() {
+    // Проверяем наличие Swiper перед использованием
+    if (typeof Swiper === 'undefined') {
+        console.error('❌ Swiper не загружен! Убедитесь, что скрипт подключен в HTML.');
+        return;
+    }
+    
+    console.log('✅ Swiper доступен, инициализирую слайдеры...');
+    
     // Слайдер отзывов
-    const reviewsSwiper = new Swiper('.reviewsSwiper', {
-        slidesPerView: 1,
-        spaceBetween: 30,
-        loop: true,
-        autoplay: {
-            delay: 5000,
-            disableOnInteraction: false,
-        },
-        pagination: {
-            el: '.reviewsSwiper .swiper-pagination',
-            clickable: true,
-        },
-        breakpoints: {
-            640: {
+    const reviewsSwiperElement = document.querySelector('.reviewsSwiper');
+    if (reviewsSwiperElement) {
+        try {
+            const reviewsSwiper = new Swiper('.reviewsSwiper', {
                 slidesPerView: 1,
-            },
-            768: {
-                slidesPerView: 2,
-            },
-            1024: {
-                slidesPerView: 3,
-            },
+                spaceBetween: 30,
+                loop: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.reviewsSwiper .swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 1,
+                    },
+                    768: {
+                        slidesPerView: 2,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                    },
+                }
+            });
+            console.log('✅ Слайдер отзывов инициализирован');
+        } catch (error) {
+            console.error('❌ Ошибка при инициализации слайдера отзывов:', error);
         }
-    });
+    } else {
+        console.log('ℹ️ Элемент .reviewsSwiper не найден, пропускаю инициализацию');
+    }
 
     // Swiper для карточек проблем (только на мобильных)
     const problemsSwiperElement = document.querySelector('.problemsSwiper');
     if (problemsSwiperElement) {
-        const problemsSwiper = new Swiper('.problemsSwiper', {
-            slidesPerView: 1,
-            spaceBetween: 20,
-            loop: false,
-            pagination: {
-                el: '.problemsSwiper .swiper-pagination',
-                clickable: true,
-                dynamicBullets: true,
-            },
-            // Отключаем на десктопе (но это уже скрыто через CSS)
-            breakpoints: {
-                768: {
-                    enabled: false, // Отключаем на md и выше
+        try {
+            const problemsSwiper = new Swiper('.problemsSwiper', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                loop: false,
+                pagination: {
+                    el: '.problemsSwiper .swiper-pagination',
+                    clickable: true,
+                    dynamicBullets: true,
                 },
-            }
-        });
+                // Отключаем на десктопе (но это уже скрыто через CSS)
+                breakpoints: {
+                    768: {
+                        enabled: false, // Отключаем на md и выше
+                    },
+                }
+            });
+            console.log('✅ Слайдер проблем инициализирован');
+        } catch (error) {
+            console.error('❌ Ошибка при инициализации слайдера проблем:', error);
+        }
+    } else {
+        console.log('ℹ️ Элемент .problemsSwiper не найден, пропускаю инициализацию');
     }
+    
+    console.log('✅ initSwiper завершен');
 }
 
 // ========== PHONE MASK INITIALIZATION ==========
@@ -307,64 +418,100 @@ function initPhoneMasks() {
 // ========== MOBILE MENU ==========
 function initMobileMenu() {
     console.log('🔧 Инициализация мобильного меню...');
+    
+    // Используем более надежный поиск элементов
     const menuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
 
     console.log('🔍 menuBtn:', menuBtn);
     console.log('🔍 mobileMenu:', mobileMenu);
 
-    if (menuBtn && mobileMenu) {
-        console.log('✅ Элементы мобильного меню найдены');
-        
-        // Удаляем старые обработчики если есть
-        const newMenuBtn = menuBtn.cloneNode(true);
-        menuBtn.parentNode.replaceChild(newMenuBtn, menuBtn);
-        
-        // Добавляем обработчик клика на кнопку
-        newMenuBtn.addEventListener('click', (e) => {
-            console.log('🖱️ Клик на кнопку мобильного меню');
-            e.stopPropagation();
-            e.preventDefault();
-            toggleMobileMenu();
-        });
-
-        // Закрытие меню при клике на ссылку
-        const menuLinks = mobileMenu.querySelectorAll('a');
-        menuLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                console.log('🔗 Клик на ссылку в меню - закрываю');
-                closeMobileMenu();
-            });
-        });
-
-        // Закрытие меню при клике вне его
-        document.addEventListener('click', (e) => {
-            if (!mobileMenu.contains(e.target) && !newMenuBtn.contains(e.target)) {
-                if (mobileMenu.classList.contains('active')) {
-                    closeMobileMenu();
-                }
-            }
-        });
-
-        // Закрытие меню при нажатии ESC
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-                console.log('⌨️ Нажата ESC - закрываю меню');
-                closeMobileMenu();
-            }
-        });
-        
-        console.log('✅ Мобильное меню инициализировано');
-    } else {
-        console.error('❌ Элементы мобильного меню не найдены!');
-        console.error('  - menuBtn:', menuBtn);
-        console.error('  - mobileMenu:', mobileMenu);
+    if (!menuBtn) {
+        console.error('❌ Кнопка мобильного меню не найдена! ID: mobile-menu-btn');
+        return;
     }
+    
+    if (!mobileMenu) {
+        console.error('❌ Мобильное меню не найдено! ID: mobile-menu');
+        return;
+    }
+
+    console.log('✅ Элементы мобильного меню найдены');
+    
+    // Удаляем все старые обработчики, создавая новую кнопку
+    const newMenuBtn = menuBtn.cloneNode(true);
+    menuBtn.parentNode.replaceChild(newMenuBtn, menuBtn);
+    
+    // Получаем обновленную ссылку на меню (на случай если оно тоже было заменено)
+    const currentMobileMenu = document.getElementById('mobile-menu');
+    
+    // Добавляем обработчик клика на кнопку
+    newMenuBtn.addEventListener('click', function(e) {
+        console.log('🖱️ Клик на кнопку мобильного меню');
+        e.stopPropagation();
+        e.preventDefault();
+        
+        // Используем текущее состояние меню
+        const menu = document.getElementById('mobile-menu');
+        if (menu && menu.classList.contains('active')) {
+            closeMobileMenu();
+        } else {
+            openMobileMenu();
+        }
+    });
+
+    // Закрытие меню при клике на ссылку
+    const menuLinks = currentMobileMenu.querySelectorAll('a');
+    console.log('🔗 Найдено ссылок в меню:', menuLinks.length);
+    menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            console.log('🔗 Клик на ссылку в меню - закрываю');
+            closeMobileMenu();
+        });
+    });
+
+    // Закрытие меню при клике вне его (только один обработчик на документ)
+    // Удаляем старый обработчик если есть
+    if (window.mobileMenuClickHandler) {
+        document.removeEventListener('click', window.mobileMenuClickHandler);
+    }
+    
+    window.mobileMenuClickHandler = function(e) {
+        const menu = document.getElementById('mobile-menu');
+        const btn = document.getElementById('mobile-menu-btn');
+        if (menu && btn && !menu.contains(e.target) && !btn.contains(e.target)) {
+            if (menu.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        }
+    };
+    document.addEventListener('click', window.mobileMenuClickHandler);
+
+    // Закрытие меню при нажатии ESC (только один обработчик)
+    if (window.mobileMenuEscapeHandler) {
+        document.removeEventListener('keydown', window.mobileMenuEscapeHandler);
+    }
+    
+    window.mobileMenuEscapeHandler = function(e) {
+        const menu = document.getElementById('mobile-menu');
+        if (menu && e.key === 'Escape' && menu.classList.contains('active')) {
+            console.log('⌨️ Нажата ESC - закрываю меню');
+            closeMobileMenu();
+        }
+    };
+    document.addEventListener('keydown', window.mobileMenuEscapeHandler);
+    
+    console.log('✅ Мобильное меню инициализировано');
 }
 
 function toggleMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
+
+    if (!menuBtn || !mobileMenu) {
+        console.error('❌ Элементы меню не найдены для toggle');
+        return;
+    }
 
     if (mobileMenu.classList.contains('active')) {
         closeMobileMenu();
@@ -377,6 +524,13 @@ function openMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
 
+    if (!menuBtn || !mobileMenu) {
+        console.error('❌ Элементы меню не найдены для открытия');
+        return;
+    }
+
+    console.log('📱 Открываю мобильное меню');
+    
     mobileMenu.classList.remove('hidden');
     // Небольшая задержка для срабатывания CSS анимации
     setTimeout(() => {
@@ -402,8 +556,15 @@ function closeMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
 
+    if (!menuBtn || !mobileMenu) {
+        console.error('❌ Элементы меню не найдены для закрытия');
+        return;
+    }
+
+    console.log('📱 Закрываю мобильное меню');
+
     mobileMenu.classList.remove('active');
-    if (menuBtn) menuBtn.classList.remove('active');
+    menuBtn.classList.remove('active');
 
     // Ждем окончания анимации перед скрытием
     setTimeout(() => {
