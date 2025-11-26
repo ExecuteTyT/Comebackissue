@@ -84,11 +84,13 @@ window.closeModal = closeModal;
 console.log('✅ window.openModal установлена:', typeof window.openModal);
 console.log('✅ window.closeModal установлена:', typeof window.closeModal);
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('📄 ========== DOM CONTENT LOADED ==========');
+// Функция инициализации, которая может быть вызвана в любое время
+function initializePage() {
+    console.log('📄 ========== INITIALIZATION START ==========');
+    console.log('🔍 document.readyState:', document.readyState);
     
     // Проверяем доступность функций
-    console.log('🔍 Проверка функций после DOMContentLoaded:');
+    console.log('🔍 Проверка функций:');
     console.log('  - window.openModal:', typeof window.openModal);
     console.log('  - window.closeModal:', typeof window.closeModal);
     console.log('  - openModal (глобально):', typeof openModal);
@@ -140,7 +142,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('✅ Сайт вернистраховку.рф загружен успешно');
     console.log('✅ ========== INITIALIZATION COMPLETE ==========');
-});
+}
+
+// Инициализация при DOMContentLoaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializePage);
+} else {
+    // DOM уже загружен, инициализируем сразу
+    initializePage();
+}
 
 // ========== CSRF TOKEN ==========
 let csrfToken = null;
@@ -218,12 +228,25 @@ function initPhoneMasks() {
 
 // ========== MOBILE MENU ==========
 function initMobileMenu() {
+    console.log('🔧 Инициализация мобильного меню...');
     const menuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
 
+    console.log('🔍 menuBtn:', menuBtn);
+    console.log('🔍 mobileMenu:', mobileMenu);
+
     if (menuBtn && mobileMenu) {
-        menuBtn.addEventListener('click', (e) => {
+        console.log('✅ Элементы мобильного меню найдены');
+        
+        // Удаляем старые обработчики если есть
+        const newMenuBtn = menuBtn.cloneNode(true);
+        menuBtn.parentNode.replaceChild(newMenuBtn, menuBtn);
+        
+        // Добавляем обработчик клика на кнопку
+        newMenuBtn.addEventListener('click', (e) => {
+            console.log('🖱️ Клик на кнопку мобильного меню');
             e.stopPropagation();
+            e.preventDefault();
             toggleMobileMenu();
         });
 
@@ -231,13 +254,14 @@ function initMobileMenu() {
         const menuLinks = mobileMenu.querySelectorAll('a');
         menuLinks.forEach(link => {
             link.addEventListener('click', () => {
+                console.log('🔗 Клик на ссылку в меню - закрываю');
                 closeMobileMenu();
             });
         });
 
         // Закрытие меню при клике вне его
         document.addEventListener('click', (e) => {
-            if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+            if (!mobileMenu.contains(e.target) && !newMenuBtn.contains(e.target)) {
                 if (mobileMenu.classList.contains('active')) {
                     closeMobileMenu();
                 }
@@ -247,9 +271,16 @@ function initMobileMenu() {
         // Закрытие меню при нажатии ESC
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                console.log('⌨️ Нажата ESC - закрываю меню');
                 closeMobileMenu();
             }
         });
+        
+        console.log('✅ Мобильное меню инициализировано');
+    } else {
+        console.error('❌ Элементы мобильного меню не найдены!');
+        console.error('  - menuBtn:', menuBtn);
+        console.error('  - mobileMenu:', mobileMenu);
     }
 }
 
