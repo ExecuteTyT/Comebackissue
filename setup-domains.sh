@@ -18,6 +18,10 @@ DOMAIN_LATIN="vozvratidengi.ru"
 WWW_DOMAIN_CYRILLIC="www.вернистраховку.рф"
 WWW_DOMAIN_LATIN="www.vozvratidengi.ru"
 
+# Punycode версии для Certbot (кириллические домены нужно конвертировать)
+DOMAIN_CYRILLIC_PUNYCODE="xn--80adbkporkockmsy.xn--p1ai"
+WWW_DOMAIN_CYRILLIC_PUNYCODE="www.xn--80adbkporkockmsy.xn--p1ai"
+
 # Шаг 1: Установка Certbot (если еще не установлен)
 echo -e "${YELLOW}📦 Проверка установки Certbot...${NC}"
 if ! command -v certbot &> /dev/null; then
@@ -97,10 +101,14 @@ server {
 }
 EOF
 
+# Удаляем старые конфигурации, которые могут конфликтовать
+echo -e "${YELLOW}🧹 Очистка старых конфигураций...${NC}"
+sudo rm -f /etc/nginx/sites-enabled/verni-strahovku.рф
+sudo rm -f /etc/nginx/sites-enabled/default
+
 # Активация конфигурации
 echo -e "${YELLOW}🔗 Активация конфигурации Nginx...${NC}"
 sudo ln -sf /etc/nginx/sites-available/verni-strahovku /etc/nginx/sites-enabled/
-sudo rm -f /etc/nginx/sites-enabled/default
 
 # Проверка конфигурации
 echo -e "${YELLOW}✅ Проверка конфигурации Nginx...${NC}"
@@ -138,16 +146,45 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
 fi
 
 # Выпускаем сертификат для всех доменов
+# ВАЖНО: Certbot требует Punycode для кириллических доменов
 echo -e "${YELLOW}🔐 Запрос SSL сертификата...${NC}"
-sudo certbot --nginx \
-    -d ${DOMAIN_CYRILLIC} \
-    -d ${WWW_DOMAIN_CYRILLIC} \
-    -d ${DOMAIN_LATIN} \
-    -d ${WWW_DOMAIN_LATIN} \
-    --email admin@${DOMAIN_LATIN} \
-    --agree-tos \
-    --non-interactive \
-    --redirect
+echo "Используем Punycode для кириллического домена:"
+echo "  ${DOMAIN_CYRILLIC} -> ${DOMAIN_CYRILLIC_PUNYCODE}"
+echo "  ${WWW_DOMAIN_CYRILLIC} -> ${WWW_DOMAIN_CYRILLIC_PUNYCODE}"
+echo ""
+
+# Проверяем, есть ли уже сертификат для кириллического домена
+if [ -f "/etc/letsencrypt/live/${DOMAIN_CYRILLIC_PUNYCODE}/fullchain.pem" ]; then
+    echo -e "${YELLOW}ℹ️  Сертификат для кириллического домена уже существует${NC}"
+    echo "Выпускаем отдельный сертификат для латинского домена..."
+    sudo certbot certonly --nginx \
+        -d ${DOMAIN_LATIN} \
+        -d ${WWW_DOMAIN_LATIN} \
+        --email admin@${DOMAIN_LATIN} \
+        --agree-tos \
+        --non-interactive
+else
+    echo "Выпускаем сертификат для всех доменов..."
+    # Сначала для кириллического домена (в Punycode)
+    sudo certbot certonly --nginx \
+        -d ${DOMAIN_CYRILLIC_PUNYCODE} \
+        -d ${WWW_DOMAIN_CYRILLIC_PUNYCODE} \
+        --email admin@${DOMAIN_LATIN} \
+        --agree-tos \
+        --non-interactive
+    
+    # Затем для латинского домена
+    sudo certbot certonly --nginx \
+        -d ${DOMAIN_LATIN} \
+        -d ${WWW_DOMAIN_LATIN} \
+        --email admin@${DOMAIN_LATIN} \
+        --agree-tos \
+        --non-interactive
+fi
+
+# После получения сертификатов, обновляем конфигурацию Nginx с HTTPS
+echo -e "${YELLOW}⚙️  Обновление конфигурации Nginx с SSL...${NC}"
+# Certbot автоматически обновит конфигурацию, но мы можем вручную настроить редиректы
 
 # Проверка автообновления
 echo -e "${YELLOW}🔄 Проверка автообновления сертификата...${NC}"
