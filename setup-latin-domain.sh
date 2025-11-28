@@ -196,3 +196,4 @@ echo ""
 echo "Проверьте логи Nginx:"
 echo "  sudo tail -f /var/log/nginx/verni-strahovku-error.log"
 
+

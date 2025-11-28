@@ -142,33 +142,36 @@ html, body {
     }
 }
 
+/* Логотип - выкрашиваем в цвет названия (темно-синий #1E3A8A) */
 .logo-img {
     margin-right: 0.125rem; /* Дополнительный минимальный отступ справа от логотипа */
-}
-
-/* На маленьких экранах убираем отступ между логотипом и текстом */
-@media (max-width: 640px) {
-    .logo-img {
-        margin-right: 0 !important; /* 0px - название вплотную к логотипу */
-    }
-}
-
-@media (max-width: 375px) {
-    .logo-img {
-        margin-right: 0 !important; /* 0px - название вплотную к логотипу */
-    }
+    filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(2000%) hue-rotate(210deg) brightness(0.9) contrast(1.2);
+    align-self: center;
+    vertical-align: middle;
 }
 
 .logo-text {
     margin-left: 0 !important; /* Убираем левый отступ у текста */
 }
 
-/* На маленьких экранах уменьшаем размер шрифта названия */
+/* На маленьких экранах увеличиваем размер шрифта названия и уменьшаем gap */
 @media (max-width: 640px) {
+    .logo-img {
+        margin-right: 0.125rem !important; /* 2px - минимальный отступ от текста */
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        align-self: center !important;
+    }
+    
     .logo-text {
-        font-size: 0.875rem !important; /* 14px */
+        font-size: 1rem !important; /* 16px - увеличен размер */
         letter-spacing: 0.02em !important;
         line-height: 1.2 !important;
+        margin-left: -0.125rem !important; /* Сдвигаем влево на 2px для плотного прилегания */
+    }
+    
+    .logo-title-block {
+        gap: 0.125rem !important; /* 2px - минимальное расстояние */
     }
 }
 
@@ -193,7 +196,7 @@ html, body {
     }
     
     .logo-title-block {
-        gap: 0.25rem !important; /* 4px - минимальное расстояние между логотипом и текстом */
+        gap: 0.125rem !important; /* 2px - минимальное расстояние между логотипом и текстом */
         max-width: calc(100% - 50px) !important; /* 40px кнопка + 10px отступы */
         flex-shrink: 1;
         min-width: 0;
@@ -204,10 +207,11 @@ html, body {
     }
     
     .logo-text {
-        font-size: 0.875rem !important; /* 14px - уменьшено для мобильных */
+        font-size: 1rem !important; /* 16px - увеличен размер */
         letter-spacing: 0.02em !important;
         line-height: 1.2 !important;
         margin: 0 !important; /* Убираем все отступы */
+        margin-left: -0.125rem !important; /* Сдвигаем влево на 2px для плотного прилегания */
         display: flex !important;
         align-items: center !important; /* Выравниваем по центру вертикально */
     }
@@ -216,7 +220,7 @@ html, body {
         height: 3.5rem !important; /* 56px - уменьшено для мобильных */
         margin-top: 0 !important; /* Убираем верхний отступ */
         margin-bottom: 0 !important; /* Убираем нижний отступ */
-        margin-right: 0.25rem !important; /* 4px - минимальный отступ от текста */
+        margin-right: 0.125rem !important; /* 2px - минимальный отступ от текста */
         margin-left: 0 !important; /* Убираем левый отступ - прижимаем к левому краю */
         align-self: center !important; /* Выравниваем по центру вертикально */
         vertical-align: middle !important;
@@ -235,6 +239,8 @@ html, body {
         margin-right: 0 !important; /* Убираем правый отступ */
         position: relative !important;
         z-index: 10000 !important; /* Высокий z-index для предотвращения перекрытия */
+        align-items: center !important; /* Выравниваем по центру вертикально */
+        justify-content: center !important; /* Выравниваем по центру горизонтально */
     }
     
     /* Убеждаемся, что навигация не обрезает бургерное меню */
@@ -266,7 +272,7 @@ html, body {
     }
     
     .logo-title-block {
-        gap: 0.25rem !important; /* 4px - минимальное расстояние */
+        gap: 0.125rem !important; /* 2px - минимальное расстояние */
         max-width: calc(100% - 50px) !important; /* 40px кнопка + 10px отступы */
         margin-left: 0 !important;
         margin-right: 0 !important;
@@ -277,7 +283,7 @@ html, body {
     }
     
     .logo-img {
-        margin-right: 0.25rem !important; /* 4px - минимальный отступ */
+        margin-right: 0.125rem !important; /* 2px - минимальный отступ */
         margin-left: 0 !important;
         margin-top: 0 !important;
         margin-bottom: 0 !important;
@@ -288,13 +294,14 @@ html, body {
     }
     
     .logo-text {
-        font-size: 0.75rem !important; /* 12px - еще меньше */
+        font-size: 0.9375rem !important; /* 15px - увеличен размер */
         letter-spacing: 0.01em !important;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         line-height: 1.2 !important;
         margin: 0 !important; /* Убираем все отступы */
+        margin-left: -0.125rem !important; /* Сдвигаем влево на 2px */
         align-self: center !important; /* Выравниваем по центру вертикально */
         display: flex !important;
         align-items: center !important;
@@ -337,23 +344,25 @@ html, body {
         margin-right: 0 !important;
         align-items: center !important;
         height: 100% !important; /* Занимаем всю высоту nav */
+        gap: 0.125rem !important; /* 2px - минимальное расстояние */
     }
     
     .logo-img {
         height: 3rem !important; /* 48px - еще меньше */
         margin-top: 0 !important;
         margin-bottom: 0 !important;
-        margin-right: 0.25rem !important; /* 4px - минимальный отступ */
+        margin-right: 0.125rem !important; /* 2px - минимальный отступ */
         margin-left: 0 !important;
         align-self: center !important; /* Выравниваем по центру вертикально */
         vertical-align: middle !important;
     }
     
     .logo-text {
-        font-size: 0.6875rem !important; /* 11px - минимальный размер */
+        font-size: 0.875rem !important; /* 14px - увеличен размер */
         letter-spacing: 0.005em !important;
         line-height: 1.2 !important;
         margin: 0 !important; /* Убираем все отступы */
+        margin-left: -0.125rem !important; /* Сдвигаем влево на 2px */
         align-self: center !important; /* Выравниваем по центру вертикально */
         display: flex !important;
         align-items: center !important;

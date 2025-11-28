@@ -49,3 +49,4 @@ echo "Проверьте статус:"
 echo "  pm2 status"
 echo "  curl http://localhost:3000"
 
+
