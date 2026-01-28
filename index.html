@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="yandex-verification" content="fd0569eaf7da9f80" />
     <meta name="description" content="Возврат навязанной страховки БЕЗ ПРЕДОПЛАТЫ. 95% успеха, срок 2-8 месяцев. Работаем по всей России. Бесплатная консультация: +7 906 123-15-22">
     <meta name="keywords" content="возврат страховки по кредиту, вернуть навязанную страховку, возврат страховки жизни, возврат каско, навязанные банковские услуги, возврат страховки без предоплаты, вернуть деньги за страховку">
 
@@ -186,52 +187,14 @@
 
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript">
-        // Загрузка конфигурации с сервера
-        (async function() {
-            try {
-                const response = await fetch('/api/config');
-                const config = await response.json();
-                const metrikaId = config.yandexMetrikaId || 105345372; // Fallback на ваш ID
-                window.YANDEX_METRIKA_ID = metrikaId;
-                window.GOOGLE_ANALYTICS_ID = config.googleAnalyticsId || null;
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105345372', 'ym');
 
-                // Загрузка Yandex Metrika
-                if (metrikaId) {
-                    (function(m,e,t,r,i,k,a){
-                        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-                        m[i].l=1*new Date();
-                        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-                        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-                    })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js?id=" + metrikaId, "ym");
-
-                    ym(metrikaId, "init", {
-                        clickmap: true,
-                        trackLinks: true,
-                        accurateTrackBounce: true,
-                        webvisor: true,
-                        trackHash: true
-                    });
-                }
-            } catch (error) {
-                console.warn('Не удалось загрузить конфигурацию, используем fallback ID:', error);
-                // Fallback на ваш ID
-                const metrikaId = 105345372;
-                window.YANDEX_METRIKA_ID = metrikaId;
-                (function(m,e,t,r,i,k,a){
-                    m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-                    m[i].l=1*new Date();
-                    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-                    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-                })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js?id=" + metrikaId, "ym");
-                ym(metrikaId, "init", {
-                    clickmap: true,
-                    trackLinks: true,
-                    accurateTrackBounce: true,
-                    webvisor: true,
-                    trackHash: true
-                });
-            }
-        })();
+        ym(105345372, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/105345372" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <!-- /Yandex.Metrika counter -->
