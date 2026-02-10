@@ -169,6 +169,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Показать/скрыть поля досрочного погашения
+    const earlyRepaymentRadio = document.querySelectorAll('input[name="early-repayment"]');
+    const earlyRepaymentFields = document.getElementById('early-repayment-fields');
+    if (earlyRepaymentRadio.length && earlyRepaymentFields) {
+        earlyRepaymentRadio.forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                earlyRepaymentFields.classList.toggle('hidden', this.value !== 'yes');
+            });
+        });
+    }
+
     // Обработчик формы - предотвращаем стандартную отправку
     const calculatorForm = document.getElementById('calculator-form');
     if (calculatorForm) {
@@ -266,7 +277,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 monthsSinceIssue = Math.round((now - loanDate) / (1000 * 60 * 60 * 24 * 30));
             }
 
-            // Выполнение расчета
+            const earlyRepayment = document.querySelector('input[name="early-repayment"]:checked')?.value === 'yes';
+            const loanTermMonthsInput = document.getElementById('loan-term-months');
+            const monthRepaidInput = document.getElementById('month-repaid');
+
+            if (earlyRepayment && loanTermMonthsInput && monthRepaidInput) {
+                const loanTermMonths = parseInt(loanTermMonthsInput.value, 10);
+                const monthRepaid = parseInt(monthRepaidInput.value, 10);
+                if (!loanTermMonths || loanTermMonths < 1 || !monthRepaid || monthRepaid < 1 || monthRepaid > loanTermMonths) {
+                    if (earlyRepaymentFields) earlyRepaymentFields.classList.remove('hidden');
+                    loanTermMonthsInput.classList.add('border-red-500');
+                    monthRepaidInput.classList.add('border-red-500');
+                    return;
+                }
+                // Формула при досрочном: (Сумма страховки / Срок кредита) × (Срок кредита − Месяц погашения) × 1.5
+                const proportionReturn = (imposedAmount / loanTermMonths) * (loanTermMonths - monthRepaid);
+                const minReturn = Math.round(proportionReturn);
+                const maxReturn = Math.round(proportionReturn * 1.5);
+                displayEarlyResult(imposedAmount, minReturn, maxReturn);
+                if (resultSection) {
+                    resultSection.classList.remove('hidden');
+                    resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                if (typeof ym !== 'undefined') {
+                    ym(window.YANDEX_METRIKA_ID || 105345372, 'reachGoal', 'calculator_used');
+                }
+                return;
+            }
+
+            // Выполнение расчета (обычный режим)
             const result = calculator.calculate(imposedAmount, loanType, false, monthsSinceIssue);
 
             if (result.error) {
@@ -319,6 +358,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 ym(YANDEX_METRIKA_ID, 'reachGoal', 'calculator_used');
             }
         });
+    }
+
+    // ========== ОТОБРАЖЕНИЕ РЕЗУЛЬТАТА ПРИ ДОСРОЧНОМ ПОГАШЕНИИ ==========
+    function displayEarlyResult(imposedAmount, minReturn, maxReturn) {
+        if (!resultSection) return;
+        resultSection.classList.remove('hidden');
+        resultSection.classList.add('animate-slide-up');
+        resultSection.innerHTML = `
+            <div class="result-card">
+                <div class="result-header">
+                    <span class="result-badge">Расчёт при досрочном погашении</span>
+                    <h2>Вы можете вернуть: от ${calculator.formatMoney(minReturn)} до ${calculator.formatMoney(maxReturn)}</h2>
+                    <p>Точный расчёт после бесплатного анализа договора. Оставьте заявку — мы свяжемся с вами и уточним сумму.</p>
+                </div>
+                <div class="result-cta mt-6">
+                    <button type="button" onclick="typeof openModal === 'function' ? openModal() : window.openModal && window.openModal()" class="w-full bg-secondary hover:bg-orange-600 text-white font-bold text-lg py-4 rounded-lg transition">
+                        <i class="fas fa-paper-plane mr-2"></i> ПОЛУЧИТЬ ТОЧНЫЙ РАСЧЁТ
+                    </button>
+                </div>
+            </div>
+        `;
     }
 
     // ========== ОТОБРАЖЕНИЕ РЕЗУЛЬТАТА ==========

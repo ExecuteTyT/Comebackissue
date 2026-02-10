@@ -927,6 +927,9 @@ function trackClick(eventName) {
 document.querySelectorAll('a[href^="tel:"]').forEach(link => {
     link.addEventListener('click', () => {
         trackClick('phone_call');
+        if (typeof ym !== 'undefined' && (window.YANDEX_METRIKA_ID || YANDEX_METRIKA_ID)) {
+            ym(window.YANDEX_METRIKA_ID || 105345372, 'reachGoal', 'phone_click');
+        }
     });
 });
 
@@ -936,6 +939,9 @@ document.querySelectorAll('a[href*="whatsapp"], a[href*="telegram"], a[href*="vk
         const messenger = link.href.includes('whatsapp') ? 'whatsapp' : 
                          link.href.includes('telegram') ? 'telegram' : 'vk';
         trackClick('messenger_' + messenger);
+        if (link.href.includes('whatsapp') && typeof ym !== 'undefined' && (window.YANDEX_METRIKA_ID || YANDEX_METRIKA_ID)) {
+            ym(window.YANDEX_METRIKA_ID || 105345372, 'reachGoal', 'whatsapp_click');
+        }
     });
 });
 

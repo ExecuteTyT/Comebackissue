@@ -3,7 +3,7 @@
     <!-- Главная страница -->
     <url>
         <loc>https://vozvratidengi.ru/</loc>
-        <lastmod>2025-01-15</lastmod>
+        <lastmod>2025-02-09</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
@@ -11,7 +11,7 @@
     <!-- Услуги -->
     <url>
         <loc>https://vozvratidengi.ru/uslugi/</loc>
-        <lastmod>2025-01-15</lastmod>
+        <lastmod>2025-02-09</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
     </url>
@@ -19,7 +19,7 @@
     <!-- Как работает -->
     <url>
         <loc>https://vozvratidengi.ru/kak-rabotaet/</loc>
-        <lastmod>2025-01-15</lastmod>
+        <lastmod>2025-02-09</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
     </url>
@@ -27,15 +27,52 @@
     <!-- Калькулятор -->
     <url>
         <loc>https://vozvratidengi.ru/kalkulyator/</loc>
-        <lastmod>2025-01-15</lastmod>
+        <lastmod>2025-02-09</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
     </url>
 
+    <!-- Возврат при досрочном погашении -->
+    <url>
+        <loc>https://vozvratidengi.ru/vozvrat-strahovki-dosrochno/</loc>
+        <lastmod>2025-02-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Заявление на возврат страховки -->
+    <url>
+        <loc>https://vozvratidengi.ru/zajavlenie-na-vozvrat-strahovki/</loc>
+        <lastmod>2025-02-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Банки -->
+    <url><loc>https://vozvratidengi.ru/vozvrat-strahovki-sberbank/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+    <url><loc>https://vozvratidengi.ru/vozvrat-strahovki-vtb/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+    <url><loc>https://vozvratidengi.ru/vozvrat-strahovki-alfa-bank/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+    <url><loc>https://vozvratidengi.ru/vozvrat-strahovki-tinkoff/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+    <url><loc>https://vozvratidengi.ru/vozvrat-strahovki-sovkombank/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+    <url><loc>https://vozvratidengi.ru/vozvrat-strahovki-rshb/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+    <url><loc>https://vozvratidengi.ru/vozvrat-strahovki-pochta-bank/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+    <url><loc>https://vozvratidengi.ru/vozvrat-strahovki-gazprombank/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+
+    <!-- Блог -->
+    <url><loc>https://vozvratidengi.ru/blog/</loc><lastmod>2025-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://vozvratidengi.ru/blog/kak-vernut-strahovku-dosrochno-2025/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+    <url><loc>https://vozvratidengi.ru/blog/zajavlenie-na-vozvrat-obrazec/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+    <url><loc>https://vozvratidengi.ru/blog/srok-iskovoj-davnosti-vozvrat/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+    <url><loc>https://vozvratidengi.ru/blog/navyazali-strahovku-chto-delat/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+    <url><loc>https://vozvratidengi.ru/blog/otkaz-ot-strahovki-po-kreditu/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+    <url><loc>https://vozvratidengi.ru/blog/vozvrat-kasko-avtokredit/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+    <url><loc>https://vozvratidengi.ru/blog/bank-otkazyvaet-v-vozvrate/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+    <url><loc>https://vozvratidengi.ru/blog/vozvrat-strahovki-cherez-sud/</loc><lastmod>2025-02-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
     <!-- Отзывы -->
     <url>
         <loc>https://vozvratidengi.ru/otzyvy/</loc>
-        <lastmod>2025-01-15</lastmod>
+        <lastmod>2025-02-09</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -43,7 +80,7 @@
     <!-- FAQ -->
     <url>
         <loc>https://vozvratidengi.ru/faq/</loc>
-        <lastmod>2025-01-15</lastmod>
+        <lastmod>2025-02-09</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -51,7 +88,7 @@
     <!-- Контакты -->
     <url>
         <loc>https://vozvratidengi.ru/contacts/</loc>
-        <lastmod>2025-01-15</lastmod>
+        <lastmod>2025-02-09</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.7</priority>
     </url>
@@ -59,7 +96,7 @@
     <!-- Политика конфиденциальности -->
     <url>
         <loc>https://vozvratidengi.ru/privacy.html</loc>
-        <lastmod>2025-01-15</lastmod>
+        <lastmod>2025-02-09</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
