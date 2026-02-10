@@ -8,36 +8,16 @@
     <title>Спасибо за заявку | vozvratidengi.ru</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Tailwind Config -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#1E3A8A',
-                        secondary: '#F97316',
-                        success: '#10B981',
-                        textDark: '#111827',
-                    },
-                    fontFamily: {
-                        heading: ['Montserrat', 'sans-serif'],
-                        body: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
+    <!-- Tailwind + Custom CSS -->
+    <link rel="stylesheet" href="/src/css/tailwind-output.css">
+    <link rel="stylesheet" href="/src/css/style.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -49,8 +29,39 @@
         }
     </script>
 </head>
-<body class="font-body text-textDark bg-gradient-to-b from-blue-50 to-white min-h-screen flex items-center justify-center">
-    <div class="container mx-auto px-6 py-16 text-center">
+<body class="font-body text-textDark bg-gradient-to-b from-blue-50 to-white min-h-screen">
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
+        <div class="container mx-auto px-6 lg:px-16">
+            <nav class="flex items-center justify-between h-20 lg:h-24" aria-label="Основное меню">
+                <a href="/" class="flex items-center flex-shrink-0">
+                    <img src="/assets/logo-main.svg" alt="Возврат страховки — vozvratidengi.ru" class="h-16 lg:h-20 w-auto">
+                    <span class="text-xl font-heading font-bold text-primary uppercase ml-2">ВОЗВРАТ СТРАХОВКИ</span>
+                </a>
+                <div class="flex items-center gap-4">
+                    <ul class="hidden lg:flex items-center space-x-6 text-base font-medium">
+                        <li><a href="/" class="hover:text-primary transition">Главная</a></li>
+                        <li><a href="/uslugi/" class="hover:text-primary transition">Услуги</a></li>
+                        <li><a href="/kak-rabotaet/" class="hover:text-primary transition">Как работает</a></li>
+                        <li><a href="/kalkulyator/" class="hover:text-primary transition">Калькулятор</a></li>
+                        <li><a href="/contacts/" class="hover:text-primary transition">Контакты</a></li>
+                    </ul>
+                    <a href="tel:+79061231522" class="hidden md:inline-flex items-center gap-2 text-lg font-bold text-primary" aria-label="Позвонить"><i class="fas fa-phone text-success"></i>+7 906 123-15-22</a>
+                    <button id="mobile-menu-btn" type="button" class="lg:hidden flex items-center justify-center w-10 h-10 text-2xl text-gray-700" aria-label="Открыть меню"><i class="fas fa-bars"></i></button>
+                </div>
+            </nav>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t">
+            <ul class="flex flex-col space-y-4 p-6">
+                <li><a href="/" class="block hover:text-primary transition">Главная</a></li>
+                <li><a href="/uslugi/" class="block hover:text-primary transition">Услуги</a></li>
+                <li><a href="/kak-rabotaet/" class="block hover:text-primary transition">Как работает</a></li>
+                <li><a href="/kalkulyator/" class="block hover:text-primary transition">Калькулятор</a></li>
+                <li><a href="/contacts/" class="block hover:text-primary transition">Контакты</a></li>
+                <li class="pt-4 border-t"><a href="tel:+79061231522" class="text-lg font-bold text-primary">+7 906 123-15-22</a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="container mx-auto px-6 pt-32 pb-16 text-center">
         <!-- Success Icon -->
         <div class="mb-8">
             <div class="w-24 h-24 mx-auto bg-success rounded-full flex items-center justify-center animate-bounce">
@@ -152,5 +163,6 @@
             <p>ООО "ПЕРВЫЙ" | ИНН: 1650448426 | ОГРН: 1027700067328 | 423810, Республика Татарстан, г. Набережные Челны, пр-кт Хасана Туфана, дом 12, офис 1506</p>
         </div>
     </div>
+    <script src="/src/js/main.js"></script>
 </body>
 </html>

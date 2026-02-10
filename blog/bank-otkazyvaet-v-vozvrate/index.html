@@ -15,15 +15,15 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Банк отказывает в возврате страховки: что делать">
     <meta name="twitter:description" content="Банк отказал в возврате страховки — порядок действий. Претензия, суд, судебная практика. Помощь без предоплаты.">
-    <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>tailwind.config={theme:{extend:{colors:{primary:'#1E3A8A',secondary:'#F97316',success:'#10B981'},fontFamily:{heading:['Montserrat','sans-serif'],body:['Inter','sans-serif']}}}}</script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
+    <link rel="stylesheet" href="/src/css/tailwind-output.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
-    <link rel="stylesheet" href="../../src/css/style.css">
+    <link rel="stylesheet" href="/src/css/style.css">
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"Article","headline":"Банк отказывает в возврате страховки: что делать","description":"Банк отказал в возврате страховки — порядок действий. Претензия, суд, судебная практика. Помощь без предоплаты.","author":{"@type":"Organization","name":"vozvratidengi.ru"},"publisher":{"@type":"Organization","name":"vozvratidengi.ru","logo":{"@type":"ImageObject","url":"https://vozvratidengi.ru/assets/logo-main.svg"}},"datePublished":"2025-02-09","dateModified":"2025-02-09"}
     </script>
@@ -32,24 +32,42 @@
     </script>
 </head>
 <body class="font-body text-textDark">
-    <header id="header" class="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 bg-white transition-shadow duration-300">
         <div class="container mx-auto px-6 lg:px-16">
-            <nav class="flex items-center justify-between h-20">
-                <a href="/" class="flex items-center flex-shrink-0">
-                    <img src="../../assets/logo-main.svg" alt="Возврат страховки" class="h-16 w-auto">
-                    <span class="text-xl font-heading font-bold text-primary uppercase ml-2">ВОЗВРАТ СТРАХОВКИ</span>
+            <nav class="flex items-center justify-between h-20 lg:h-24" aria-label="Основное меню">
+                <a href="/" class="flex items-center flex-shrink-0 logo-title-block">
+                    <img src="/assets/logo-main.svg" alt="Возврат страховки — vozvratidengi.ru" class="h-20 sm:h-24 lg:h-28 w-auto flex-shrink-0 logo-img">
+                    <span class="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-heading font-bold text-primary uppercase whitespace-nowrap logo-text">ВОЗВРАТ СТРАХОВКИ</span>
                 </a>
-                <ul class="hidden lg:flex items-center space-x-6">
-                    <li><a href="/" class="hover:text-primary transition">Главная</a></li>
-                    <li><a href="/uslugi/" class="hover:text-primary transition">Услуги</a></li>
-                    <li><a href="/vozvrat-strahovki-dosrochno/" class="hover:text-primary transition">Досрочное погашение</a></li>
-                    <li><a href="/kalkulyator/" class="hover:text-primary transition">Калькулятор</a></li>
-                    <li><a href="/blog/" class="hover:text-primary transition">Блог</a></li>
-                    <li><a href="/contacts/" class="hover:text-primary transition">Контакты</a></li>
-                </ul>
-                <a href="tel:+79061231522" class="text-primary font-bold">+7 906 123-15-22</a>
-                <button onclick="openModal()" class="hidden lg:block bg-secondary text-white px-5 py-2 rounded-lg">Консультация</button>
+                <div class="flex items-center gap-4 lg:gap-6">
+                    <ul class="hidden lg:flex items-center space-x-6 text-base font-medium">
+                        <li><a href="/" class="hover:text-primary transition">Главная</a></li>
+                        <li><a href="/uslugi/" class="hover:text-primary transition">Услуги</a></li>
+                        <li><a href="/vozvrat-strahovki-dosrochno/" class="hover:text-primary transition">Досрочное погашение</a></li>
+                        <li><a href="/kak-rabotaet/" class="hover:text-primary transition">Как работает</a></li>
+                        <li><a href="/kalkulyator/" class="hover:text-primary transition">Калькулятор</a></li>
+                        <li><a href="/otzyvy/" class="hover:text-primary transition">Отзывы</a></li>
+                        <li><a href="/contacts/" class="hover:text-primary transition">Контакты</a></li>
+                    </ul>
+                    <div class="hidden md:flex items-center space-x-4">
+                        <a href="tel:+79061231522" class="flex items-center gap-2 text-lg font-bold text-primary hover:text-blue-light transition" aria-label="Позвонить"><i class="fas fa-phone text-success"></i><span>+7 906 123-15-22</span></a>
+                        <button onclick="openModal()" class="hidden lg:block bg-secondary hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition">Бесплатная консультация</button>
+                    </div>
+                    <button id="mobile-menu-btn" type="button" class="lg:hidden flex items-center justify-center w-10 h-10 min-w-[40px] text-2xl text-gray-700 hover:text-primary transition z-50" aria-label="Открыть меню"><i class="fas fa-bars"></i></button>
+                </div>
             </nav>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t">
+            <ul class="flex flex-col space-y-4 p-6">
+                <li><a href="/" class="block hover:text-primary transition">Главная</a></li>
+                <li><a href="/uslugi/" class="block hover:text-primary transition">Услуги</a></li>
+                <li><a href="/vozvrat-strahovki-dosrochno/" class="block hover:text-primary transition">Досрочное погашение</a></li>
+                <li><a href="/kak-rabotaet/" class="block hover:text-primary transition">Как работает</a></li>
+                <li><a href="/kalkulyator/" class="block hover:text-primary transition">Калькулятор</a></li>
+                <li><a href="/otzyvy/" class="block hover:text-primary transition">Отзывы</a></li>
+                <li><a href="/contacts/" class="block hover:text-primary transition">Контакты</a></li>
+                <li class="pt-4 border-t"><a href="tel:+79061231522" class="text-lg font-bold text-primary">+7 906 123-15-22</a></li>
+            </ul>
         </div>
     </header>
     <main class="pt-24 pb-16">
@@ -65,7 +83,7 @@
     <p class="text-gray-700 leading-relaxed mb-4">Направьте письменную претензию с требованием вернуть деньги и указанием срока (10–14 дней). При повторном отказе — иск в суд. Имеет смысл привлечь юристов: мы ведём дела без предоплаты и получаем вознаграждение только при успехе.</p>
     <h2 class="font-heading font-bold text-2xl mt-8 mb-4">Судебная практика</h2>
     <p class="text-gray-700 leading-relaxed mb-4">Иски к <a href="/vozvrat-strahovki-sberbank/" class="text-primary hover:text-secondary font-medium">Сбербанку</a>, <a href="/vozvrat-strahovki-vtb/" class="text-primary hover:text-secondary font-medium">ВТБ</a>, <a href="/vozvrat-strahovki-alfa-bank/" class="text-primary hover:text-secondary font-medium">Альфа-Банку</a> и другим банкам часто заканчиваются взысканием суммы страховки, неустойки и компенсации. Подробнее — в статье <a href="/blog/vozvrat-strahovki-cherez-sud/">возврат страховки через суд</a>.</p>
-    <img src="../../assets/reviews/review-1.jpeg" alt="Банк отказывает в возврате страховки" class="w-full rounded-xl my-6" loading="lazy" width="800" height="450">
+    <img src="/assets/reviews/review-1.jpeg" alt="Банк отказывает в возврате страховки" class="w-full rounded-xl my-6" loading="lazy" width="800" height="450">
     
             </article>
             <section class="mt-12 p-8 bg-primary text-white rounded-2xl text-center">
@@ -92,7 +110,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>AOS.init({ once: true });</script>
-    <script src="../../src/js/main.js"></script>
+    <script src="/src/js/main.js"></script>
     <script>(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t);a=e.getElementsByTagName(t)[0];k.async=1;k.src=r;a.parentNode.insertBefore(k,a);})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=105345372','ym');ym(105345372,'init',{webvisor:true});</script>
 </body>
 </html>

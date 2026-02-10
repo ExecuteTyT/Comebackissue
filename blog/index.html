@@ -14,18 +14,23 @@
     <meta property="og:description" content="Статьи о возврате навязанных страховок по кредитам: досрочное погашение, образцы заявлений, суд, КАСКО.">
     <meta property="og:image" content="https://vozvratidengi.ru/assets/reviews/review-1.jpeg">
     <meta property="og:site_name" content="vozvratidengi.ru">
+    <meta property="og:locale" content="ru_RU">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Блог о возврате страховки | vozvratidengi.ru">
     <meta name="twitter:description" content="Статьи о возврате навязанных страховок по кредитам: досрочное погашение, образцы заявлений, суд, КАСКО.">
     <meta name="twitter:image" content="https://vozvratidengi.ru/assets/reviews/review-1.jpeg">
+    <meta name="twitter:url" content="https://vozvratidengi.ru/blog/">
 
-    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>tailwind.config={theme:{extend:{colors:{primary:'#1E3A8A',secondary:'#F97316'},fontFamily:{heading:['Montserrat','sans-serif'],body:['Inter','sans-serif']}}}}</script>
-    <link rel="stylesheet" href="../src/css/style.css">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
+    <link rel="stylesheet" href="/src/css/tailwind-output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/src/css/style.css">
 
     <script type="application/ld+json">
     {
@@ -52,31 +57,92 @@
     }
     </script>
 </head>
-<body class="font-body text-gray-900">
-    <header class="bg-white shadow-sm">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="/" class="font-heading font-bold text-xl text-primary">ВОЗВРАТ СТРАХОВКИ</a>
-            <nav class="flex gap-6">
-                <a href="/" class="hover:text-primary">Главная</a>
-                <a href="/uslugi/" class="hover:text-primary">Услуги</a>
-                <a href="/kalkulyator/" class="hover:text-primary">Калькулятор</a>
-                <a href="/contacts/" class="hover:text-primary">Контакты</a>
+<body class="font-body text-textDark">
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 bg-white transition-shadow duration-300">
+        <div class="container mx-auto px-6 lg:px-16">
+            <nav class="flex items-center justify-between h-20 lg:h-24" aria-label="Основное меню">
+                <a href="/" class="flex items-center flex-shrink-0 logo-title-block">
+                    <img src="/assets/logo-main.svg" alt="Возврат страховки — vozvratidengi.ru" class="h-20 sm:h-24 lg:h-28 w-auto flex-shrink-0 logo-img">
+                    <span class="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-heading font-bold text-primary uppercase whitespace-nowrap logo-text">ВОЗВРАТ СТРАХОВКИ</span>
+                </a>
+                <div class="flex items-center gap-4 lg:gap-6">
+                    <ul class="hidden lg:flex items-center space-x-6 text-base font-medium">
+                        <li><a href="/" class="hover:text-primary transition">Главная</a></li>
+                        <li><a href="/uslugi/" class="hover:text-primary transition">Услуги</a></li>
+                        <li><a href="/vozvrat-strahovki-dosrochno/" class="hover:text-primary transition">Досрочное погашение</a></li>
+                        <li><a href="/kak-rabotaet/" class="hover:text-primary transition">Как работает</a></li>
+                        <li><a href="/kalkulyator/" class="hover:text-primary transition">Калькулятор</a></li>
+                        <li><a href="/otzyvy/" class="hover:text-primary transition">Отзывы</a></li>
+                        <li><a href="/contacts/" class="hover:text-primary transition">Контакты</a></li>
+                    </ul>
+                    <div class="hidden md:flex items-center space-x-4">
+                        <a href="tel:+79061231522" class="flex items-center gap-2 text-lg font-bold text-primary hover:text-blue-light transition" aria-label="Позвонить"><i class="fas fa-phone text-success"></i><span>+7 906 123-15-22</span></a>
+                        <button onclick="openModal()" class="hidden lg:block bg-secondary hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition">Бесплатная консультация</button>
+                    </div>
+                    <button id="mobile-menu-btn" type="button" class="lg:hidden flex items-center justify-center w-10 h-10 min-w-[40px] text-2xl text-gray-700 hover:text-primary transition z-50" aria-label="Открыть меню"><i class="fas fa-bars"></i></button>
+                </div>
             </nav>
         </div>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t">
+            <ul class="flex flex-col space-y-4 p-6">
+                <li><a href="/" class="block hover:text-primary transition">Главная</a></li>
+                <li><a href="/uslugi/" class="block hover:text-primary transition">Услуги</a></li>
+                <li><a href="/vozvrat-strahovki-dosrochno/" class="block hover:text-primary transition">Досрочное погашение</a></li>
+                <li><a href="/kak-rabotaet/" class="block hover:text-primary transition">Как работает</a></li>
+                <li><a href="/kalkulyator/" class="block hover:text-primary transition">Калькулятор</a></li>
+                <li><a href="/otzyvy/" class="block hover:text-primary transition">Отзывы</a></li>
+                <li><a href="/contacts/" class="block hover:text-primary transition">Контакты</a></li>
+                <li class="pt-4 border-t"><a href="tel:+79061231522" class="text-lg font-bold text-primary">+7 906 123-15-22</a></li>
+            </ul>
+        </div>
     </header>
-    <main class="container mx-auto px-6 py-12 max-w-4xl">
-        <h1 class="text-3xl font-heading font-bold mb-8">Блог</h1>
-        <ul class="space-y-4">
-            <li><a href="/blog/kak-vernut-strahovku-dosrochno-2025/" class="text-primary hover:text-secondary font-medium text-lg">Как вернуть страховку при досрочном погашении в 2025</a></li>
-            <li><a href="/blog/zajavlenie-na-vozvrat-obrazec/" class="text-primary hover:text-secondary font-medium text-lg">Заявление на возврат страховки: образец 2025</a></li>
-            <li><a href="/blog/srok-iskovoj-davnosti-vozvrat/" class="text-primary hover:text-secondary font-medium text-lg">Срок исковой давности по возврату страховки</a></li>
-            <li><a href="/blog/navyazali-strahovku-chto-delat/" class="text-primary hover:text-secondary font-medium text-lg">Навязали страховку по кредиту: что делать</a></li>
-            <li><a href="/blog/otkaz-ot-strahovki-po-kreditu/" class="text-primary hover:text-secondary font-medium text-lg">Отказ от страховки по кредиту: права и порядок</a></li>
-            <li><a href="/blog/vozvrat-kasko-avtokredit/" class="text-primary hover:text-secondary font-medium text-lg">Возврат КАСКО при автокредите</a></li>
-            <li><a href="/blog/bank-otkazyvaet-v-vozvrate/" class="text-primary hover:text-secondary font-medium text-lg">Банк отказывает в возврате страховки: что делать</a></li>
-            <li><a href="/blog/vozvrat-strahovki-cherez-sud/" class="text-primary hover:text-secondary font-medium text-lg">Возврат страховки через суд</a></li>
-        </ul>
+    <main class="pt-24 lg:pt-32">
+        <div class="container mx-auto px-6 lg:px-16 py-4">
+            <nav aria-label="Хлебные крошки">
+                <ol class="flex items-center space-x-2 text-sm text-gray-500">
+                    <li><a href="/" class="hover:text-secondary transition">Главная</a></li>
+                    <li><i class="fas fa-chevron-right text-xs mx-2" aria-hidden="true"></i></li>
+                    <li class="text-primary font-semibold">Блог</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="container mx-auto px-6 lg:px-16 py-12 max-w-4xl">
+            <h1 class="text-3xl font-heading font-bold mb-8">Блог</h1>
+            <ul class="space-y-4">
+                <li><a href="/blog/kak-vernut-strahovku-dosrochno-2025/" class="text-primary hover:text-secondary font-medium text-lg">Как вернуть страховку при досрочном погашении в 2025</a></li>
+                <li><a href="/blog/zajavlenie-na-vozvrat-obrazec/" class="text-primary hover:text-secondary font-medium text-lg">Заявление на возврат страховки: образец 2025</a></li>
+                <li><a href="/blog/srok-iskovoj-davnosti-vozvrat/" class="text-primary hover:text-secondary font-medium text-lg">Срок исковой давности по возврату страховки</a></li>
+                <li><a href="/blog/navyazali-strahovku-chto-delat/" class="text-primary hover:text-secondary font-medium text-lg">Навязали страховку по кредиту: что делать</a></li>
+                <li><a href="/blog/otkaz-ot-strahovki-po-kreditu/" class="text-primary hover:text-secondary font-medium text-lg">Отказ от страховки по кредиту: права и порядок</a></li>
+                <li><a href="/blog/vozvrat-kasko-avtokredit/" class="text-primary hover:text-secondary font-medium text-lg">Возврат КАСКО при автокредите</a></li>
+                <li><a href="/blog/bank-otkazyvaet-v-vozvrate/" class="text-primary hover:text-secondary font-medium text-lg">Банк отказывает в возврате страховки: что делать</a></li>
+                <li><a href="/blog/vozvrat-strahovki-cherez-sud/" class="text-primary hover:text-secondary font-medium text-lg">Возврат страховки через суд</a></li>
+            </ul>
+        </div>
     </main>
-    <footer class="border-t py-6 text-center text-sm text-gray-500">© 2025 vozvratidengi.ru</footer>
+    <footer class="border-t py-8 mt-12">
+        <div class="container mx-auto px-6 lg:px-16 text-center text-sm text-gray-500">© 2025 vozvratidengi.ru</div>
+    </footer>
+    <div id="modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 px-4">
+        <div class="bg-white rounded-3xl p-8 md:p-12 max-w-md w-full relative" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-3xl text-gray-500 hover:text-gray-700" aria-label="Закрыть"><i class="fas fa-times"></i></button>
+            <h2 class="font-heading font-bold text-3xl mb-4 text-center">БЕСПЛАТНАЯ КОНСУЛЬТАЦИЯ</h2>
+            <p class="text-gray-600 text-center mb-6">Оставьте заявку, и мы свяжемся с вами в течение 15 минут</p>
+            <form id="modal-form" onsubmit="handleFormSubmit(event, 'modal')" class="space-y-4">
+                <input type="text" name="name" placeholder="Ваше имя" required class="w-full h-12 px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary transition">
+                <input type="tel" name="phone" id="modal-phone" placeholder="+7 (___) ___-__-__" required class="w-full h-12 px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary transition">
+                <div class="flex items-start space-x-2">
+                    <input type="checkbox" id="modal-consent" required class="mt-1">
+                    <label for="modal-consent" class="text-xs text-gray-600">Согласен с <a href="/privacy.html" class="text-primary underline" target="_blank" rel="noopener">политикой конфиденциальности</a></label>
+                </div>
+                <button type="submit" class="w-full bg-secondary hover:bg-orange-500 text-white font-bold text-lg py-4 rounded-lg transition">ОТПРАВИТЬ ЗАЯВКУ</button>
+            </form>
+            <div class="text-center mt-6">
+                <p class="text-gray-600 mb-2">Или позвоните:</p>
+                <a href="tel:+79061231522" class="text-2xl font-bold text-primary hover:text-blue-700 transition">+7 906 123-15-22</a>
+            </div>
+        </div>
+    </div>
+    <script src="/src/js/main.js"></script>
 </body>
 </html>

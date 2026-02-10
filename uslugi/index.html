@@ -34,35 +34,16 @@
     <meta name="twitter:image:alt" content="Услуги по возврату навязанных страховок - vozvratidengi.ru">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#1E3A8A',
-                        secondary: '#F97316',
-                        success: '#10B981',
-                        warning: '#F59E0B',
-                        danger: '#EF4444',
-                        textDark: '#111827',
-                    },
-                    fontFamily: {
-                        heading: ['Montserrat', 'sans-serif'],
-                        body: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Tailwind CSS (локальный) -->
+    <link rel="stylesheet" href="/src/css/tailwind-output.css">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -71,7 +52,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../src/css/style.css">
+    <link rel="stylesheet" href="/src/css/style.css">
 
     <!-- Service Schema -->
     <script type="application/ld+json">
@@ -104,9 +85,9 @@
     <!-- Header -->
     <header id="header" class="fixed top-0 left-0 right-0 z-50 bg-white transition-shadow duration-300">
         <div class="container mx-auto px-6 lg:px-16">
-            <nav class="flex items-center justify-between h-20 lg:h-24">
+            <nav class="flex items-center justify-between h-20 lg:h-24" aria-label="Основное меню">
                 <a href="/" class="flex items-center flex-shrink-0 logo-title-block">
-                    <img src="../assets/logo-main.svg" alt="Возврат страховки" class="h-20 sm:h-24 lg:h-28 w-auto flex-shrink-0 logo-img">
+                    <img src="/assets/logo-main.svg" alt="Возврат страховки" class="h-20 sm:h-24 lg:h-28 w-auto flex-shrink-0 logo-img">
                     <span class="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-heading font-bold text-primary uppercase whitespace-nowrap logo-text">ВОЗВРАТ СТРАХОВКИ</span>
                 </a>
 
@@ -505,6 +486,6 @@
     </script>
     
     <!-- Main JS -->
-    <script src="../src/js/main.js"></script>
+    <script src="/src/js/main.js"></script>
 </body>
 </html>
