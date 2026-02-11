@@ -171,7 +171,7 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
     : ['http://localhost:3000', 'http://127.0.0.1:3000'];
 
-// Добавляем домен вернистраховку.рф в разрешенные origins
+// Добавляем домены сайта в разрешенные origins (CORS для форм и API)
 const siteOrigins = [
     'http://вернистраховку.рф',
     'http://www.вернистраховку.рф',
@@ -180,7 +180,11 @@ const siteOrigins = [
     'https://вернистраховку.рф',
     'https://www.вернистраховку.рф',
     'https://xn--80adbkporkockmsy.xn--p1ai',
-    'https://www.xn--80adbkporkockmsy.xn--p1ai'
+    'https://www.xn--80adbkporkockmsy.xn--p1ai',
+    'http://vozvratidengi.ru',
+    'http://www.vozvratidengi.ru',
+    'https://vozvratidengi.ru',
+    'https://www.vozvratidengi.ru'
 ];
 
 // Добавляем Vercel домены в разрешенные origins
@@ -932,6 +936,7 @@ function getEmailSubject(formType) {
         'modal': '💬 НОВАЯ ЗАЯВКА через модальное окно',
         'calculator': '🧮 НОВАЯ ЗАЯВКА через калькулятор',
         'final': '🎯 НОВАЯ ЗАЯВКА с финального CTA',
+        'contact': '📞 НОВАЯ ЗАЯВКА со страницы контактов',
         'default': '📋 НОВАЯ ЗАЯВКА с сайта'
     };
 
@@ -1048,6 +1053,7 @@ function getFormTypeName(type) {
         'modal': 'Модальное окно',
         'calculator': 'Калькулятор возврата',
         'final': 'Финальный CTA',
+        'contact': 'Страница контактов',
         'default': 'Неизвестный источник'
     };
     return names[type] || names['default'];

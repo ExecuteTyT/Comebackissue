@@ -279,15 +279,15 @@ function initFormHandlers() {
         console.log('✅ Final form handler attached');
     }
     
-    // Обработчик для calculator-form
+    // Обработчик для contact-form (страница контактов)
     if (calculatorForm) {
         calculatorForm.addEventListener('submit', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            console.log('📋 Calculator form submit intercepted');
-            handleFormSubmit(e, 'calculator');
+            console.log('📋 Contact form submit intercepted');
+            handleFormSubmit(e, 'contact');
         });
-        console.log('✅ Calculator form handler attached');
+        console.log('✅ Contact form handler attached');
     }
     
     console.log('✅ All form handlers initialized');
