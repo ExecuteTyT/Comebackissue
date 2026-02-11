@@ -67,6 +67,13 @@ html, body {
     display: block !important;
     visibility: visible !important;
     overflow-x: visible !important; /* Разрешаем overflow для видимости кнопки */
+    border: none !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+}
+#header::before,
+#header::after {
+    display: none !important;
 }
 
 #header.scrolled {
@@ -1430,5 +1437,37 @@ h3:contains("₽") {
 /* Альтернативный вариант для навигации header */
 #header nav ul.space-x-6 li + li {
     margin-left: 1.5rem;
+}
+
+/* ========== HEADER DESKTOP: одна строка навигации и телефон ========== */
+@media (min-width: 1024px) {
+    /* Пункты меню не переносятся — всегда в одну строку */
+    #header nav ul a {
+        white-space: nowrap;
+    }
+    /* На узких десктопах (1024–1280px) чуть меньше отступы между пунктами, чтобы всё влезало */
+    #header nav ul.space-x-6 li + li {
+        margin-left: 1rem;
+    }
+    #header nav ul {
+        font-size: 0.9375rem;
+        flex-shrink: 0;
+    }
+}
+@media (min-width: 1280px) {
+    #header nav ul.space-x-6 li + li {
+        margin-left: 1.5rem;
+    }
+    #header nav ul {
+        font-size: 1rem;
+    }
+}
+
+/* Телефон в шапке — в одну строку, без переноса цифр */
+#header a[href^="tel:"] {
+    white-space: nowrap;
+}
+#header a[href^="tel:"] span {
+    white-space: nowrap;
 }
 
