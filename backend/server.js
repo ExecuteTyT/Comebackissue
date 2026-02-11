@@ -595,6 +595,85 @@ app.get('/faq/', (req, res) => {
     res.sendFile(path.join(__dirname, '../faq/index.html'));
 });
 
+// ========== BANK PAGES ==========
+app.get('/vozvrat-strahovki-sberbank/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../vozvrat-strahovki-sberbank/index.html'));
+});
+app.get('/vozvrat-strahovki-vtb/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../vozvrat-strahovki-vtb/index.html'));
+});
+app.get('/vozvrat-strahovki-alfa-bank/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../vozvrat-strahovki-alfa-bank/index.html'));
+});
+app.get('/vozvrat-strahovki-tinkoff/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../vozvrat-strahovki-tinkoff/index.html'));
+});
+app.get('/vozvrat-strahovki-sovkombank/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../vozvrat-strahovki-sovkombank/index.html'));
+});
+app.get('/vozvrat-strahovki-pochta-bank/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../vozvrat-strahovki-pochta-bank/index.html'));
+});
+app.get('/vozvrat-strahovki-rshb/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../vozvrat-strahovki-rshb/index.html'));
+});
+app.get('/vozvrat-strahovki-gazprombank/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../vozvrat-strahovki-gazprombank/index.html'));
+});
+app.get('/vozvrat-strahovki-dosrochno/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../vozvrat-strahovki-dosrochno/index.html'));
+});
+
+// Маршруты без trailing slash (редирект на канонический URL со слешем)
+const bankSlugs = [
+    'vozvrat-strahovki-sberbank', 'vozvrat-strahovki-vtb', 'vozvrat-strahovki-alfa-bank',
+    'vozvrat-strahovki-tinkoff', 'vozvrat-strahovki-sovkombank', 'vozvrat-strahovki-pochta-bank',
+    'vozvrat-strahovki-rshb', 'vozvrat-strahovki-gazprombank', 'vozvrat-strahovki-dosrochno'
+];
+bankSlugs.forEach(slug => {
+    app.get('/' + slug, (req, res) => res.redirect(301, '/' + slug + '/'));
+});
+
+// ========== OTHER PAGES ==========
+app.get('/thank-you/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../thank-you/index.html'));
+});
+app.get('/zajavlenie-na-vozvrat-strahovki/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../zajavlenie-na-vozvrat-strahovki/index.html'));
+});
+app.get('/blog/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../blog/index.html'));
+});
+app.get('/blog/kak-vernut-strahovku-dosrochno-2025/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../blog/kak-vernut-strahovku-dosrochno-2025/index.html'));
+});
+app.get('/blog/zajavlenie-na-vozvrat-obrazec/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../blog/zajavlenie-na-vozvrat-obrazec/index.html'));
+});
+app.get('/blog/srok-iskovoj-davnosti-vozvrat/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../blog/srok-iskovoj-davnosti-vozvrat/index.html'));
+});
+app.get('/blog/navyazali-strahovku-chto-delat/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../blog/navyazali-strahovku-chto-delat/index.html'));
+});
+app.get('/blog/otkaz-ot-strahovki-po-kreditu/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../blog/otkaz-ot-strahovki-po-kreditu/index.html'));
+});
+app.get('/blog/vozvrat-kasko-avtokredit/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../blog/vozvrat-kasko-avtokredit/index.html'));
+});
+app.get('/blog/bank-otkazyvaet-v-vozvrate/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../blog/bank-otkazyvaet-v-vozvrate/index.html'));
+});
+app.get('/blog/vozvrat-strahovki-cherez-sud/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../blog/vozvrat-strahovki-cherez-sud/index.html'));
+});
+
+// Без trailing slash — редирект
+app.get('/thank-you', (req, res) => res.redirect(301, '/thank-you/'));
+app.get('/zajavlenie-na-vozvrat-strahovki', (req, res) => res.redirect(301, '/zajavlenie-na-vozvrat-strahovki/'));
+app.get('/blog', (req, res) => res.redirect(301, '/blog/'));
+
 // ========== CONFIG ENDPOINT ==========
 app.get('/api/config', (req, res) => {
     res.json({

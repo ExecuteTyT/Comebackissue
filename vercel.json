@@ -10,6 +10,162 @@
     {
       "source": "/api/(.*)",
       "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-sberbank",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-sberbank/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-vtb",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-vtb/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-alfa-bank",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-alfa-bank/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-tinkoff",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-tinkoff/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-sovkombank",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-sovkombank/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-pochta-bank",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-pochta-bank/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-rshb",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-rshb/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-gazprombank",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-gazprombank/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-dosrochno",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vozvrat-strahovki-dosrochno/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/thank-you",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/thank-you/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/zajavlenie-na-vozvrat-strahovki",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/zajavlenie-na-vozvrat-strahovki/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/blog",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/blog/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/blog/kak-vernut-strahovku-dosrochno-2025/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/blog/zajavlenie-na-vozvrat-obrazec/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/blog/srok-iskovoj-davnosti-vozvrat/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/blog/navyazali-strahovku-chto-delat/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/blog/otkaz-ot-strahovki-po-kreditu/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/blog/vozvrat-kasko-avtokredit/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/blog/bank-otkazyvaet-v-vozvrate/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/blog/vozvrat-strahovki-cherez-sud/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/uslugi/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/kak-rabotaet/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/otzyvy/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/contacts/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/kalkulyator/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/faq/",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/",
+      "destination": "/api/index.js"
     }
   ],
   "headers": [
