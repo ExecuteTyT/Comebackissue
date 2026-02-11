@@ -1,20 +1,22 @@
 Бланки заявлений на возврат страховки (DOCX)
+============================================
 
-Поместите в эту папку файлы с именами:
+Чтобы скачивание бланков на сайте работало, в этой папке должны лежать
+файлы с точными именами (латиница). Сайт отдаёт «Файл недоступен», если
+файлов нет.
 
-По банкам (из корня проекта переименуйте):
-- zajavlenie-sberbank.docx      ← Сбербанк.docx
-- zajavlenie-pochta-bank.docx   ← почтабанк страховка.docx
-- zajavlenie-sovkombank.docx    ← совкомбанк страховка.docx
-- zajavlenie-tinkoff.docx       ← тбанк страховка.docx
+БЫСТРЫЙ СПОСОБ (если в корне проекта уже есть .docx с кириллическими именами):
+  В корне проекта выполните:
+    npm run copy-docx
+  Скрипт скопирует Сбербанк.docx, почтабанк страховка.docx и др. в эту папку
+  с именами zajavlenie-sberbank.docx, zajavlenie-pochta-bank.docx и т.д.
+  Затем закоммитьте папку assets/documents/ (вместе с .docx) и задеплойте сайт.
 
-Универсальный бланк (подходит для ВТБ, Альфа-Банк, РСХБ, Газпромбанк и др.):
-- zajavlenie-universal.docx     ← скопируйте любой из банковских и переименуйте
+Требуемые имена файлов в этой папке:
+- zajavlenie-sberbank.docx
+- zajavlenie-pochta-bank.docx
+- zajavlenie-sovkombank.docx
+- zajavlenie-tinkoff.docx
+- zajavlenie-universal.docx   (универсальный бланк для ВТБ, Альфа-Банк, РСХБ, Газпромбанк)
 
-Опционально (если есть отдельные бланки):
-- zajavlenie-vtb.docx
-- zajavlenie-alfa-bank.docx
-- zajavlenie-rshb.docx
-- zajavlenie-gazprombank.docx
-
-Ссылки на эти файлы используются на страницах банков и на /zajavlenie-na-vozvrat-strahovki/. Формат: DOCX.
+Опционально: zajavlenie-vtb.docx, zajavlenie-alfa-bank.docx, zajavlenie-rshb.docx, zajavlenie-gazprombank.docx

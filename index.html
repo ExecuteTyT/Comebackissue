@@ -186,19 +186,19 @@
 <body class="font-body text-textDark">
 
     <!-- ========== 1. ЛИПКАЯ ШАПКА ========== -->
-    <header id="header" class="fixed top-0 left-0 right-0 z-50 bg-white transition-shadow duration-300">
-        <div class="container mx-auto px-6 lg:px-16">
-            <nav class="flex items-center justify-between h-20 lg:h-24" aria-label="Основное меню">
-                <!-- Логотип -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 bg-white transition-shadow duration-300 border-b border-gray-100">
+        <div class="container mx-auto px-4 lg:px-8 max-w-7xl">
+            <nav class="flex items-center justify-between h-16 lg:h-20 gap-4" aria-label="Основное меню">
+                <!-- Логотип (компактный) -->
                 <a href="/" class="flex items-center flex-shrink-0 logo-title-block">
-                    <img src="/assets/logo-main.svg" alt="Возврат страховки" class="h-20 sm:h-24 lg:h-28 w-auto flex-shrink-0 logo-img">
-                    <span class="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-heading font-bold text-primary uppercase whitespace-nowrap logo-text">ВОЗВРАТ СТРАХОВКИ</span>
+                    <img src="/assets/logo-main.svg" alt="Возврат страховки" class="h-10 sm:h-11 lg:h-12 w-auto flex-shrink-0 logo-img">
+                    <span class="text-sm sm:text-base font-heading font-bold text-primary uppercase tracking-tight logo-text">ВОЗВРАТ СТРАХОВКИ</span>
                 </a>
 
                 <!-- Right side container (меню, телефон, кнопки) -->
-                <div class="flex items-center gap-4 lg:gap-6">
+                <div class="flex items-center gap-3 lg:gap-5 flex-shrink-0">
                     <!-- Desktop Menu -->
-                    <ul class="hidden lg:flex items-center space-x-6 text-base font-medium">
+                    <ul class="hidden lg:flex items-center space-x-4 lg:space-x-5 text-sm font-medium text-gray-700">
                         <li><a href="/" class="hover:text-primary transition">Главная</a></li>
                         <li><a href="/uslugi/" class="hover:text-primary transition">Услуги</a></li>
                         <li><a href="/kak-rabotaet/" class="hover:text-primary transition">Как работает</a></li>
@@ -209,15 +209,15 @@
                     </ul>
 
                     <!-- Phone & CTA -->
-                    <div class="hidden md:flex items-center space-x-4">
+                    <div class="hidden md:flex items-center gap-4 flex-shrink-0">
                         <div class="text-right">
-                            <a href="tel:+79061231522" class="flex items-center gap-2 text-lg font-bold text-primary hover:text-blue-light transition">
-                                <i class="fas fa-phone text-success"></i>
+                            <a href="tel:+79061231522" class="flex items-center gap-2 text-base font-bold text-primary hover:text-blue-light transition">
+                                <i class="fas fa-phone text-success text-sm"></i>
                                 <span>+7 906 123-15-22</span>
                             </a>
-                            <p class="text-xs text-gray-500 ml-7">Пн-Пт 9:00-21:00</p>
+                            <p class="text-xs text-gray-500 mt-0.5">Пн-Пт 9:00-21:00</p>
                         </div>
-                        <button onclick="openModal()" class="hidden lg:block whitespace-nowrap bg-secondary hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
+                        <button onclick="openModal()" class="hidden lg:inline-flex whitespace-nowrap bg-secondary hover:bg-orange-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition shadow-sm hover:shadow">
                             Бесплатная консультация
                         </button>
                     </div>
@@ -248,7 +248,7 @@
     </header>
 
     <!-- ========== 2. HERO СЕКЦИЯ (обновлено согласно ТЗ) ========== -->
-    <section id="hero" class="relative min-h-screen flex items-center bg-gradient-to-b from-blue-50 to-white pt-20 sm:pt-24 lg:pt-32 pb-12 md:pb-16">
+    <section id="hero" class="relative min-h-screen flex items-center bg-gradient-to-b from-blue-50 to-white pt-20 lg:pt-24 pb-12 md:pb-16">
         <div class="container mx-auto px-4 md:px-6 lg:px-16">
             <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
                 <!-- Left: Content (50%) -->

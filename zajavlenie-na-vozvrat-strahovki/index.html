@@ -45,15 +45,15 @@
 </head>
 <body class="font-body text-textDark">
 
-    <header id="header" class="fixed top-0 left-0 right-0 z-50 bg-white transition-shadow duration-300">
-        <div class="container mx-auto px-6 lg:px-16">
-            <nav class="flex items-center justify-between h-20 lg:h-24" aria-label="Основное меню">
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 bg-white transition-shadow duration-300 border-b border-gray-100">
+        <div class="container mx-auto px-4 lg:px-8 max-w-7xl">
+            <nav class="flex items-center justify-between h-16 lg:h-20 gap-4" aria-label="Основное меню">
                 <a href="/" class="flex items-center flex-shrink-0 logo-title-block">
-                    <img src="/assets/logo-main.svg" alt="Возврат страховки" class="h-20 sm:h-24 lg:h-28 w-auto flex-shrink-0 logo-img">
-                    <span class="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-heading font-bold text-primary uppercase whitespace-nowrap logo-text">ВОЗВРАТ СТРАХОВКИ</span>
+                    <img src="/assets/logo-main.svg" alt="Возврат страховки" class="h-10 sm:h-11 lg:h-12 w-auto flex-shrink-0 logo-img">
+                    <span class="text-sm sm:text-base font-heading font-bold text-primary uppercase tracking-tight logo-text">ВОЗВРАТ СТРАХОВКИ</span>
                 </a>
-                <div class="flex items-center gap-4 lg:gap-6">
-                    <ul class="hidden lg:flex items-center space-x-6 text-base font-medium">
+                <div class="flex items-center gap-3 lg:gap-5 flex-shrink-0">
+                    <ul class="hidden lg:flex items-center space-x-4 lg:space-x-5 text-sm font-medium text-gray-700">
                         <li><a href="/" class="hover:text-primary transition">Главная</a></li>
                         <li><a href="/uslugi/" class="hover:text-primary transition">Услуги</a></li>
                         <li><a href="/vozvrat-strahovki-dosrochno/" class="hover:text-primary transition">Досрочное погашение</a></li>
@@ -62,9 +62,9 @@
                         <li><a href="/otzyvy/" class="hover:text-primary transition">Отзывы</a></li>
                         <li><a href="/contacts/" class="hover:text-primary transition">Контакты</a></li>
                     </ul>
-                    <div class="hidden md:flex items-center space-x-4">
-                        <a href="tel:+79061231522" class="flex items-center gap-2 text-lg font-bold text-primary hover:text-blue-light transition"><i class="fas fa-phone text-success"></i><span>+7 906 123-15-22</span></a>
-                        <button onclick="openModal()" class="hidden lg:block whitespace-nowrap bg-secondary hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition">Бесплатная консультация</button>
+                    <div class="hidden md:flex items-center gap-4 flex-shrink-0">
+                        <a href="tel:+79061231522" class="flex items-center gap-2 text-base font-bold text-primary hover:text-blue-light transition"><i class="fas fa-phone text-success text-sm"></i><span>+7 906 123-15-22</span></a>
+                        <button onclick="openModal()" class="hidden lg:inline-flex whitespace-nowrap bg-secondary hover:bg-orange-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition shadow-sm hover:shadow">Бесплатная консультация</button>
                     </div>
                     <button id="mobile-menu-btn" type="button" class="lg:hidden flex items-center justify-center w-10 h-10 min-w-[40px] text-2xl text-gray-700 hover:text-primary transition z-50"><i class="fas fa-bars"></i></button>
                 </div>
