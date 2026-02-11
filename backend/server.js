@@ -507,19 +507,22 @@ const formValidationRules = [
         .trim()
         .notEmpty().withMessage('Имя обязательно')
         .isLength({ min: 2, max: 100 }).withMessage('Имя должно быть от 2 до 100 символов')
-        .matches(/^[а-яА-ЯёЁa-zA-Z\s\-]+$/).withMessage('Имя может содержать только буквы'),
+        .matches(/^[а-яА-ЯёЁa-zA-Z0-9\s\-()]+$/).withMessage('Имя может содержать только буквы, цифры, пробелы, дефис и скобки'),
 
     body('phone')
         .trim()
         .notEmpty().withMessage('Телефон обязателен')
-        .matches(/^\+?7\s?\(?[0-9]{3}\)?\s?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/)
-        .withMessage('Неверный формат телефона'),
+        .custom((value) => {
+            const digits = value.replace(/\D/g, '');
+            return /^7\d{10}$/.test(digits) || /^8\d{10}$/.test(digits);
+        })
+        .withMessage('Неверный формат телефона (ожидается +7 и 10 цифр)'),
 
     body('email')
-        .optional()
+        .optional({ checkFalsy: true })
         .trim()
-        .isEmail().withMessage('Неверный формат email')
-        .normalizeEmail(),
+        .normalizeEmail()
+        .isEmail().withMessage('Неверный формат email'),
 
     body('amount')
         .optional()
@@ -533,7 +536,19 @@ const formValidationRules = [
     body('message')
         .optional()
         .trim()
-        .isLength({ max: 1000 }).withMessage('Сообщение не может быть длиннее 1000 символов')
+        .isLength({ max: 1000 }).withMessage('Сообщение не может быть длиннее 1000 символов'),
+
+    body('formType')
+        .optional()
+        .trim(),
+
+    body('calculated_amount')
+        .optional()
+        .trim(),
+
+    body('imposed_amount')
+        .optional()
+        .trim()
 ];
 
 // ========== TEST ROUTE FOR STATIC FILES ==========

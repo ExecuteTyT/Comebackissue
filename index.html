@@ -2083,7 +2083,7 @@
         <h2 class="font-heading font-bold text-3xl mb-4 text-center">БЕСПЛАТНАЯ КОНСУЛЬТАЦИЯ</h2>
         <p class="text-gray-600 text-center mb-6">Оставьте заявку, и мы свяжемся с вами в течение 15 минут</p>
 
-        <form id="modal-form" method="post" class="space-y-4">
+        <form id="modal-form" method="post" class="space-y-4" onsubmit="if(typeof handleFormSubmit==='function'){handleFormSubmit(event,'modal');} return false;">
             <input 
                 type="text" 
                 name="name" 
