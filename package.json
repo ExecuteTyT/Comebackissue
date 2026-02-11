@@ -10,7 +10,8 @@
     "watch:css": "tailwindcss -i ./src/css/tailwind-input.css -o ./src/css/tailwind-output.css --watch",
     "test": "node scripts/test-forms-api.js http://localhost:3000",
     "test:forms": "node scripts/test-forms-api.js http://localhost:3000",
-    "copy-docx": "node scripts/copy-docx-to-assets.js"
+    "copy-docx": "node scripts/copy-docx-to-assets.js",
+    "generate-docx": "node scripts/generate-placeholder-docx.js"
   },
   "keywords": [
     "возврат страховки",
