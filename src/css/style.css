@@ -129,6 +129,8 @@ html, body {
 #header .container {
     max-width: 100%;
     overflow: visible; /* Изменено с hidden на visible для предотвращения обрезания бургерного меню */
+    border-right: none !important;
+    box-shadow: none !important;
 }
 
 /* ========== LOGO AND TITLE BLOCK ========== */
@@ -1469,5 +1471,20 @@ h3:contains("₽") {
 }
 #header a[href^="tel:"] span {
     white-space: nowrap;
+}
+
+/* ========== HEADER CTA BUTTON: не обрезать текст, убрать артефакт справа ========== */
+@media (min-width: 1024px) {
+    #header button[onclick="openModal()"] {
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        min-width: 220px;
+        border: none;
+        outline: none;
+    }
+    #header button[onclick="openModal()"]:focus {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+    }
 }
 
