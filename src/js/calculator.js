@@ -475,14 +475,15 @@ document.addEventListener('DOMContentLoaded', function() {
             1500
         );
 
-        // Инициализация маски телефона в форме результата
+        // Инициализация маски телефона в форме результата (ссылка на элементе для sync при отправке/reset)
         const phoneInput = document.getElementById('calc-result-phone');
         if (phoneInput && typeof IMask !== 'undefined') {
-            IMask(phoneInput, {
+            const mask = IMask(phoneInput, {
                 mask: '+{7} (000) 000-00-00',
                 lazy: false,
                 placeholderChar: '_'
             });
+            phoneInput._phoneMask = mask;
         }
         
         // Добавляем обработчик для формы калькулятора (создается динамически)

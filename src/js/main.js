@@ -403,6 +403,7 @@ function initSwiper() {
 }
 
 // ========== PHONE MASK INITIALIZATION ==========
+// Ссылки на маски храним на элементе, чтобы синхронизировать после reset() и перед отправкой
 function initPhoneMasks() {
     const phoneInputs = document.querySelectorAll('input[type="tel"]');
     
@@ -412,6 +413,17 @@ function initPhoneMasks() {
             lazy: false,
             placeholderChar: '_'
         });
+        input._phoneMask = mask;
+    });
+}
+
+// Синхронизация масок телефона в форме (после reset или перед отправкой) — убирает предупреждения и разное поведение на разных ПК
+function syncPhoneMasksInForm(form) {
+    if (!form || typeof IMask === 'undefined') return;
+    form.querySelectorAll('input[type="tel"]').forEach(function(inp) {
+        if (inp._phoneMask && typeof inp._phoneMask.updateValue === 'function') {
+            inp._phoneMask.updateValue();
+        }
     });
 }
 
@@ -733,6 +745,9 @@ async function handleFormSubmit(event, formType) {
         return false;
     }
     
+    // Синхронизируем маски телефона с полями, чтобы на всех ПК/браузерах отправлялось корректное значение
+    syncPhoneMasksInForm(form);
+    
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
     
@@ -818,6 +833,8 @@ async function handleFormSubmit(event, formType) {
         
         // Очищаем форму
         form.reset();
+        // Синхронизируем маски после reset, чтобы не было предупреждений IMask и одинаковое поведение на всех ПК
+        syncPhoneMasksInForm(form);
         
         // Отправка цели в Яндекс.Метрику
         if (typeof ym !== 'undefined' && window.YANDEX_METRIKA_ID) {
