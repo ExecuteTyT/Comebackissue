@@ -314,7 +314,7 @@ async function fetchCSRFToken() {
 fetchCSRFToken();
 
 // ========== YANDEX METRIKA CONFIGURATION ==========
-const YANDEX_METRIKA_ID = window.YANDEX_METRIKA_ID || null;
+const YANDEX_METRIKA_ID = window.YANDEX_METRIKA_ID || 105345372;
 
 // ========== AOS INITIALIZATION ==========
 function initAOS() {
@@ -837,8 +837,8 @@ async function handleFormSubmit(event, formType) {
         syncPhoneMasksInForm(form);
         
         // Отправка цели в Яндекс.Метрику
-        if (typeof ym !== 'undefined' && window.YANDEX_METRIKA_ID) {
-            ym(window.YANDEX_METRIKA_ID, 'reachGoal', 'form_submit_' + formType);
+        if (typeof ym !== 'undefined') {
+            ym(window.YANDEX_METRIKA_ID || 105345372, 'reachGoal', 'form_submit_' + formType);
         }
         
         // Закрываем модалку, если была открыта
