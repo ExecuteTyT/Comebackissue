@@ -5,6 +5,9 @@
 User-agent: *
 Allow: /
 
+# Игнорировать GET-параметры Яндекс.Директа (etext, ybaip) — устраняет дубли страниц
+Clean-param: etext&ybaip /
+
 # Запретить индексацию служебных директорий
 Disallow: /admin/
 Disallow: /api/
